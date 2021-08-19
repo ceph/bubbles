@@ -17,6 +17,7 @@ import uvicorn
 from fastapi import FastAPI
 
 from mgr_module import MgrModule
+from bubbles.bubbles import Bubbles
 
 
 class BubblesModule(MgrModule):
@@ -32,10 +33,15 @@ class BubblesModule(MgrModule):
     async def _startup(self) -> None:
         self.log.info("Startup Bubbles")
         assert self.api
+        bubbles = Bubbles(self)
+        self.api.state.bubbles = bubbles
+        await bubbles.start()
 
     async def _shutdown(self) -> None:
         self.log.info("Shutdown Bubbles")
         assert self.api
+        bubbles: Bubbles = self.api.state.bubbles
+        await bubbles.shutdown()
 
     def serve(self) -> None:
         self.log.info("Starting Bubbles server")
