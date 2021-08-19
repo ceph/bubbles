@@ -12,9 +12,11 @@
 # Lesser General Public License for more details.
 #
 # pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false
+import os
 from typing import Any, Optional
 import uvicorn
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from mgr_module import MgrModule
 from bubbles.bubbles import Bubbles
@@ -52,7 +54,14 @@ class BubblesModule(MgrModule):
         self.app.add_event_handler("startup", self._startup)
         self.app.add_event_handler("shutdown", self._shutdown)
 
+        staticdir = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)), "frontend/dist"
+        )
+
         self.app.mount("/api", self.api, name="api")
+        self.app.mount(
+            "/", StaticFiles(directory=staticdir, html=True), name="static"
+        )
         uvicorn.run(self.app, host="0.0.0.0", port=1337)  # type: ignore
 
     def shutdown(self) -> None:
