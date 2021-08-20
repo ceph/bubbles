@@ -1,0 +1,32 @@
+<!--
+ bubbles - a simplified management UI for Ceph
+ Copyright (C) 2021 SUSE, LLC
+ 
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
+  <a class="navbar-brand" href="#">Bubbles</a>
+</nav>
+
+<div class="container-fluid">
+  <div class="row flex-xl-nowrap">
+    <nav class="col-md-2 col-lg-1 d-md-block bg-light sidebar collapse">
+      <div class="sidebar-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="#" routerLink="/ui" routerLinkActive="active-link">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Services</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <main class="col-md-10 ml-sm-auto col-lg-11 px-md-4" role="main">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

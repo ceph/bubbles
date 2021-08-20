@@ -9,23 +9,11 @@
  */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MainComponent } from './ui/main/main.component';
 
-const routes: Routes = [
-  {
-    path: "",
-    component: MainComponent,
-    children: [
-      {
-        path: "ui",
-        loadChildren: () => import("./ui/ui.module").then((m) => m.UiModule),
-      }
-    ]
-  }
-];
+const routes: Routes = [];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class UiRoutingModule { }
