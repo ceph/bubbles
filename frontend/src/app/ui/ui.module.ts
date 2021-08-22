@@ -13,12 +13,16 @@ import { CommonModule } from '@angular/common';
 import { UiRoutingModule } from './ui-routing.module';
 import { MainComponent } from './main/main.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ServicesListComponent } from './services/services-list/services-list.component';
+import { ServicesCreateComponent } from './services/services-create/services-create.component';
 
 
 @NgModule({
   declarations: [
     MainComponent,
-    DashboardComponent
+    DashboardComponent,
+    ServicesListComponent,
+    ServicesCreateComponent,
   ],
   imports: [
     CommonModule,

@@ -10,9 +10,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ServicesCreateComponent } from './services/services-create/services-create.component';
+import { ServicesListComponent } from './services/services-list/services-list.component';
 
 const routes: Routes = [
   { path: "dashboard", component: DashboardComponent },
+  {
+    path: "services",
+    children: [
+      { path: "list", component: ServicesListComponent },
+      { path: "create", component: ServicesCreateComponent },
+    ],
+  },
 ];
 
 @NgModule({

@@ -1,0 +1,42 @@
+<!--
+ bubbles - a simplified management UI for Ceph
+ Copyright (C) 2021 SUSE, LLC
+ 
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+-->
+<div class="container mt-3">
+
+  <div class="card">
+    <div class="card-body">
+      <p class="text-center">There are no Services defined. Go ahead and <a
+      href="#" routerLink="/ui/services/create">create
+      your first Service!</a></p>
+    </div>
+  </div>
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Type</th>
+        <th scope="col">Size</th>
+        <th scope="col">Usage</th>
+        <th scope="col">Replication</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr scope="row">
+        <td>Foo</td>
+        <td>CephFS</td>
+        <td>10 GB</td>
+        <td>2 GB</td>
+        <td>3 replicas</td>
+        <td>Okay</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
