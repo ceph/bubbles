@@ -15,6 +15,8 @@ import { MainComponent } from './main/main.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ServicesListComponent } from './services/services-list/services-list.component';
 import { ServicesCreateComponent } from './services/services-create/services-create.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -26,7 +28,9 @@ import { ServicesCreateComponent } from './services/services-create/services-cre
   ],
   imports: [
     CommonModule,
-    UiRoutingModule
+    ReactiveFormsModule,
+    UiRoutingModule,
+    NgbCollapseModule,
   ]
 })
 export class UiModule { }
