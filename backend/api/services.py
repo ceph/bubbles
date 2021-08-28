@@ -16,7 +16,15 @@ router = APIRouter(prefix="/services", tags=["services"])
 
 @router.get("/list", response_model=List[ServiceInfoModel])
 async def get_list(request: Request) -> List[ServiceInfoModel]:
-    return []
+    return [
+        ServiceInfoModel(
+            name="foo",
+            size=10000000,
+            replicas=2,
+            type="cephfs",
+            backend="nfs"
+        )
+    ]
 
 @router.post("/create", response_model=bool)
 async def create(request: Request, info: ServiceInfoModel) -> bool:

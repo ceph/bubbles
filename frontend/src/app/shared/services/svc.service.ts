@@ -44,4 +44,8 @@ export class SvcService {
         });
     });
   }
+
+  public list(): Observable<ServiceInfo[]> {
+    return this.http.get<ServiceInfo[]>(`${this.url}/list`);
+  }
 }

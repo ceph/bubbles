@@ -9,7 +9,7 @@
 -->
 <div class="container mt-3">
 
-  <div class="card">
+  <div class="card" *ngIf="!hasServices()">
     <div class="card-body">
       <p class="text-center">There are no Services defined. Go ahead and <a
       href="#" routerLink="/ui/services/create">create
@@ -17,24 +17,24 @@
     </div>
   </div>
 
-  <table class="table table-hover">
+  <table class="table table-hover" *ngIf="hasServices()">
     <thead>
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Type</th>
+        <th scope="col">Backend</th>
         <th scope="col">Size</th>
-        <th scope="col">Usage</th>
         <th scope="col">Replication</th>
         <th scope="col">Status</th>
       </tr>
     </thead>
     <tbody>
-      <tr scope="row">
-        <td>Foo</td>
-        <td>CephFS</td>
-        <td>10 GB</td>
-        <td>2 GB</td>
-        <td>3 replicas</td>
+      <tr scope="row" *ngFor="let svc of services">
+        <td>{{svc.name}}</td>
+        <td>{{svc.type}}</td>
+        <td>{{svc.backend}}</td>
+        <td>{{svc.size}}</td>
+        <td>{{svc.replicas}}</td>
         <td>Okay</td>
       </tr>
     </tbody>
