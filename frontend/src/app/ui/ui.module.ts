@@ -17,6 +17,7 @@ import { ServicesListComponent } from './services/services-list/services-list.co
 import { ServicesCreateComponent } from './services/services-create/services-create.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
     UiRoutingModule,
     NgbCollapseModule,
+    HttpClientModule,
   ]
 })
 export class UiModule { }

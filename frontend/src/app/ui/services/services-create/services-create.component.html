@@ -77,7 +77,16 @@
     </div>
 
     <div class="card">
-      <button class="btn btn-primary" type="submit">Create!</button>
+      <button class="btn btn-primary" type="submit"
+              (click)="submitForm()">Create!</button>
+    </div>
+
+    <div class="alert alert-danger" role="alert" *ngIf="isError">
+      <p>An error occured: {{errorMsg}}</p>
+    </div>
+
+    <div class="alert alert-success" role="alert" *ngIf="isSuccess">
+      <p>Service successfully created!</p>
     </div>
 
   </form>
