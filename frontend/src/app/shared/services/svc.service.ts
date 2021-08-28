@@ -29,10 +29,6 @@ export class SvcService {
 
   private url: string = "/api/services"
 
-  private services: {[id: string]: ServiceInfo} = {};
-  private subject: BehaviorSubject<ServiceInfoMap> =
-    new BehaviorSubject<ServiceInfoMap>({});
-
   public constructor(private http: HttpClient) { }
 
   public create(info: ServiceInfo): Observable<boolean> {
@@ -40,10 +36,6 @@ export class SvcService {
       this.http.post<boolean>(`${this.url}/create`, info)
         .subscribe({
           next: (res: boolean) => {
-            if (res) {
-              this.services[info.name] = info;
-              this.updateSubject();
-            }
             observer.next(res);
           },
           error: (err: HttpErrorResponse) => {
@@ -51,9 +43,5 @@ export class SvcService {
           },
         });
     });
-  }
-
-  private updateSubject(): void {
-    this.subject.next(this.services);
   }
 }
