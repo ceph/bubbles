@@ -8,6 +8,7 @@
 #
 from typing import List
 from fastapi import APIRouter, Request
+from bubbles.bubbles import Bubbles
 from bubbles.backend.controllers.services import ServiceInfoModel
 
 
@@ -16,16 +17,13 @@ router = APIRouter(prefix="/services", tags=["services"])
 
 @router.get("/list", response_model=List[ServiceInfoModel])
 async def get_list(request: Request) -> List[ServiceInfoModel]:
-    return [
-        ServiceInfoModel(
-            name="foo",
-            size=10000000,
-            replicas=2,
-            type="cephfs",
-            backend="nfs"
-        )
-    ]
+    bubbles: Bubbles = request.app.state.bubbles
+    assert bubbles.ctrls.services is not None
+    return list(bubbles.ctrls.services.services.values())
+
 
 @router.post("/create", response_model=bool)
 async def create(request: Request, info: ServiceInfoModel) -> bool:
-    return True
+    bubbles: Bubbles = request.app.state.bubbles
+    assert bubbles.ctrls.services is not None
+    return await bubbles.ctrls.services.create(info)

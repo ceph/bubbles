@@ -10,14 +10,17 @@ import asyncio
 from typing import Optional
 from mgr_module import MgrModule
 
+from bubbles.backend.controllers.ctrls import Controllers
 
 class Bubbles:
     _task = None  # type: Optional[asyncio.Task[None]]
     _running: bool = False
     _mgr: MgrModule
+    _ctrls: Controllers
 
     def __init__(self, mgr: MgrModule) -> None:
         self._mgr = mgr
+        self._ctrls = Controllers()
 
     async def _tick(self) -> None:
         while self._running:
@@ -25,6 +28,7 @@ class Bubbles:
 
     async def start(self) -> None:
         self._running = True
+        self._ctrls.start()
         self._task = asyncio.create_task(self._tick())
 
     async def shutdown(self) -> None:
@@ -32,3 +36,6 @@ class Bubbles:
         if self._task:
             await self._task
     
+    @property
+    def ctrls(self) -> Controllers:
+        return self._ctrls

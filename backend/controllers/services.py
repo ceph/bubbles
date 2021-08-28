@@ -43,6 +43,13 @@ class ServicesController:
         return self._services[name]
 
     async def create(self, info: ServiceInfoModel) -> bool:
+        if not self.is_valid(info):
+            return False
+
+        if info.name in self._services:
+            return False
+
+        self._services[info.name] = info        
         return True
 
     def is_valid(self, info: ServiceInfoModel) -> bool:
