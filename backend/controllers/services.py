@@ -6,6 +6,7 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
+from enum import Enum
 from typing import Dict
 from pydantic import BaseModel
 from bubbles.backend.errors import BubblesError
@@ -19,12 +20,26 @@ class ServiceNotFoundError(ServiceError):
     pass
 
 
+class ServiceTypeEnum(str, Enum):
+    FILE = "file"
+    OBJECT = "object"
+    BLOCK = "block"
+
+
+class ServiceBackendEnum(str, Enum):
+    CEPHFS = "cephfs"
+    NFS = "nfs"
+    RBD = "rbd"
+    ISCSI = "iscsi"
+    RGW = "rgw"
+
+
 class ServiceInfoModel(BaseModel):
     name: str
     size: int
     replicas: int
-    type: str
-    backend: str
+    type: ServiceTypeEnum
+    backend: ServiceBackendEnum
 
 
 class ServicesController:
@@ -63,15 +78,20 @@ class ServicesController:
             and self._is_valid_type(info.type, info.backend)
         )
 
-    def _is_valid_type(self, type: str, backend: str) -> bool:
-        type = type.lower()
-        backend = backend.lower()
-        if type not in ["file", "object", "block"]:
-            return False
+    def _is_valid_type(
+        self, type: ServiceTypeEnum, backend: ServiceBackendEnum
+    ) -> bool:
 
-        if type == "file":
-            return backend in ["cephfs", "nfs"]
-        elif type == "object":
-            return backend == "rgw"
+        if type == ServiceTypeEnum.FILE:
+            return (
+                backend == ServiceBackendEnum.CEPHFS
+                or backend == ServiceBackendEnum.NFS
+            )
+        elif type == ServiceTypeEnum.OBJECT:
+            return backend == ServiceBackendEnum.RGW
         else:
-            return backend in ["rbd", "iscsi"]
+            assert type == ServiceTypeEnum.BLOCK
+            return (
+                backend == ServiceBackendEnum.RBD
+                or backend == ServiceBackendEnum.ISCSI
+            )
