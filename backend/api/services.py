@@ -19,7 +19,7 @@ router = APIRouter(prefix="/services", tags=["services"])
 async def get_list(request: Request) -> List[ServiceInfoModel]:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.services is not None
-    return list(bubbles.ctrls.services.services.values())
+    return bubbles.ctrls.services.services
 
 
 @router.post("/create", response_model=bool)

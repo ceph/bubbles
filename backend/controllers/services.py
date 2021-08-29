@@ -7,7 +7,7 @@
 # version 2.1 of the License, or (at your option) any later version.
 #
 from enum import Enum
-from typing import Dict
+from typing import Dict, List
 from pydantic import BaseModel
 from bubbles.backend.errors import BubblesError
 
@@ -41,22 +41,51 @@ class ServiceInfoModel(BaseModel):
     type: ServiceTypeEnum
     backend: ServiceBackendEnum
 
+    @property
+    def raw_size(self) -> int:
+        return self.replicas * self.size
+
+
+class ServiceModel(BaseModel):
+    info: ServiceInfoModel
+    pools: List[int]
+
+    @property
+    def name(self) -> str:
+        return self.info.name
+
+    @property
+    def size(self) -> int:
+        return self.info.size
+
+    @property
+    def raw_size(self) -> int:
+        return self.info.raw_size
+
+    @property
+    def type(self) -> ServiceTypeEnum:
+        return self.info.type
+
+    @property
+    def backend(self) -> ServiceBackendEnum:
+        return self.info.backend
+
 
 class ServicesController:
 
-    _services: Dict[str, ServiceInfoModel] = {}
+    _services: Dict[str, ServiceModel] = {}
 
     def __init__(self):
         pass
 
     @property
-    def services(self) -> Dict[str, ServiceInfoModel]:
-        return self._services
+    def services(self) -> List[ServiceInfoModel]:
+        return [svc.info for svc in self._services.values()]
 
     def get(self, name: str) -> ServiceInfoModel:
         if name not in self._services:
             raise ServiceNotFoundError()
-        return self._services[name]
+        return self._services[name].info
 
     async def create(self, info: ServiceInfoModel) -> bool:
         if not self.is_valid(info):
@@ -65,7 +94,7 @@ class ServicesController:
         if info.name in self._services:
             return False
 
-        self._services[info.name] = info
+        self._services[info.name] = ServiceModel(info=info, pools=[])
         return True
 
     def is_valid(self, info: ServiceInfoModel) -> bool:
