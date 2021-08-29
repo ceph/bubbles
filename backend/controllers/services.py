@@ -8,9 +8,10 @@
 #
 from typing import Dict
 from pydantic import BaseModel
+from bubbles.backend.errors import BubblesError
 
 
-class ServiceError(Exception):
+class ServiceError(BubblesError):
     pass
 
 
