@@ -12,6 +12,7 @@ from mgr_module import MgrModule
 
 from bubbles.backend.controllers.ctrls import Controllers
 
+
 class Bubbles:
     _task = None  # type: Optional[asyncio.Task[None]]
     _running: bool = False
@@ -35,7 +36,7 @@ class Bubbles:
         self._running = False
         if self._task:
             await self._task
-    
+
     @property
     def ctrls(self) -> Controllers:
         return self._ctrls

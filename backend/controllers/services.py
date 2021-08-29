@@ -50,25 +50,28 @@ class ServicesController:
         if info.name in self._services:
             return False
 
-        self._services[info.name] = info        
+        self._services[info.name] = info
         return True
 
     def is_valid(self, info: ServiceInfoModel) -> bool:
         return (
-            len(info.name) > 0 and len(info.type) > 0 and
-            len(info.backend) > 0 and info.size > 0 and info.replicas > 0 and
-            self._is_valid_type(info.type, info.backend)
+            len(info.name) > 0
+            and len(info.type) > 0
+            and len(info.backend) > 0
+            and info.size > 0
+            and info.replicas > 0
+            and self._is_valid_type(info.type, info.backend)
         )
 
     def _is_valid_type(self, type: str, backend: str) -> bool:
         type = type.lower()
         backend = backend.lower()
-        if type not in [ "file", "object", "block" ]:
+        if type not in ["file", "object", "block"]:
             return False
 
         if type == "file":
-            return backend in [ "cephfs", "nfs" ]
+            return backend in ["cephfs", "nfs"]
         elif type == "object":
             return backend == "rgw"
         else:
-            return backend in [ "rbd", "iscsi" ]
+            return backend in ["rbd", "iscsi"]

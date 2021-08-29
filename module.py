@@ -22,6 +22,7 @@ from mgr_module import MgrModule
 from bubbles.bubbles import Bubbles
 from bubbles.backend.api import services
 
+
 class BubblesModule(MgrModule):
     MODULE_OPTIONS = []
     NATIVE_OPTIONS = []

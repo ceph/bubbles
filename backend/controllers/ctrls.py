@@ -10,6 +10,7 @@
 from typing import Optional
 from bubbles.backend.controllers.services import ServicesController
 
+
 class Controllers:
     services: Optional[ServicesController] = None
 
