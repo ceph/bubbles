@@ -8,18 +8,27 @@
 #
 from typing import List
 from fastapi import APIRouter, Request
+from pydantic import BaseModel, Field
 from bubbles.bubbles import Bubbles
 from bubbles.backend.controllers.services import ServiceInfoModel
+
+
+class ListReply(BaseModel):
+    allocated: int = Field(0, title="Allocated bytes, total")
+    services: List[ServiceInfoModel] = Field([], title="Services")
 
 
 router = APIRouter(prefix="/services", tags=["services"])
 
 
-@router.get("/list", response_model=List[ServiceInfoModel])
-async def get_list(request: Request) -> List[ServiceInfoModel]:
+@router.get("/list", response_model=ListReply)
+async def get_list(request: Request) -> ListReply:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.services is not None
-    return bubbles.ctrls.services.services
+
+    allocated = bubbles.ctrls.services.total_allocated
+    svcs = bubbles.ctrls.services.services
+    return ListReply(allocated=allocated, services=svcs)
 
 
 @router.post("/create", response_model=bool)

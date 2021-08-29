@@ -9,7 +9,7 @@
  */
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { Observable } from "rxjs";
 
 
 export declare type ServiceInfo = {
@@ -20,7 +20,10 @@ export declare type ServiceInfo = {
   backend: string,
 };
 
-export declare type ServiceInfoMap = { [id: string]: ServiceInfo };
+export declare type ServiceListReply = {
+  allocated: number,
+  services: ServiceInfo[]
+}
 
 @Injectable({
   providedIn: "root"
@@ -45,7 +48,7 @@ export class SvcService {
     });
   }
 
-  public list(): Observable<ServiceInfo[]> {
-    return this.http.get<ServiceInfo[]>(`${this.url}/list`);
+  public list(): Observable<ServiceListReply> {
+    return this.http.get<ServiceListReply>(`${this.url}/list`);
   }
 }

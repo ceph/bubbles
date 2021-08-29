@@ -8,7 +8,7 @@
  * version 2.1 of the License, or (at your option) any later version.
  */
 import { Component, OnInit } from "@angular/core";
-import { ServiceInfo, SvcService } from "src/app/shared/services/svc.service";
+import { ServiceInfo, ServiceListReply, SvcService } from "src/app/shared/services/svc.service";
 
 @Component({
   selector: "bubbles-services-list",
@@ -18,13 +18,16 @@ import { ServiceInfo, SvcService } from "src/app/shared/services/svc.service";
 export class ServicesListComponent implements OnInit {
 
   public services: ServiceInfo[] = [];
+  public allocated: number = 0;
 
   public constructor(private svcService: SvcService) { }
 
   public ngOnInit(): void {
     this.svcService.list().subscribe({
-      next: (svcs: ServiceInfo[]) => {
-        this.services = svcs;
+      next: (svcs: ServiceListReply) => {
+        console.log(svcs);
+        this.services = svcs.services;
+        this.allocated = svcs.allocated;
       }
     });
   }

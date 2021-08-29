@@ -94,6 +94,11 @@ class ServicesController:
             raise ServiceNotFoundError()
         return self._services[name].info
 
+    @property
+    def total_allocated(self) -> int:
+        allocated = sum([svc.raw_size for svc in self._services.values()])
+        return allocated
+
     async def create(self, info: ServiceInfoModel) -> bool:
         if not self.is_valid(info):
             return False
