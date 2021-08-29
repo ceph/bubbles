@@ -7,6 +7,7 @@
 # version 2.1 of the License, or (at your option) any later version.
 #
 from enum import Enum
+from mgr_module import MgrModule
 from typing import Dict, List
 from pydantic import BaseModel
 from bubbles.backend.errors import BubblesError
@@ -71,12 +72,18 @@ class ServiceModel(BaseModel):
         return self.info.backend
 
 
+class ServiceStateModel(BaseModel):
+    services: Dict[str, ServiceModel]
+
+
 class ServicesController:
 
+    _mgr: MgrModule
     _services: Dict[str, ServiceModel] = {}
 
-    def __init__(self):
-        pass
+    def __init__(self, mgr: MgrModule):
+        self._mgr = mgr
+        self._load()
 
     @property
     def services(self) -> List[ServiceInfoModel]:
@@ -95,6 +102,7 @@ class ServicesController:
             return False
 
         self._services[info.name] = ServiceModel(info=info, pools=[])
+        self._save()
         return True
 
     def is_valid(self, info: ServiceInfoModel) -> bool:
@@ -124,3 +132,15 @@ class ServicesController:
                 backend == ServiceBackendEnum.RBD
                 or backend == ServiceBackendEnum.ISCSI
             )
+
+    def _save(self) -> None:
+        state = ServiceStateModel(services=self._services)
+        svcstr = state.json()
+        self._mgr.set_store("services", svcstr)
+
+    def _load(self) -> None:
+        svcstr = self._mgr.get_store("services")
+        if not svcstr or len(svcstr) == 0:
+            return
+        state = ServiceStateModel.parse_raw(svcstr)
+        self._services = state.services

@@ -21,7 +21,7 @@ class Bubbles:
 
     def __init__(self, mgr: MgrModule) -> None:
         self._mgr = mgr
-        self._ctrls = Controllers()
+        self._ctrls = Controllers(mgr)
 
     async def _tick(self) -> None:
         while self._running:
