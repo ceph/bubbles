@@ -20,7 +20,7 @@ from fastapi.staticfiles import StaticFiles
 
 from mgr_module import MgrModule
 from bubbles.bubbles import Bubbles
-from bubbles.backend.api import services
+from bubbles.backend.api import services, cluster, storage
 
 
 class BubblesModule(MgrModule):
@@ -56,6 +56,8 @@ class BubblesModule(MgrModule):
         self.app.add_event_handler("shutdown", self._shutdown)
 
         self.api.include_router(services.router)
+        self.api.include_router(cluster.router)
+        self.api.include_router(storage.router)
 
         staticdir = os.path.join(
             os.path.dirname(os.path.realpath(__file__)), "frontend/dist"
@@ -71,3 +73,6 @@ class BubblesModule(MgrModule):
         self.log.info("Shutting down Bubbles server")
         if not self.app:
             return
+
+    def notify(self, notify_type: str, notify_id: str) -> None:
+        self.log.debug(f"recv notify {notify_type}")

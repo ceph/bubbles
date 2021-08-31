@@ -7,6 +7,7 @@
 # version 2.1 of the License, or (at your option) any later version.
 #
 
+from bubbles.backend.controllers.storage import StorageController
 from mgr_module import MgrModule
 from typing import Optional
 from bubbles.backend.controllers.cluster import ClusterController
@@ -16,6 +17,7 @@ from bubbles.backend.controllers.services import ServicesController
 class Controllers:
     services: Optional[ServicesController] = None
     cluster: Optional[ClusterController] = None
+    storage: Optional[StorageController] = None
     _mgr: MgrModule
 
     def __init__(self, mgr: MgrModule):
@@ -24,3 +26,4 @@ class Controllers:
     def start(self):
         self.services = ServicesController(self._mgr)
         self.cluster = ClusterController(self._mgr)
+        self.storage = StorageController(self._mgr, self.cluster, self.services)
