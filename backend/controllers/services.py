@@ -11,7 +11,6 @@ from mgr_module import MgrModule
 from typing import Dict, List
 from pydantic import BaseModel
 from bubbles.backend.errors import BubblesError
-from bubbles.backend.models.df import ClusterUsageStatsModel
 
 
 class ServiceError(BubblesError):
@@ -110,9 +109,6 @@ class ServicesController:
         self._services[info.name] = ServiceModel(info=info, pools=[])
         self._save()
         return True
-
-    def df(self) -> ClusterUsageStatsModel:
-        return ClusterUsageStatsModel.get(self._mgr)
 
     def is_valid(self, info: ServiceInfoModel) -> bool:
         return (

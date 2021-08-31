@@ -9,11 +9,13 @@
 
 from mgr_module import MgrModule
 from typing import Optional
+from bubbles.backend.controllers.cluster import ClusterController
 from bubbles.backend.controllers.services import ServicesController
 
 
 class Controllers:
     services: Optional[ServicesController] = None
+    cluster: Optional[ClusterController] = None
     _mgr: MgrModule
 
     def __init__(self, mgr: MgrModule):
@@ -21,3 +23,4 @@ class Controllers:
 
     def start(self):
         self.services = ServicesController(self._mgr)
+        self.cluster = ClusterController(self._mgr)
