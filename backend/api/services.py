@@ -11,6 +11,7 @@ from fastapi import APIRouter, Request
 from pydantic import BaseModel, Field
 from bubbles.bubbles import Bubbles
 from bubbles.backend.controllers.services import ServiceInfoModel
+from bubbles.backend.models.df import ClusterUsageStatsModel
 
 
 class ListReply(BaseModel):
@@ -36,3 +37,12 @@ async def create(request: Request, info: ServiceInfoModel) -> bool:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.services is not None
     return await bubbles.ctrls.services.create(info)
+
+
+# this should not live here, but let's allow it for a bit while we don't have
+# anywhere else to place it.
+@router.get("/df", response_model=ClusterUsageStatsModel)
+async def df(request: Request) -> ClusterUsageStatsModel:
+    bubbles: Bubbles = request.app.state.bubbles
+    assert bubbles.ctrls.services is not None
+    return bubbles.ctrls.services.df()
