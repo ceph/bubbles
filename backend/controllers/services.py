@@ -21,6 +21,29 @@ class ServiceNotFoundError(ServiceError):
     pass
 
 
+class ServiceStatusEnum(int, Enum):
+    OKAY = 0
+    WARN = 5
+    ERROR = 10
+    NONE = 20
+
+
+class ServiceStatusCodeEnum(str, Enum):
+    UNDEFINED = "undefined"
+    DNE = "dne"
+
+
+class ServiceStatusInfo(BaseModel):
+    code: ServiceStatusCodeEnum
+    msg: str
+
+
+class ServiceStatusModel(BaseModel):
+    name: str
+    status: ServiceStatusEnum
+    info: List[ServiceStatusInfo]
+
+
 class ServiceTypeEnum(str, Enum):
     FILE = "file"
     OBJECT = "object"
@@ -109,6 +132,20 @@ class ServicesController:
         self._services[info.name] = ServiceModel(info=info, pools=[])
         self._save()
         return True
+
+    async def status(self, svcname: str) -> ServiceStatusModel:
+        status = ServiceStatusModel(
+            name=svcname, status=ServiceStatusEnum.NONE, info=[]
+        )
+        if svcname not in self._services:
+            status.status = ServiceStatusEnum.ERROR
+            status.info.append(
+                ServiceStatusInfo(
+                    code=ServiceStatusCodeEnum.DNE, msg="does not exist"
+                )
+            )
+            return status
+        return status
 
     def is_valid(self, info: ServiceInfoModel) -> bool:
         return (
