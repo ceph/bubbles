@@ -12,8 +12,11 @@
   <div class="card-deck">
     <div class="card">
       <h6 class="card-header">Status</h6>
-      <div class="card-body bg-success pb-0">
-        <p class="text-left text-light">Okay</p>
+      <div class="card-body pb-0"
+           [class.bg-success]="isGlobalOkay()"
+           [class.bg-danger]="isGlobalError()"
+           [class.bg-warning]="isGlobalWarn()">
+        <p class="text-left text-light">{{getGlobalStatus()}}</p>
       </div>
     </div>
 
@@ -60,7 +63,13 @@
           <td>{{svc.backend}}</td>
           <td>{{svc.size}}</td>
           <td>{{svc.replicas}}</td>
-          <td>Okay</td>
+          <td>
+            <span [class.text-danger]="isServiceError(svc.name)"
+                  [class.text-success]="isServiceOkay(svc.name)"
+                  [class.text-warning]="isServiceWarn(svc.name)">
+              {{getServiceStatus(svc.name)}}
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>

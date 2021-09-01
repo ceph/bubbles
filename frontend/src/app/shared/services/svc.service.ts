@@ -22,8 +22,25 @@ export declare type ServiceInfo = {
 
 export declare type ServiceListReply = {
   allocated: number,
-  services: ServiceInfo[]
-}
+  services: ServiceInfo[],
+  status: {[id: string]: ServiceStatus},
+};
+
+export declare type ServiceStatusCode = "undefined" | "dne";
+
+export declare type ServiceStatusEnum = number;
+
+export declare type ServiceStatusInfo = {
+  code: ServiceStatusCode,
+  msg: string,
+};
+
+export declare type ServiceStatus = {
+  name: string,
+  status: ServiceStatusEnum,
+  info: ServiceStatusInfo[],
+};
+
 
 @Injectable({
   providedIn: "root"
