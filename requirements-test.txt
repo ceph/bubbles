@@ -1,0 +1,9 @@
+asgi-lifespan
+httpx
+pytest
+pytest-asyncio
+pytest-mock
+requests
+black
+mypy
+

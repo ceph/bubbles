@@ -13,7 +13,7 @@
 #
 # pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false
 import os
-from typing import Any, Optional
+from typing import Any, Optional, List
 import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -24,8 +24,8 @@ from bubbles.backend.api import services, cluster, storage
 
 
 class BubblesModule(MgrModule):
-    MODULE_OPTIONS = []
-    NATIVE_OPTIONS = []
+    MODULE_OPTIONS: List[Any] = []
+    NATIVE_OPTIONS: List[Any] = []
 
     app: Optional[FastAPI] = None
     api: Optional[FastAPI] = None
