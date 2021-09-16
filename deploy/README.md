@@ -1,6 +1,6 @@
 # Deploying Bubbles for Development
 
-Given Bubbles is not part of the main ceph distribution, we need to take a few
+Given Bubbles is not part of the main Ceph distribution, we need to take a few
 steps to get Bubbles running as a module served by ceph-mgr.
 
 It might seem a bit convoluted at this point, but we will do our best attempts
@@ -13,7 +13,7 @@ We will be relying heavily on [kcli](https://github.com/karmab/kcli), which is
 already being used for [orchestrator and dashboard development][1], given it's able
 to easily deploy VMs with libvirt.
 
-Additionally, we need to build a new container image with the ceph binaries. We
+Additionally, we need to build a new container image with the Ceph binaries. We
 can't simply use the vanilla upstream container because we have certain
 dependencies not installed in said container.
 
