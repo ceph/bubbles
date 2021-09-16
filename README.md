@@ -34,7 +34,7 @@ are a lot of things still up in the air, but at the moment we know a few things:
 
 1. It must be orchestrator-driven
 2. The user won't be exposed to Ceph-specific concepts such as pools, PGs, or
-   ceph services.
+   Ceph services.
 3. The UX/UI must be intuitive, driven by what's wrong with the system.
 4. Must make operations as trivial as possible, including recovery from disaster
    scenarios.
