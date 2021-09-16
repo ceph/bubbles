@@ -5,7 +5,6 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
-from __future__ import annotations
 from mgr_module import MgrModule
 from typing import List, Optional
 from pydantic import BaseModel, Field
@@ -67,5 +66,5 @@ class ClusterUsageStatsModel(BaseModel):
     pools: List[PoolStatsModel]
 
     @staticmethod
-    def get(mgr: MgrModule) -> ClusterUsageStatsModel:
+    def get(mgr):  # type: (MgrModule) -> ClusterUsageStatsModel
         return ClusterUsageStatsModel.parse_obj(mgr.get("df"))
