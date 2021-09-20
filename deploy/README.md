@@ -23,6 +23,24 @@ Finally, we'll need to serve the built image from a local registry so that
 [1]: https://docs.ceph.com/en/latest/dev/cephadm/developing-cephadm/#kcli-a-virtualization-management-tool-to-make-easy-orchestrators-development
 
 
+### NOTE BEFORE
+
+Because libpython3.6 does not play well with asyncio's event loop, for reasons
+unknown at the time, we are limited to running containers with binaries built
+and linked against libpython3.8+.
+
+Unfortunately this means that we can't be using the upstream containers as
+base for our images, since these are based on a python 3.6 release.
+
+We have thus moved to containers we know are built against python 3.8, coming
+from opensuse's registry. However, these are built solely for Pacific, instead
+of following Ceph's master branch.
+
+Until this is ironed out, we are bound by the Pacific release. This also means
+that we will be grabbing a Pacific `cephadm` from the upstream repositories,
+instead of relying on the currently available version in the developer's
+machine. This is a nasty kludge, but will get us through this dark period.
+
 ### libvirt
 
 Our VMs, deployed with `kcli`, will be run with `libvirt`. Thus, one needs

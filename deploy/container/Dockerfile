@@ -1,5 +1,6 @@
-FROM quay.ceph.io/ceph-ci/ceph:master
+FROM registry.opensuse.org/opensuse/ceph/ceph:latest
 LABEL maintainer="Joao Eduardo Luis <joao@suse.com>"
 
-RUN pip3 install fastapi uvicorn aiofiles
+RUN zypper install -y python38-pip
+RUN pip install fastapi uvicorn aiofiles
 
