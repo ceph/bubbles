@@ -1,20 +1,25 @@
 @import 'styles.scss';
 
 .cb-not-found-page {
-  @extend .cb-color-theme-primary;
-
+  background-color: hsla(
+    hue($cb-color-navy),
+    saturation($cb-color-navy),
+    lightness($cb-color-navy),
+    0.6
+  );
   background-image: url('/assets/images/isabel-galvez-i54owgDjXeY-unsplash.jpg');
   background-blend-mode: multiply;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
+  color: $cb-color-white;
 
   .logo {
-    background-image: url('/assets/images/bubbles-logo.svg');
+    background-image: url('/assets/images/ceph-logo-grey-reverse.svg');
     background-repeat: no-repeat;
     background-size: contain;
-    height: 6rem;
-    width: 6rem;
+    height: 3rem;
+    width: 12rem;
   }
 
   .text {
