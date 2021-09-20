@@ -1,0 +1,49 @@
+@import 'styles.scss';
+
+div.cb-dashboard-widget {
+  // Needed for box shadow
+  margin: 5px;
+  height: calc(100% - 10px) !important;
+  min-height: calc(100% - 10px) !important;
+  width: calc(100% - 10px) !important;
+  min-width: calc(100% - 10px) !important;
+
+  .card-body {
+    padding: unset;
+    background-color: $cb-color-theme-primary-complementary;
+
+    .card-title {
+      height: 52px;
+      padding: $cb-padding;
+
+      .btn {
+        color: $cb-color-black;
+      }
+
+      .dropdown-toggle::after {
+        display: none;
+      }
+    }
+
+    .card-text {
+      height: calc(100% - 52px);
+    }
+  }
+
+  &.info {
+    box-shadow: 0 0 5px 2px $cb-color-info !important;
+  }
+
+  &.success {
+    box-shadow: 0 0 5px 2px $cb-color-success !important;
+  }
+
+  &.warning {
+    box-shadow: 0 0 5px 2px $cb-color-warning !important;
+  }
+
+  &.error {
+    @extend .cb-color-theme-error;
+    box-shadow: 0 0 5px 2px $cb-color-danger !important;
+  }
+}

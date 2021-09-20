@@ -1,0 +1,233 @@
+msgid ""
+msgstr ""
+"mime-version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "1 min"
+msgstr ""
+
+msgid "10 items per page"
+msgstr ""
+
+msgid "100 items per page"
+msgstr ""
+
+msgid "15 min"
+msgstr ""
+
+msgid "25 items per page"
+msgstr ""
+
+msgid "5 items per page"
+msgstr ""
+
+msgid "5 min"
+msgstr ""
+
+msgid "50 items per page"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Add User"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+msgid "Architecture"
+msgstr ""
+
+msgid "Authentication Token"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "CPU Load"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Copied text to the clipboard successfully."
+msgstr ""
+
+msgid "Copy to clipboard"
+msgstr ""
+
+msgid "Dashboard"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Discussions"
+msgstr ""
+
+msgid "Do you really want to logout?"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Edit User"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Failed to copy text to the clipboard."
+msgstr ""
+
+msgid "Failed to fetch data"
+msgstr ""
+
+msgid "Free"
+msgstr ""
+
+msgid "Full Name"
+msgstr ""
+
+msgid "Health"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Hostname"
+msgstr ""
+
+msgid "Hosts"
+msgstr ""
+
+msgid "Kernel"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Logged in user"
+msgstr ""
+
+msgid "Logout"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Operating System"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Path"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+msgid "Please wait ..."
+msgstr ""
+
+msgid "Please wait, creating user ..."
+msgstr ""
+
+msgid "Please wait, deleting user ..."
+msgstr ""
+
+msgid "Please wait, updating user ..."
+msgstr ""
+
+msgid "Serial"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Sign in"
+msgstr ""
+
+msgid "Signed in as"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Sorry, we could not find what you are looking for."
+msgstr ""
+
+msgid "System Information"
+msgstr ""
+
+msgid "Temporarily prohibit the user from logging in."
+msgstr ""
+
+msgid "The value is invalid."
+msgstr ""
+
+msgid "This field is required."
+msgstr ""
+
+msgid "This field must be an IP address or FQDN."
+msgstr ""
+
+msgid "Toggle navigation"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Uptime"
+msgstr ""
+
+msgid "Use this token to authenticate a new node when adding it to the cluster."
+msgstr ""
+
+msgid "Used"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid "Vendor"
+msgstr ""
+
+msgid "Volumes"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid "Website"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "items per page"
+msgstr ""

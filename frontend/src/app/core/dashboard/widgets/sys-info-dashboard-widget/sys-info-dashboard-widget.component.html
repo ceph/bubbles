@@ -1,0 +1,73 @@
+<cb-widget [loadData]="loadData.bind(this)"
+           title="System Information"
+           (loadDataEvent)="updateData($event)">
+  <div class="cb-sys-info-dashboard-widget"
+       fxLayout="row"
+       fxLayoutAlign="center center">
+    <div fxFlexFill
+         fxLayout="row wrap">
+      <div class="cb-sys-info-dashboard-widget-cell"
+           fxFlex="50">
+        <div class="cb-text-bold"
+             translate>Hostname</div>
+        <div>{{ data?.hostname }}</div>
+      </div>
+      <div class="cb-sys-info-dashboard-widget-cell"
+           fxFlex="50">
+        <div class="cb-text-bold"
+             translate>Operating System</div>
+        <div>{{ data?.operating_system }}</div>
+      </div>
+      <div class="cb-sys-info-dashboard-widget-cell"
+           fxFlex="50">
+        <div class="cb-text-bold"
+             translate>Kernel</div>
+        <div>{{ data?.kernel }}</div>
+      </div>
+      <div class="cb-sys-info-dashboard-widget-cell"
+           fxFlex="50">
+        <div class="cb-text-bold"
+             translate>Architecture</div>
+        <div>{{ data?.cpu?.arch }}</div>
+      </div>
+      <div class="cb-sys-info-dashboard-widget-cell"
+           fxFlex="50">
+        <div class="cb-text-bold"
+             translate>Uptime</div>
+        <div>{{ data?.system_uptime | relativeDate:true }}</div>
+      </div>
+      <div class="cb-sys-info-dashboard-widget-cell"
+           fxFlex="100"
+           fxLayout="column">
+        <div class="cb-text-bold">Memory</div>
+        <div fxFlex>
+          <ngx-charts-advanced-pie-chart [scheme]="memoryChartColorScheme"
+                                         [results]="memoryChartData"
+                                         [view]="[500,175]"
+                                         [animations]="false"
+                                         [tooltipDisabled]="true"
+                                         [valueFormatting]="valueFormatting">
+          </ngx-charts-advanced-pie-chart>
+        </div>
+      </div>
+      <div class="cb-sys-info-dashboard-widget-cell"
+           fxFlex="100"
+           fxLayout="column">
+        <div class="cb-text-bold"
+             translate>CPU Load</div>
+        <div fxFlex
+             fxLayoutGap="8px"
+             fxLayout="row">
+          <div *ngFor="let item of cpuLoadChartData; index as i"
+               fxFlex>
+            <div class="shadow-sm p-2 rounded"
+                 [ngStyle]="{'backgroundColor': cpuLoadColorScheme.domain[i] }">
+              <div>{{ item.value }}</div>
+              <div>{{ item.name }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</cb-widget>

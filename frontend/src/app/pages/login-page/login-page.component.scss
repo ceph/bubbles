@@ -1,0 +1,64 @@
+@import 'styles.scss';
+
+.cb-login-page {
+  .sidebar {
+    background-color: $cb-color-theme-primary;
+    background-image: url('/assets/images/qijin-xu-pSmXVhWr9kE-unsplash.jpg');
+    background-blend-mode: multiply;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: $cb-color-theme-primary-complementary;
+    max-width: 20rem;
+    min-width: 20rem;
+    padding: $cb-padding;
+
+    .header {
+      .logo {
+        background-image: url('/assets/images/bubbles-logo.svg');
+        background-repeat: no-repeat;
+        background-size: contain;
+        height: 3rem;
+        width: 3rem;
+      }
+
+      .title {
+        font-family: $cb-font-family-headings;
+        font-size: 2.5rem;
+        font-weight: lighter;
+        padding-left: $cb-padding;
+
+        &:after {
+          content: 'Bubbles';
+        }
+      }
+    }
+
+    .footer {
+      font-size: 0.75rem;
+
+      &:after {
+        content: '@2021 SUSE, LLC.';
+      }
+    }
+  }
+
+  .main {
+    background-color: $cb-color-whitesmoke;
+
+    .header {
+      height: $cb-site-header-height;
+
+      ::ng-deep .btn {
+        color: $cb-color-black;
+      }
+
+      ::ng-deep .submenu {
+        a {
+          color: $cb-color-black;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+}

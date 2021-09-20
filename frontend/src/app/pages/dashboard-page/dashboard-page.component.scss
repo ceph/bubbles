@@ -1,0 +1,17 @@
+@import 'styles.scss';
+
+.cb-dashboard-page {
+  margin: $cb-margin;
+
+  .content {
+    margin-top: $cb-margin;
+
+    gridster {
+      background: unset;
+
+      gridster-item {
+        box-shadow: unset;
+      }
+    }
+  }
+}

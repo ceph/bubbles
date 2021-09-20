@@ -1,0 +1,13 @@
+@import 'styles.scss';
+
+.cb-users-page {
+  margin: $cb-margin;
+
+  .page-actions {
+    margin-bottom: 8px;
+
+    button {
+      @extend .cb-color-theme-primary;
+    }
+  }
+}

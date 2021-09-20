@@ -1,0 +1,128 @@
+<table class="table table-striped">
+  <thead>
+    <tr class="d-flex">
+      <th *ngFor="let column of columns"
+          scope="col"
+          [class]="setHeaderClasses(column)"
+          (click)="updateSorting(column)">
+        <span *ngIf="column.name">{{ column.name | translate }}
+        </span>
+        <i *ngIf="sortHeader === column.prop"
+           aria-hidden="true"
+           [class]="getHeaderIconCss()"></i>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of filteredData"
+        class="d-flex">
+      <td *ngFor="let column of columns"
+          [class]="column.css"
+          [ngStyle]="{'text-align': !column?.align ? 'start' : column?.align}">
+        <div *ngIf="!(column.cellTemplateName || column.cellTemplate)">{{ renderCellValue(row, column) }}</div>
+        <ng-template *ngIf="column.cellTemplate"
+                     [ngTemplateOutlet]="column.cellTemplate"
+                     [ngTemplateOutletContext]="{ row: row, column: column, value: column.prop ? renderCellValue(row, column) : undefined }">
+        </ng-template>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="d-flex float-right">
+  <div *ngIf="!hidePageSize"
+       ngbDropdown>
+    <button class="btn btn-outline-default mr-2"
+            ngbDropdownToggle>
+      {{ pageSize + ' ' + ('items per page' | translate) }}
+    </button>
+    <div ngbDropdownMenu>
+      <button ngbDropdownItem
+              (click)="onPageSizeChange(5)"
+              translate>
+        5 items per page
+      </button>
+      <button ngbDropdownItem
+              (click)="onPageSizeChange(10)"
+              translate>
+        10 items per page
+      </button>
+      <button ngbDropdownItem
+              (click)="onPageSizeChange(25)"
+              translate>
+        25 items per page
+      </button>
+      <button ngbDropdownItem
+              (click)="onPageSizeChange(50)"
+              translate>
+        50 items per page
+      </button>
+      <button ngbDropdownItem
+              (click)="onPageSizeChange(100)"
+              translate>
+        100 items per page
+      </button>
+    </div>
+  </div>
+  <ngb-pagination [collectionSize]="data.length"
+                  [(page)]="page"
+                  [pageSize]="pageSize"
+                  (pageChange)="reloadData()">
+  </ngb-pagination>
+</div>
+
+<ng-template #yesNoIconTpl
+             let-value="value">
+  <i *ngIf="value"
+     [class]="icons.check">
+  </i>
+  <i *ngIf="!value"
+     [class]="icons.minus">
+  </i>
+</ng-template>
+
+<ng-template #checkIconTpl
+             let-value="value">
+  <i *ngIf="value"
+     [class]="icons.check">
+  </i>
+</ng-template>
+
+<ng-template #mapTpl
+             let-value="value"
+             let-column="column">
+  <span>{{ value | map:column.cellTemplateConfig }}</span>
+</ng-template>
+
+<ng-template #iconTpl
+             let-column="column">
+  <i [ngClass]="column.cellTemplateConfig?.class"
+     [class]="column.cellTemplateConfig.name">
+  </i>
+</ng-template>
+
+<ng-template #actionMenuTpl
+             let-column="column"
+             let-row="row">
+  <ng-template [ngTemplateOutlet]="renderActionButton"
+               [ngTemplateOutletContext]="{ row: row, items: column.cellTemplateConfig(row) }">
+  </ng-template>
+</ng-template>
+
+<ng-template #renderActionButton
+             let-items="items"
+             let-row="row">
+  <div ngbDropdown>
+    <button class="btn"
+            title="{{ 'Actions' | translate }}"
+            ngbDropdownToggle>
+      <i class="mdi mdi-dots-vertical"></i>
+    </button>
+    <div ngbDropdownMenu>
+      <button *ngFor="let item of items"
+              ngbDropdownItem
+              (click)="item.callback(row)">
+        <span>{{ item.title | translate }}</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

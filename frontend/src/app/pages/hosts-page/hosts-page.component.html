@@ -1,0 +1,23 @@
+<div class="cb-hosts-page"
+     fxLayout="column">
+  <div class="page-actions"
+       fxLayout="row"
+       fxLayoutAlign="start center">
+    <button type="button"
+            class="btn"
+            (click)="onShowToken()">
+      <span translate>Authentication Token</span>
+    </button>
+  </div>
+  <div class="cb-hosts-page-content">
+    <div *ngIf="!firstLoadComplete && loading"
+         class="progress">
+      <div class="progress-bar indeterminate"></div>
+    </div>
+    <cb-datatable [data]="data"
+                  [columns]="columns"
+                  [autoReload]="30000"
+                  (loadData)="loadData()">
+    </cb-datatable>
+  </div>
+</div>

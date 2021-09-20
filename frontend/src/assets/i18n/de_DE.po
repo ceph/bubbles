@@ -1,0 +1,463 @@
+#
+# Translators:
+# Volker <votdev@gmx.de>, 2021
+# AvengerMoJo Alex <avengermojo@gmail.com>, 2021
+# Tatjana Dehler, 2021
+#
+msgid ""
+msgstr ""
+"Last-Translator: Tatjana Dehler, 2021\n"
+"Language-Team: German (Germany) (https://www.transifex.com/aquarist-labs/teams/117625/de_DE/)\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"mime-version: 1.0\n"
+
+msgid "1 min"
+msgstr "1 min"
+
+msgid "15 min"
+msgstr "15 min"
+
+msgid "5 min"
+msgstr "5 min"
+
+msgid "Add"
+msgstr "Hinzufügen"
+
+msgid "Address"
+msgstr "Adresse"
+
+msgid "Allocated Size"
+msgstr "Zugewiesene Größe"
+
+msgid ""
+"Aquarium will now install and setup the core system. All recognized storage "
+"devices are automatically assigned. Afterwards, you will be able to "
+"configure the services you want to provide."
+msgstr ""
+"Aquarium installiert und konfiguriert nun das Basissystem. Alle gefundenen "
+"Speichergeräte werden automatisch übernommen. Anschließend kannst du "
+"benötigte Dienste konfigurieren."
+
+msgid "Architecture"
+msgstr "Architektur"
+
+msgid "Authentication Token"
+msgstr "Authentifizierungsschlüssel"
+
+msgid "Available"
+msgstr "Verfügbar"
+
+msgid "Available Capacity"
+msgstr "Verfügbare Kapazität"
+
+msgid "Back"
+msgstr "Zurück"
+
+msgid "Bootstrapping not possible at the moment, please retry later."
+msgstr ""
+
+msgid "CPU Load"
+msgstr "CPU-Auslastung"
+
+msgid "Cancel"
+msgstr "Abbruch"
+
+msgid "Capacity"
+msgstr "Kapazität"
+
+msgid "CephFS"
+msgstr "CephFS"
+
+msgid "CephFS Service"
+msgstr "CephFS-Dienst"
+
+msgid "Choose installation mode"
+msgstr "Wählen Sie den Installationsmodus"
+
+msgid "Close"
+msgstr "Schließen"
+
+msgid "Configure CephFS service"
+msgstr "Konfiguriere den CephFS-Dienst"
+
+msgid "Configure NFS service"
+msgstr "Konfiguriere den NFS-Dienst"
+
+msgid "Continue"
+msgstr "Fortsetzen"
+
+msgid "Copied text to the clipboard successfully."
+msgstr "Text erfolgreich in die Zwischenablage kopiert."
+
+msgid "Copy to clipboard"
+msgstr "In die Zwischenablage kopieren"
+
+msgid "Create"
+msgstr "Erstellen"
+
+msgid "Create new cluster"
+msgstr "Neuen Cluster erstellen"
+
+msgid "Current deployment has a single host and can't tolerate failures."
+msgstr ""
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Deploy devices"
+msgstr ""
+
+msgid "Devices"
+msgstr ""
+
+msgid "Discussions"
+msgstr ""
+
+msgid "Entity"
+msgstr ""
+
+msgid "Error"
+msgstr "Fehler"
+
+msgid "Estimated Required Capacity"
+msgstr ""
+
+msgid "Failed to bootstrap the system."
+msgstr "Fehler beim Urladen des Systems."
+
+msgid "Failed to copy text to the clipboard."
+msgstr "Fehler beim Kopieren des Textes in die Zwischenablage."
+
+msgid "Failed to create service."
+msgstr "Fehler beim Erstellen des Dienstes."
+
+msgid "Failed to fetch data"
+msgstr "Daten konnten nicht abgerufen werden"
+
+msgid "Failed to fetch device information"
+msgstr "Geräteinformationen konnten nicht abgerufen werden"
+
+msgid "Failed to join existing cluster."
+msgstr ""
+
+msgid "Failed to start bootstrapping the system."
+msgstr "Fehler beim Starten des Urladen des Systems."
+
+msgid "Failed to start device deployment."
+msgstr "Fehler beim Starten der Gerätebereitstellung."
+
+msgid "File Service"
+msgstr ""
+
+msgid "Flavor"
+msgstr ""
+
+msgid "Free"
+msgstr "Frei"
+
+msgid "Go to Dashboard"
+msgstr "Zum Dashboard gehen"
+
+msgid "Health"
+msgstr ""
+
+msgid "Help"
+msgstr "Hilfe"
+
+msgid "Hostname"
+msgstr "Hostname"
+
+msgid "Hosts"
+msgstr ""
+
+msgid ""
+"If you do have your own NTP host configured on the network, please add it "
+"below."
+msgstr ""
+
+msgid "Installation"
+msgstr ""
+
+msgid "Join"
+msgstr ""
+
+msgid "Join existing cluster"
+msgstr "Einem vorhandenen Cluster beitreten"
+
+msgid "Kernel"
+msgstr "Kernel"
+
+msgid "Key"
+msgstr ""
+
+msgid "Language"
+msgstr "Sprache"
+
+msgid "Mount command"
+msgstr ""
+
+msgid "NFS"
+msgstr "NFS"
+
+msgid "NFS Service"
+msgstr "NFS-Dienst"
+
+msgid "NTP host IP/FQDN"
+msgstr ""
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Networking"
+msgstr ""
+
+msgid "Next"
+msgstr "Weiter"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "No CephFS services configured"
+msgstr "Keine CephFS-Dienste konfiguriert"
+
+msgid "No NFS services configured"
+msgstr "Keine NFS-Dienste konfiguriert"
+
+msgid "No services deployed yet."
+msgstr "Noch keine Dienste erstellt."
+
+msgid "Number Of Replicas"
+msgstr ""
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Operating System"
+msgstr "Betriebssystem"
+
+msgid "Path"
+msgstr "Pfad"
+
+msgid "Performance"
+msgstr ""
+
+msgid "Please wait, assessing service specifications ..."
+msgstr ""
+
+msgid "Please wait, bootstrapping in progress ..."
+msgstr "Bitte warten, das Urladen läuft ..."
+
+msgid "Please wait, bootstrapping will be started ..."
+msgstr "Bitte warten, das Urladen wird gestartet ..."
+
+msgid "Please wait, checking node status ..."
+msgstr ""
+
+msgid "Please wait, checking system status ..."
+msgstr ""
+
+msgid "Please wait, deploying service ..."
+msgstr ""
+
+msgid "Please wait, device deployment in progress ..."
+msgstr "Bitte warten, die Gerätebereitstellung läuft ..."
+
+msgid "Please wait, fetching device information ..."
+msgstr "Bitte warten, die Geräteinformationen werden ermittelt ...."
+
+msgid "Please wait, finishing deployment ..."
+msgstr ""
+
+msgid "Please wait, joining existing cluster in progress ..."
+msgstr ""
+
+msgid "Please wait, start joining existing cluster ..."
+msgstr ""
+
+msgid "Port"
+msgstr ""
+
+msgid "Raw Required Capacity"
+msgstr ""
+
+msgid "Raw Size"
+msgstr ""
+
+msgid "Reserved Capacity"
+msgstr ""
+
+msgid "Serial"
+msgstr "Seriennummer"
+
+msgid "Service Name"
+msgstr "Name des Dienstes"
+
+msgid "Service Type"
+msgstr "Art des Dienstes"
+
+msgid "Service creation requirements not met."
+msgstr ""
+
+msgid "Service successfully created."
+msgstr ""
+
+msgid "Services"
+msgstr "Dienste"
+
+msgid "Services Capacity"
+msgstr ""
+
+msgid "Services Capacity - Top 5"
+msgstr ""
+
+msgid ""
+"Setup will create a new deployment from scratch, configuring this node as a "
+"standalone storage solution."
+msgstr ""
+
+msgid ""
+"Setup will search for existing deployments in the network and be "
+"assimilated."
+msgstr ""
+
+msgid "Show credentials"
+msgstr ""
+
+msgid "Show mount command"
+msgstr ""
+
+msgid "Size"
+msgstr "Größe"
+
+msgid "Sorry, we could not find what you are looking for."
+msgstr ""
+
+msgid "Start"
+msgstr "Start"
+
+msgid "Summary"
+msgstr "Zusammenfassung"
+
+msgid "System Information"
+msgstr "Systeminformationen"
+
+msgid "The IP address or FQDN of the NTP host."
+msgstr ""
+
+msgid "The IP address or FQDN of the main node."
+msgstr ""
+
+msgid ""
+"The following devices have been identified in the system and are "
+"automatically added to the storage management."
+msgstr ""
+
+msgid "The name of the node."
+msgstr ""
+
+msgid "The security token to authorize at the main node."
+msgstr ""
+
+msgid "The service name already exists."
+msgstr "Der Name des Dienstes existiert bereits."
+
+msgid "The token is invalid."
+msgstr "Der Schlüssel ist ungültig."
+
+msgid "The value cannot exceed 65535."
+msgstr ""
+
+msgid "The value must be at least 0."
+msgstr ""
+
+msgid "This field is required."
+msgstr "Dieses Feld ist ein Pflichtfeld."
+
+msgid "This field must be an IP address or FQDN (<address>:<port>)."
+msgstr ""
+
+msgid "This field must be an IP address or FQDN."
+msgstr ""
+
+msgid ""
+"This step will erase all data on the listed devices. Are you sure you want "
+"to continue?"
+msgstr ""
+
+msgid ""
+"This wizard will guide you through the installation process to set up a node"
+" from scratch."
+msgstr ""
+
+msgid "Toggle navigation"
+msgstr "Navigation umschalten"
+
+msgid "Token"
+msgstr "Schlüssel"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Unable to finish deployment."
+msgstr ""
+
+msgid "Uptime"
+msgstr "Betriebszeit"
+
+msgid "Usable Size"
+msgstr ""
+
+msgid "Use an NTP host on the Internet"
+msgstr ""
+
+msgid "Use the following command line to mount the file system."
+msgstr ""
+
+msgid ""
+"Use this token to authenticate a new node when adding it to the cluster."
+msgstr ""
+
+msgid "Use your own NTP host"
+msgstr ""
+
+msgid "Used"
+msgstr "Benutzt"
+
+msgid "Vendor"
+msgstr "Anbieter"
+
+msgid "Volumes"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid "Website"
+msgstr ""
+
+msgid ""
+"Welcome to Aquarium - Our take on an opinionated storage appliance. To get "
+"started on your first deployment, click below. We are in the initial phases "
+"of development and welcome feature and bug reports. See our"
+msgstr ""
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "You can now open your dashboard by clicking the button below."
+msgstr ""
+
+msgid ""
+"Your Aquarium environment needs to have the time synchronized with a "
+"reliable time source. You do have two options in order to configure the time"
+" synchronization:"
+msgstr ""
+
+msgid "Your deployment was successful and is now ready to use."
+msgstr ""
+
+msgid "for more details."
+msgstr "für mehr Details."

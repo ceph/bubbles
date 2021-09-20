@@ -1,0 +1,28 @@
+@import 'styles.scss';
+
+.submenu {
+  a {
+    border-bottom: 3px solid;
+    border-color: transparent;
+    color: $cb-color-submenu-item-text;
+
+    &.selected {
+      color: $cb-color-submenu-item-selected;
+    }
+
+    &:hover {
+      cursor: pointer;
+      color: $cb-color-submenu-item-selected;
+      text-decoration: none;
+
+      &:not(.selected) {
+        border-color: $cb-color-submenu-item-hover;
+      }
+    }
+  }
+
+  .submenu-item {
+    display: inline-block;
+    padding: 12px 16px;
+  }
+}

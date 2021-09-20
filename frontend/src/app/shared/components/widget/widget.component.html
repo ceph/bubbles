@@ -1,0 +1,42 @@
+<div class="card cb-dashboard-widget {{status}}"
+     fxFlexFill>
+  <div class="card-body">
+    <div class="card-title"
+         fxLayout="row"
+         fxLayoutAlign="space-between center">
+      {{ title | translate }}
+      <div *ngIf="actionMenu"
+           ngbDropdown
+           display="dynamic"
+           placement="bottom-right">
+        <button class="btn btn-simple"
+                title="{{title | translate}} actions"
+                ngbDropdownToggle>
+          <i class="mdi mdi-menu"></i>
+        </button>
+        <div ngbDropdownMenu>
+          <a ngbDropdownItem
+             *ngFor="let item of actionMenu"
+             (click)="item.action()">
+            <i class="mdi mdi-{{item.icon}}"></i>
+            <span>{{item.name | translate}}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!firstLoadComplete && loading"
+         class="progress">
+      <div class="progress-bar indeterminate"></div>
+    </div>
+    <div *ngIf="!error && firstLoadComplete"
+         class="card-text">
+      <ng-content></ng-content>
+    </div>
+    <div *ngIf="error && !loading"
+         class="card-text"
+         fxLayout="column"
+         fxLayoutAlign="center center">
+      <i class="mdi mdi-lan-disconnect"></i>
+    </div>
+  </div>
+</div>

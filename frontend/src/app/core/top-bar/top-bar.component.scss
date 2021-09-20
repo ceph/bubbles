@@ -1,0 +1,10 @@
+@import 'styles.scss';
+
+.cb-top-bar {
+  background-color: $cb-color-site-header-background;
+  height: $cb-site-header-height;
+
+  ::ng-deep .btn {
+    color: $cb-color-submenu-item-text;
+  }
+}
