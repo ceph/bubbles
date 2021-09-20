@@ -1,0 +1,20 @@
+<cb-widget [loadData]="loadData.bind(this)"
+           title="Health"
+           [setStatus]="setHealthStatusIndicator.bind(this)"
+           (loadDataEvent)="setHealthStatus($event)">
+  <div class="cb-health-dashboard-widget"
+       [class.cb-color-theme-ok]="isOkay"
+       [class.cb-color-theme-error]="isError || !hasStatus"
+       [class.cb-color-theme-warn]="isWarn"
+       fxLayout="row"
+       fxLayoutAlign="center center"
+       fxFlexFill>
+    <i *ngIf="isOkay"
+       class="mdi mdi-thumb-up"></i>
+    <i *ngIf="isError"
+       class="mdi mdi-thumb-down"></i>
+    <i *ngIf="isWarn"
+       class="mdi mdi-alert-circle-outline"></i>
+    <span class="cb-health-dashboard-widget-text">{{ statusText }}</span>
+  </div>
+</cb-widget>

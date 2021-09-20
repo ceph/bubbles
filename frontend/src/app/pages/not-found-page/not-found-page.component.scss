@@ -1,0 +1,23 @@
+@import 'styles.scss';
+
+.cb-not-found-page {
+  @extend .cb-color-theme-primary;
+
+  background-image: url('/assets/images/isabel-galvez-i54owgDjXeY-unsplash.jpg');
+  background-blend-mode: multiply;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  .logo {
+    background-image: url('/assets/images/bubbles-logo.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 6rem;
+    width: 6rem;
+  }
+
+  .text {
+    @extend .h1;
+  }
+}

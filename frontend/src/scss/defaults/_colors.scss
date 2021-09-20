@@ -1,0 +1,53 @@
+/*
+ * Copyright (C) 2021 SUSE, LLC.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+@forward '../vendor/colors';
+
+$cb-color-red-500: hsl(360, 84%, 47%);
+$cb-color-green-500: #0b0;
+$cb-color-yellow-500: #ffc200;
+$cb-color-gray-50: #f2f2f2;
+$cb-color-gray-300: hsl(210, 40%, 96%);
+$cb-color-gray-500: hsl(210, 29%, 87%);
+$cb-color-transparent: transparent;
+$cb-color-transparent-black: hsla(235, 16%, 16%, 0.05);
+$cb-color-white: white;
+$cb-color-whitesmoke: whitesmoke;
+$cb-color-black: black;
+$cb-color-gunmetal: hsl(235, 16%, 16%);
+$cb-color-navy: hsl(237, 74%, 13%);
+$cb-color-blue: hsl(214, 82%, 51%);
+$cb-color-royal: hsl(237, 74%, 25%);
+$cb-color-success: $cb-color-green-500;
+$cb-color-info: $cb-color-blue;
+$cb-color-warning: $cb-color-yellow-500;
+$cb-color-danger: $cb-color-red-500;
+
+$cb-color-theme-primary: $cb-color-royal;
+$cb-color-theme-primary-complementary: $cb-color-white;
+$cb-color-theme-accent: $cb-color-red-500;
+$cb-color-theme-accent-complementary: $cb-color-white;
+$cb-color-body-background: $cb-color-white;
+$cb-color-card-background: $cb-color-gray-300;
+$cb-color-btn-submit: $cb-color-red-500;
+$cb-color-site-header-background: $cb-color-white;
+$cb-color-site-header-text: $cb-color-gunmetal;
+$cb-color-menu-background: $cb-color-gray-300;
+$cb-color-menu-item-hover: $cb-color-red-500;
+$cb-color-menu-item-text: $cb-color-black;
+$cb-color-menu-item-selected: $cb-color-red-500;
+$cb-color-menu-item-selected-text: $cb-color-white;
+$cb-color-submenu-item-selected: $cb-color-red-500;
+$cb-color-submenu-item-hover: $cb-color-red-500;
+$cb-color-submenu-item-text: $cb-color-gunmetal;
+$cb-color-table-accent-background: $cb-color-gray-300;

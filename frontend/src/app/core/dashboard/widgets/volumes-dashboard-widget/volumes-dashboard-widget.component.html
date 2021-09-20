@@ -1,0 +1,18 @@
+<cb-widget [loadData]="loadData.bind(this)"
+           title="Volumes"
+           (loadDataEvent)="updateData($event)">
+  <div class="cb-volumes-dashboard-widget"
+       fxLayout="row"
+       fxLayoutAlign="center center">
+    <div class="cb-volumes-dashboard-widget-table"
+         fxFlex
+         fxLayout="column">
+      <cb-datatable [data]="data"
+                    [columns]="columns"
+                    [pageSize]="5"
+                    [autoReload]="false"
+                    [hidePageSize]="true">
+      </cb-datatable>
+    </div>
+  </div>
+</cb-widget>

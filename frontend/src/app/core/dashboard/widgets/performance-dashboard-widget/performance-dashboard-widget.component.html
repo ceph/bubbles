@@ -1,0 +1,36 @@
+<cb-widget [loadData]="loadData.bind(this)"
+           title="{{ 'Performance' | translate }}"
+           (loadDataEvent)="updateChartData($event)">
+  <div class="cb-performance-dashboard-widget"
+       fxFlexFill
+       fxLayout="column"
+       fxLayoutAlign="start stretch">
+    <div fxFlexFill
+         fxLayout="row"
+         fxLayoutAlign="center stretch">
+      <div fxFlex="50">
+        <ngx-charts-gauge #read
+                          [ngClass]="{visible: sizeUpdated}"
+                          [results]="chartDataRead"
+                          [showAxis]="false"
+                          [tooltipDisabled]="false"
+                          units="Read"
+                          [valueFormatting]="valueFormatting"
+                          [animations]="false">
+        </ngx-charts-gauge>
+      </div>
+      <div fxFlex="50">
+        <ngx-charts-gauge #write
+                          [ngClass]="{visible: sizeUpdated}"
+                          [results]="chartDataWrite"
+                          [showAxis]="false"
+                          [tooltipDisabled]="false"
+                          units="Write"
+                          [valueFormatting]="valueFormatting"
+                          [animations]="false">
+        </ngx-charts-gauge>
+      </div>
+    </div>
+    <!-- Area chart will come below as soon as rate series are available -->
+  </div>
+</cb-widget>

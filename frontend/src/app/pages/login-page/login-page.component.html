@@ -1,0 +1,34 @@
+<div class="cb-login-page"
+     fxFlexFill
+     fxLayout="row"
+     fxLayoutAlign="start stretch">
+  <div class="sidebar"
+       fxLayout="column">
+    <div class="header"
+         fxLayout="row"
+         fxLayoutAlign="start center">
+      <div class="logo"></div>
+      <div class="title"></div>
+    </div>
+    <div fxFlex></div>
+    <div class="footer"></div>
+  </div>
+  <div class="main"
+       fxFlex
+       fxLayout="column"
+       fxLayoutAlign="start stretch">
+    <div class="header"
+         fxLayout="row"
+         fxLayoutAlign="start center">
+      <div fxFlex></div>
+      <cb-language-button></cb-language-button>
+    </div>
+    <div class="content"
+         fxFlex
+         fxLayout="column"
+         fxLayoutAlign="center center">
+      <cb-declarative-form [config]="config"></cb-declarative-form>
+    </div>
+    <div class="footer"></div>
+  </div>
+</div>

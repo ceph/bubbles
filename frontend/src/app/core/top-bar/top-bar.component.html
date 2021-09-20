@@ -1,0 +1,59 @@
+<div class="cb-top-bar"
+     fxLayout="row"
+     fxLayoutAlign="start center">
+  <button class="btn btn-simple"
+          title="{{ 'Toggle navigation' | translate }}"
+          (click)="onToggleNavigation()">
+    <i class="mdi mdi-menu"></i>
+  </button>
+  <cb-breadcrumbs></cb-breadcrumbs>
+  <span fxFlex></span>
+  <cb-language-button></cb-language-button>
+  <div ngbDropdown>
+    <button class="btn btn-simple"
+            title="{{ 'Help' | translate }}"
+            ngbDropdownToggle>
+      <i class="mdi mdi-help-circle"></i>
+    </button>
+    <div ngbDropdownMenu>
+      <a ngbDropdownItem
+         href="https://ceph.io/"
+         target="_blank">
+        <div>
+          <i class="mdi mdi-web mr-1"></i>
+          <span translate>Website</span>
+        </div>
+      </a>
+      <a ngbDropdownItem
+         href="https://github.com/ceph/bubbles/discussions/"
+         target="_blank">
+        <div>
+          <i class="mdi mdi-forum mr-1"></i>
+          <span translate>Discussions</span>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div ngbDropdown
+       display="dynamic"
+       placement="bottom-right">
+    <button class="btn btn-simple"
+            title="{{ 'Logged in user' | translate }}"
+            ngbDropdownToggle>
+      <i class="mdi mdi-account-circle"></i>
+    </button>
+    <div ngbDropdownMenu>
+      <div ngbDropdownItem
+           disabled>
+        <i class="mdi mdi-account-circle mr-1"></i>
+        <span translate>Signed in as <b>{{ username }}</b></span>
+      </div>
+      <div class="dropdown-divider"></div>
+      <button ngbDropdownItem
+              (click)="onLogout()">
+        <i class="mdi mdi-logout mr-1"></i>
+        <span translate>Logout</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,97 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'src/scss/defaults';
 
-/* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
+@import 'src/scss/blockui';
+@import 'src/scss/bootstrap';
+@import 'src/scss/ngx-charts';
+@import 'src/scss/ngx-toastr';
+
+.cb-color-theme-primary {
+  color: $cb-color-theme-primary-complementary;
+  background-color: $cb-color-theme-primary;
+}
+.cb-color-theme-accent {
+  color: $cb-color-theme-accent-complementary;
+  background-color: $cb-color-theme-accent;
+}
+.cb-color-theme-white {
+  color: $cb-color-white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.cb-color-theme-error,
+.cb-color-theme-danger {
+  color: $cb-color-white;
+  background-color: $cb-color-danger;
+}
+.cb-color-theme-ok {
+  color: $cb-color-white;
+  background-color: $cb-color-success;
+}
+.cb-color-theme-warn {
+  color: $cb-color-black;
+  background-color: $cb-color-warning;
+}
+.cb-color-theme-info {
+  color: $cb-color-white;
+  background-color: $cb-color-info;
+}
+.cb-color-theme-success {
+  color: $cb-color-white;
+  background-color: $cb-color-success;
+}
+
+.cb-background-color-primary {
+  background-color: $cb-color-theme-primary;
+}
+.cb-background-color-accent {
+  background-color: $cb-color-theme-accent;
+}
+
+.cb-color-primary {
+  color: $cb-color-theme-primary;
+}
+.cb-color-accent {
+  color: $cb-color-theme-accent;
+}
+.cb-color-green,
+.cb-color-success {
+  color: $cb-color-success;
+}
+.cb-color-red,
+.cb-color-error,
+.cb-color-danger {
+  color: $cb-color-danger;
+}
+
+.cb-text-pre-wrap {
+  white-space: pre-wrap;
+}
+.cb-text-pre {
+  white-space: pre;
+}
+.cb-text-center {
+  text-align: center;
+}
+.cb-text-bold {
+  font-weight: bold;
+}
+.cb-text-monospaced {
+  font-family: $cb-font-family-monospace !important;
+}
+.cb-text-no-decoration {
+  text-decoration: none;
+}
+
+.cb-cursor-help {
+  cursor: help;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  background-color: $cb-color-body-background;
+  color: $cb-color-gunmetal;
+  font-family: $cb-font-family-sans-serif;
+  margin: 0;
+}
