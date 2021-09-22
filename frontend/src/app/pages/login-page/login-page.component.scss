@@ -1,7 +1,8 @@
 @import 'styles.scss';
 
 .cb-login-page {
-  @extend .cb-color-theme-black;
+  background-color: $cb-color-gunmetal;
+  color: $cb-color-white;
 
   .sidebar {
     background-color: hsla(
