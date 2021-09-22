@@ -7,7 +7,7 @@
     lightness($cb-color-navy),
     0.6
   );
-  background-image: url('/assets/images/isabel-galvez-i54owgDjXeY-unsplash.jpg');
+  background-image: url('/assets/images/mostafa-ashraf-mostafa-2n-NlDEAhtk-unsplash.jpg');
   background-blend-mode: multiply;
   background-size: cover;
   background-repeat: no-repeat;
@@ -18,11 +18,14 @@
     background-image: url('/assets/images/ceph-logo-grey-reverse.svg');
     background-repeat: no-repeat;
     background-size: contain;
+    margin-bottom: 1rem;
     height: 3rem;
     width: 12rem;
   }
 
   .text {
     @extend .h1;
+
+    margin-bottom: 1rem;
   }
 }

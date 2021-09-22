@@ -4,9 +4,9 @@ Name: bubbles
 Files: *
 License: GPL-2 (see LICENSE), unless otherwise specified
 
-Files: frontend/src/assets/images/qijin-xu-pSmXVhWr9kE-unsplash.jpg
-Source: https://unsplash.com/photos/pSmXVhWr9kE
-Copyright: Qijin Xu <https://unsplash.com/@obkim>
+Files: frontend/src/assets/images/jong-marshes-79mNMAvSORg-unsplash.jpg
+Source: https://unsplash.com/photos/79mNMAvSORg
+Copyright: Jong Marshes <https://unsplash.com/@turnlip19>
 License: Unsplash License
  Unsplash grants you an irrevocable, nonexclusive, worldwide copyright
  license to download, copy, modify, distribute, perform, and use photos
@@ -15,9 +15,9 @@ License: Unsplash License
  license does not include the right to compile photos from Unsplash to
  replicate a similar or competing service.
 
-Files: frontend/src/assets/images/isabel-galvez-i54owgDjXeY-unsplash.jpg
-Source: https://unsplash.com/photos/i54owgDjXeY
-Copyright: Isabel Galvez <https://unsplash.com/@isagalvezphoto>
+Files: frontend/src/assets/images/mostafa-ashraf-mostafa-2n-NlDEAhtk-unsplash.jpg
+Source: https://unsplash.com/photos/2n-NlDEAhtk
+Copyright: Mostafa Ashraf Mostafa <https://unsplash.com/@mustafa_ita>
 License: Unsplash License
  Unsplash grants you an irrevocable, nonexclusive, worldwide copyright
  license to download, copy, modify, distribute, perform, and use photos

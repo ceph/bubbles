@@ -1,6 +1,8 @@
 @import 'styles.scss';
 
 .cb-login-page {
+  @extend .cb-color-theme-black;
+
   .sidebar {
     background-color: hsla(
       hue($cb-color-royal),
@@ -8,7 +10,7 @@
       lightness($cb-color-royal),
       0.6
     );
-    background-image: url('/assets/images/qijin-xu-pSmXVhWr9kE-unsplash.jpg');
+    background-image: url('/assets/images/jong-marshes-79mNMAvSORg-unsplash.jpg');
     background-blend-mode: multiply;
     background-size: cover;
     background-repeat: no-repeat;
@@ -49,20 +51,17 @@
   }
 
   .main {
-    background-color: $cb-color-whitesmoke;
-
     .header {
       height: $cb-site-header-height;
 
       ::ng-deep .btn {
-        color: $cb-color-black;
+        color: $cb-color-white;
       }
+    }
 
-      ::ng-deep .submenu {
-        a {
-          color: $cb-color-black;
-          pointer-events: none;
-        }
+    .content {
+      ::ng-deep .btn-outline-default {
+        color: $cb-color-white;
       }
     }
   }
