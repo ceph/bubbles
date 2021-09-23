@@ -3,19 +3,12 @@
 export PATH=/root/bin:$PATH
 mkdir /root/bin
 {% if ceph_dev_folder is defined %}
-  # NOTE: we need a pacific cephadm for now, regardless of what version the
-  # developer is working against.
-  # cp /mnt/{{ ceph_dev_folder }}/src/cephadm/cephadm /root/bin/cephadm
-  pushd /root/bin
-  curl --silent --remote-name \
-    --location \
-    https://raw.githubusercontent.com/ceph/ceph/pacific/src/cephadm/cephadm
-  popd
+  cp /mnt/{{ ceph_dev_folder }}/src/cephadm/cephadm /root/bin/cephadm
 {% else %}
   pushd /root/bin
   curl --silent --remote-name \
     --location \
-    https://raw.githubusercontent.com/ceph/ceph/pacific/src/cephadm/cephadm
+    https://raw.githubusercontent.com/ceph/ceph/master/src/cephadm/cephadm
   popd
 {% endif %}
 chmod +x /root/bin/cephadm

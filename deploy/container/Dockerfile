@@ -1,4 +1,4 @@
-FROM registry.opensuse.org/opensuse/ceph/ceph:latest
+FROM registry.opensuse.org/filesystems/ceph/master/upstream/images/opensuse/ceph/ceph:latest
 LABEL maintainer="Joao Eduardo Luis <joao@suse.com>"
 
 RUN zypper install -y python38-pip
