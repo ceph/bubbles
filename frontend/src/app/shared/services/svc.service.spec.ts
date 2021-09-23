@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SvcService } from './svc.service';
+import { SvcService } from '~/app/shared/services/svc.service';
+import { TestingModule } from '~/app/testing.module';
 
 describe('SvcService', () => {
   let service: SvcService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [TestingModule]
+    });
     service = TestBed.inject(SvcService);
   });
 
