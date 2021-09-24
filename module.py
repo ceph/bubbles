@@ -97,4 +97,5 @@ class BubblesModule(MgrModule):
             return
 
     def notify(self, notify_type: str, notify_id: str) -> None:
-        self.log.debug(f"recv notify {notify_type}")
+        # self.log.debug(f"recv notify {notify_type}")
+        pass
