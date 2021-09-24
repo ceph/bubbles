@@ -23,7 +23,7 @@ class Controllers:
     def __init__(self, mgr: MgrModule):
         self._mgr = mgr
 
-    def start(self):
+    def start(self) -> None:
         self.services = ServicesController(self._mgr)
         self.cluster = ClusterController(self._mgr)
         self.storage = StorageController(self._mgr, self.cluster, self.services)
