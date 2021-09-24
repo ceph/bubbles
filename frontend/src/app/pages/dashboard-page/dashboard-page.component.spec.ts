@@ -11,11 +11,7 @@ describe('DashboardPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        PagesModule,
-        TestingModule,
-        TranslateModule.forRoot()
-      ]
+      imports: [PagesModule, TestingModule, TranslateModule.forRoot()]
     }).compileComponents();
   });
 
