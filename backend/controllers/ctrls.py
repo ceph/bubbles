@@ -11,6 +11,7 @@ from bubbles.backend.controllers.storage import StorageController
 from mgr_module import MgrModule
 from typing import Optional
 from bubbles.backend.controllers.cluster import ClusterController
+from bubbles.backend.controllers.rest_api_proxy import RestApiProxyController
 from bubbles.backend.controllers.services import ServicesController
 
 
@@ -18,6 +19,7 @@ class Controllers:
     services: Optional[ServicesController] = None
     cluster: Optional[ClusterController] = None
     storage: Optional[StorageController] = None
+    rest_api_proxy: Optional[RestApiProxyController] = None
     _mgr: MgrModule
 
     def __init__(self, mgr: MgrModule):
@@ -27,3 +29,4 @@ class Controllers:
         self.services = ServicesController(self._mgr)
         self.cluster = ClusterController(self._mgr)
         self.storage = StorageController(self._mgr, self.cluster, self.services)
+        self.rest_api_proxy = RestApiProxyController(self._mgr)

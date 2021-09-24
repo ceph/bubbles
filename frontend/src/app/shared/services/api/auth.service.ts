@@ -2,7 +2,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 
 import { AuthStorageService } from '~/app/shared/services/auth-storage.service';
 
@@ -39,7 +39,7 @@ export class AuthService {
 
   logout(): Observable<void> {
     return this.http.post<void>(`${this.url}/logout`, null).pipe(
-      tap(() => {
+      finalize(() => {
         this.authStorageService.revoke();
         document.location.replace('');
       })

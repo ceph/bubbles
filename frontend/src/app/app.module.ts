@@ -11,6 +11,7 @@ import { CoreModule } from '~/app/core/core.module';
 import { getCurrentLanguage, setTranslationService, TranslateHttpLoader } from '~/app/i18n.helper';
 import { PagesModule } from '~/app/pages/pages.module';
 import { HttpErrorInterceptorService } from '~/app/shared/services/http-error-interceptor.service';
+import { SharedModule } from '~/app/shared/shared.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,6 +22,7 @@ import { HttpErrorInterceptorService } from '~/app/shared/services/http-error-in
     AppRoutingModule,
     CoreModule,
     PagesModule,
+    SharedModule.forRoot(),
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-center',
       preventDuplicates: true

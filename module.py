@@ -24,7 +24,14 @@ from fastapi.staticfiles import StaticFiles
 
 from mgr_module import MgrModule
 from bubbles.bubbles import Bubbles
-from bubbles.backend.api import services, cluster, storage
+from bubbles.backend.api import (
+    auth,
+    cluster,
+    services,
+    status,
+    storage,
+    user
+)
 
 
 class BubblesModule(MgrModule):
@@ -62,6 +69,9 @@ class BubblesModule(MgrModule):
         self.api.include_router(services.router)
         self.api.include_router(cluster.router)
         self.api.include_router(storage.router)
+        self.api.include_router(auth.router)
+        self.api.include_router(user.router)
+        self.api.include_router(status.router)
 
         staticdir = os.path.join(
             os.path.dirname(os.path.realpath(__file__)), "frontend/dist"
