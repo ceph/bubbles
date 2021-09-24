@@ -12,9 +12,13 @@
 # Lesser General Public License for more details.
 #
 # pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false
+
+import asyncio
 import os
-from typing import Any, Optional, List
+import sys
 import uvicorn
+
+from typing import Any, Optional, List
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
@@ -67,7 +71,25 @@ class BubblesModule(MgrModule):
         self.app.mount(
             "/", StaticFiles(directory=staticdir, html=True), name="static"
         )
-        uvicorn.run(self.app, host="0.0.0.0", port=1337)  # type: ignore
+        self._run()
+
+    def _run(
+        self,
+        host: str = "0.0.0.0",
+        port: int = 1337,
+    ) -> None:
+        config = uvicorn.Config(app=self.app, host=host, port=port)
+        config.setup_event_loop()
+        server = uvicorn.Server(config=config)
+
+        if sys.version_info >= (3, 7):
+            return asyncio.run(server.serve())
+
+        loop = asyncio.new_event_loop()
+        try:
+            loop.run_until_complete(server.serve())
+        finally:
+            loop.close()
 
     def shutdown(self) -> None:
         self.log.info("Shutting down Bubbles server")
