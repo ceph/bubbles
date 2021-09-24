@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { CoreModule } from '~/app/core/core.module';
@@ -28,17 +27,7 @@ describe('NavigationBarItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        CoreModule,
-        RouterTestingModule.withRoutes([
-          {
-            path: 'itemroute',
-            redirectTo: '/'
-          }
-        ]),
-        TestingModule,
-        TranslateModule.forRoot()
-      ]
+      imports: [CoreModule, TestingModule, TranslateModule.forRoot()]
     }).compileComponents();
   });
 
@@ -47,7 +36,7 @@ describe('NavigationBarItemComponent', () => {
     component = fixture.componentInstance;
     component.item = item;
     router = TestBed.inject(Router);
-    jest.spyOn(router, 'navigate');
+    jest.spyOn(router, 'navigate').mockImplementation();
     fixture.detectChanges();
   });
 
