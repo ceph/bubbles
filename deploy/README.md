@@ -33,13 +33,7 @@ Unfortunately this means that we can't be using the upstream containers as
 base for our images, since these are based on a python 3.6 release.
 
 We have thus moved to containers we know are built against python 3.8, coming
-from opensuse's registry. However, these are built solely for Pacific, instead
-of following Ceph's master branch.
-
-Until this is ironed out, we are bound by the Pacific release. This also means
-that we will be grabbing a Pacific `cephadm` from the upstream repositories,
-instead of relying on the currently available version in the developer's
-machine. This is a nasty kludge, but will get us through this dark period.
+from opensuse's registry.
 
 ### libvirt
 
@@ -117,25 +111,7 @@ guest VMs, mounting it under the VM's `/mnt/` directory.
 Seems a bit convoluted, but it works.
 
 
-### Step 1: Create container image
-
-First of all, we'll need to create the container image we'll be using to deploy
-Bubbles. This image will be based off the Ceph upstream's master container
-image, with additional dependencies we require (`fastapi`, `uvicorn`, etc)
-installed through `pip`.
-
-To do so, running the following should suffice:
-
-```
-    # sudo podman build container/ -t ceph/bubbles:master
-```
-
-Running `podman images` should now show a `localhost/ceph/bubbles` image tagged
-with `master`. The name is relevant because that's the image name and tag we'll
-be pulling to deploy with `cephadm`.
-
-
-### Step 2: Run a local registry
+### Step 1: Run a local registry
 
 By default `cephadm` will pull from Ceph's repository at `quay.io`. Because we
 want to run our own purpose-built image we'll need to provide a different
@@ -154,6 +130,25 @@ directory in the system.
         --restart=always registry:2
 ```
 
+### Step 2: Build container image
+
+First of all, we'll need to create the container image we'll be using to deploy
+Bubbles. This image will be based off the Ceph upstream's master container
+image, with additional dependencies we require (`fastapi`, `uvicorn`, etc)
+installed through `pip`.
+
+To do so, running the following should suffice. Note that, unless unprivileged
+podman is setup, this command needs to run with root super powers because it
+will execute `buildah` and `podman` commands.
+
+```
+    # sudo ./build-container.sh
+```
+
+Running `podman images` should now show a `localhost/opensuse/bubbles` image
+tagged with `master`. The name is relevant because that's the image name and
+tag we'll be pulling to deploy with `cephadm`.
+
 
 ### Step 3: Push image to local registry
 
@@ -165,8 +160,8 @@ One can push our local image to the registry by running
 ```
     sudo podman push \
         --tls-verify=false \
-        localhost/ceph/bubbles:master \
-        docker://127.0.0.1:5000/ceph/bubbles:master
+        localhost/opensuse/bubbles:master \
+        docker://127.0.0.1:5000/opensuse/bubbles:master
 ```
 
 

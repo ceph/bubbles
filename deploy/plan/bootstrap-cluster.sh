@@ -16,9 +16,9 @@ mkdir -p /etc/ceph
 mon_ip=$(ifconfig eth0  | grep 'inet ' | awk '{ print $2}')
 {% if ceph_dev_folder is defined %}
   podman pull --tls-verify=false \
-    docker://{{ registry }}/ceph/bubbles:master
+    docker://{{ registry }}/opensuse/bubbles:master
 
-  cephadm --image {{ registry }}/ceph/bubbles:master \
+  cephadm --image {{ registry }}/opensuse/bubbles:master \
     bootstrap \
     --skip-pull \
     --mon-ip $mon_ip \
@@ -28,9 +28,9 @@ mon_ip=$(ifconfig eth0  | grep 'inet ' | awk '{ print $2}')
     --shared_ceph_folder /mnt/{{ ceph_dev_folder }}
 {% else %}
   podman pull --tls-verify=false \
-    docker://{{ registry }}/ceph/bubbles:master
+    docker://{{ registry }}/opensuse/bubbles:master
 
-  cephadm --image {{registry}}/ceph/bubbles:master \
+  cephadm --image {{registry}}/opensuse/bubbles:master \
     bootstrap \
     --skip-pull \
     --mon-ip $mon_ip \
