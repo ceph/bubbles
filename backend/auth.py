@@ -51,7 +51,7 @@ class JWTMgr:
         )
         return encoded_token
 
-    def get_raw_access_token(self, token, verify=True) -> JWT:
+    def get_raw_access_token(self, token: str, verify: bool = True) -> JWT:
         options = {}
         if not verify:
             options = {"verify_signature": False}

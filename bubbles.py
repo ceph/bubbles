@@ -44,7 +44,7 @@ class Bubbles:
         return self._ctrls
 
     @property
-    def mgr(self):
+    def mgr(self) -> MgrModule:
         return self._mgr
 
     @property

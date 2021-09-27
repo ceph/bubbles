@@ -16,7 +16,7 @@ from bubbles.backend.auth import JWT, JWTDenyList, JWTMgr
 
 
 class JWTAuthSchema(OAuth2PasswordBearer):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(tokenUrl="auth/login")
 
     async def __call__(self, request: Request) -> Optional[JWT]:  # type: ignore[override]
