@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -24,6 +25,7 @@ export interface ClusterStatus {
 
 export type Status = {
   cluster?: ClusterStatus;
+  dashboard_url?: string;
 };
 
 export type IORate = {

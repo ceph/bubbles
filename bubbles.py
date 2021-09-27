@@ -10,6 +10,7 @@ import asyncio
 from typing import Optional
 from mgr_module import MgrModule
 
+from bubbles.backend.config import Config
 from bubbles.backend.controllers.ctrls import Controllers
 
 
@@ -22,6 +23,7 @@ class Bubbles:
     def __init__(self, mgr: MgrModule) -> None:
         self._mgr = mgr
         self._ctrls = Controllers(mgr)
+        self._config = Config(mgr)
 
     async def _tick(self) -> None:
         while self._running:
@@ -40,3 +42,11 @@ class Bubbles:
     @property
     def ctrls(self) -> Controllers:
         return self._ctrls
+
+    @property
+    def mgr(self):
+        return self._mgr
+
+    @property
+    def config(self) -> Config:
+        return self._config

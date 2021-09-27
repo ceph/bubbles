@@ -100,6 +100,13 @@
   </i>
 </ng-template>
 
+<ng-template #joinTpl
+             let-values="value">
+  <span *ngFor="let value of values; last as isLast">
+    {{ value }}{{ !isLast ? ", " : "" }}
+  </span>
+</ng-template>
+
 <ng-template #actionMenuTpl
              let-column="column"
              let-row="row">

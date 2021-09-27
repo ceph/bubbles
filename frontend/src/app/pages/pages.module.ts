@@ -8,6 +8,7 @@ import { GridsterModule } from 'angular-gridster2';
 
 import { CoreModule } from '~/app/core/core.module';
 import { DashboardPageComponent } from '~/app/pages/dashboard-page/dashboard-page.component';
+import { EmptyPageComponent } from '~/app/pages/empty-page/empty-page.component';
 import { HostsPageComponent } from '~/app/pages/hosts-page/hosts-page.component';
 import { LoginPageComponent } from '~/app/pages/login-page/login-page.component';
 import { NotFoundPageComponent } from '~/app/pages/not-found-page/not-found-page.component';
@@ -20,7 +21,8 @@ import { SharedModule } from '~/app/shared/shared.module';
     NotFoundPageComponent,
     HostsPageComponent,
     LoginPageComponent,
-    UsersPageComponent
+    UsersPageComponent,
+    EmptyPageComponent
   ],
   imports: [
     CommonModule,

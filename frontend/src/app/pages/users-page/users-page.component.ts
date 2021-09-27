@@ -1,16 +1,13 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { finalize } from 'rxjs/operators';
 
-import { DeclarativeFormModalComponent } from '~/app/core/modals/declarative-form/declarative-form-modal.component';
-import { translate } from '~/app/i18n.helper';
-import { DialogComponent } from '~/app/shared/components/dialog/dialog.component';
 import { DatatableActionItem } from '~/app/shared/models/datatable-action-item.type';
 import { DatatableColumn } from '~/app/shared/models/datatable-column.type';
 import { DatatableData } from '~/app/shared/models/datatable-data.type';
 import { User, UserService } from '~/app/shared/services/api/user.service';
-import { DialogService } from '~/app/shared/services/dialog.service';
 
 @Component({
   selector: 'cb-users-page',
@@ -26,19 +23,28 @@ export class UsersPageComponent {
   data: User[] = [];
   columns: DatatableColumn[];
 
-  constructor(private dialogService: DialogService, private userService: UserService) {
+  constructor(private userService: UserService, private router: Router) {
     this.columns = [
       {
-        name: TEXT('Name'),
+        name: TEXT('Username'),
         prop: 'username'
       },
       {
-        name: TEXT('Full Name'),
-        prop: 'full_name'
+        name: TEXT('Name'),
+        prop: 'name'
       },
       {
-        name: TEXT('Disabled'),
-        prop: 'disabled',
+        name: TEXT('Email'),
+        prop: 'email'
+      },
+      {
+        name: TEXT('Roles'),
+        prop: 'roles',
+        cellTemplateName: 'join'
+      },
+      {
+        name: TEXT('Enabled'),
+        prop: 'enabled',
         cellTemplateName: 'checkIcon'
       },
       {
@@ -53,66 +59,20 @@ export class UsersPageComponent {
 
   loadData(): void {
     this.loading = true;
-    this.userService.list().subscribe((data) => {
-      this.data = data;
-      this.loading = this.firstLoadComplete = true;
-    });
+    this.userService
+      .list()
+      .pipe(
+        finalize(() => {
+          this.loading = this.firstLoadComplete = true;
+        })
+      )
+      .subscribe((data) => {
+        this.data = data;
+      });
   }
 
   onAdd(): void {
-    this.dialogService.open(
-      DeclarativeFormModalComponent,
-      (res: User | boolean) => {
-        if (res) {
-          this.blockUI.start(translate(TEXT('Please wait, creating user ...')));
-          this.userService
-            .create(res as User)
-            .pipe(finalize(() => this.blockUI.stop()))
-            .subscribe(() => {
-              this.loadData();
-            });
-        }
-      },
-      {
-        title: TEXT('Add User'),
-        formConfig: {
-          fields: [
-            {
-              type: 'text',
-              label: TEXT('Name'),
-              name: 'username',
-              value: '',
-              validators: {
-                required: true
-              }
-            },
-            {
-              type: 'text',
-              label: TEXT('Full Name'),
-              name: 'full_name',
-              value: ''
-            },
-            {
-              type: 'password',
-              label: TEXT('Password'),
-              name: 'password',
-              value: '',
-              validators: {
-                required: true
-              }
-            },
-            {
-              type: 'checkbox',
-              label: TEXT('Disabled'),
-              name: 'disabled',
-              value: false,
-              hint: TEXT('Temporarily prohibit the user from logging in.')
-            }
-          ]
-        },
-        submitButtonText: TEXT('Add')
-      }
-    );
+    this.navigateTo('/user-management/users/create');
   }
 
   onActionMenu(user: User): DatatableActionItem[] {
@@ -120,81 +80,22 @@ export class UsersPageComponent {
       {
         title: TEXT('Edit'),
         callback: (data: DatatableData) => {
-          this.dialogService.open(
-            DeclarativeFormModalComponent,
-            (res: User | boolean) => {
-              if (res) {
-                this.blockUI.start(translate(TEXT('Please wait, updating user ...')));
-                this.userService
-                  .update((res as User).username, res as User)
-                  .pipe(finalize(() => this.blockUI.stop()))
-                  .subscribe(() => {
-                    this.loadData();
-                  });
-              }
-            },
-            {
-              title: TEXT('Edit User'),
-              formConfig: {
-                fields: [
-                  {
-                    type: 'text',
-                    label: TEXT('Name'),
-                    name: 'username',
-                    value: user.username,
-                    readonly: true
-                  },
-                  {
-                    type: 'text',
-                    label: TEXT('Full Name'),
-                    name: 'full_name',
-                    value: user.full_name
-                  },
-                  {
-                    type: 'password',
-                    label: TEXT('Password'),
-                    name: 'password',
-                    value: ''
-                  },
-                  {
-                    type: 'checkbox',
-                    label: TEXT('Disabled'),
-                    name: 'disabled',
-                    value: user.disabled,
-                    hint: TEXT('Temporarily prohibit the user from logging in.')
-                  }
-                ]
-              },
-              submitButtonText: TEXT('Edit')
-            }
-          );
+          this.navigateTo(`/user-management/users/edit/${user.username}`);
         }
       },
       {
         title: TEXT('Delete'),
         callback: (data: DatatableData) => {
-          this.dialogService.open(
-            DialogComponent,
-            (res: boolean) => {
-              if (res) {
-                this.blockUI.start(translate(TEXT('Please wait, deleting user ...')));
-                this.userService
-                  .delete(data.username)
-                  .pipe(finalize(() => this.blockUI.stop()))
-                  .subscribe(() => {
-                    this.loadData();
-                  });
-              }
-            },
-            {
-              type: 'yesNo',
-              icon: 'question',
-              message: TEXT(`Do you really want to delete user <strong>${data.username}</strong>?`)
-            }
-          );
+          this.navigateTo('/user-management/users');
         }
       }
     ];
     return result;
+  }
+
+  private navigateTo(url: string): void {
+    this.router.navigateByUrl(`/cephDashboardRedirect/${encodeURIComponent(url)}`, {
+      skipLocationChange: true
+    });
   }
 }
