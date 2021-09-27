@@ -22,16 +22,23 @@ class JWTAuthSchema(OAuth2PasswordBearer):
     async def __call__(self, request: Request) -> Optional[JWT]:  # type: ignore[override]
         bubbles: Bubbles = request.app.state.bubbles
         jwt_mgr = JWTMgr(bubbles.config.options.auth)
+
         # Get and validate the token.
         token = jwt_mgr.get_token_from_cookie(request)
         if token is None:
             # Fallback: Try to get it from the headers.
             token = await super().__call__(request)
+        if not token:
+            raise HTTPException(
+                status_code=400, detail="Token missing from request"
+            )
+
         # Decode token and do the following checks:
         try:
             raw_token: JWT = jwt_mgr.get_raw_access_token(token)
         except Exception as e:
             raise HTTPException(status_code=401, detail=str(e))
+
         # - Is the token revoked?
         deny_list = JWTDenyList(bubbles.mgr)
         deny_list.load()
