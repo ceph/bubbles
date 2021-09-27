@@ -11,16 +11,16 @@ from fastapi import APIRouter, Depends, Request, Response
 
 from bubbles.bubbles import Bubbles
 from bubbles.backend.api import jwt_auth_scheme
-from bubbles.backend.models.user import UserModel
+from bubbles.backend.models.host import HostModel
 
-router = APIRouter(prefix="/user", tags=["user"])
+router = APIRouter(prefix="/host", tags=["host"])
 
 
-@router.get("/", name="Get list of users", response_model=List[UserModel])
-async def get_users(
+@router.get("/", name="Get list of hosts", response_model=List[HostModel])
+async def get_hosts(
     request: Request, _=Depends(jwt_auth_scheme)
-) -> List[UserModel]:
+) -> List[HostModel]:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.rest_api_proxy is not None
-    response = bubbles.ctrls.rest_api_proxy.request("GET", "/api/user")
-    return [UserModel.parse_obj(user) for user in response]
+    response = bubbles.ctrls.rest_api_proxy.request("GET", "/api/host")
+    return [HostModel.parse_obj(host) for host in response]

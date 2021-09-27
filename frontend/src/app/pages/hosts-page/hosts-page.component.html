@@ -1,14 +1,5 @@
 <div class="cb-hosts-page"
      fxLayout="column">
-  <div class="page-actions"
-       fxLayout="row"
-       fxLayoutAlign="start center">
-    <button type="button"
-            class="btn"
-            (click)="onShowToken()">
-      <span translate>Authentication Token</span>
-    </button>
-  </div>
   <div class="cb-hosts-page-content">
     <div *ngIf="!firstLoadComplete && loading"
          class="progress">
@@ -21,3 +12,11 @@
     </cb-datatable>
   </div>
 </div>
+
+<ng-template #servicesTpl
+             let-value="value">
+  <span *ngFor="let service of value; last as isLast">
+    <span>{{ service.type }}.{{ service.id }}</span>
+    <ng-container *ngIf="!isLast">, </ng-container>
+  </span>
+</ng-template>
