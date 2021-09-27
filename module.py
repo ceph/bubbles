@@ -27,6 +27,7 @@ from bubbles.bubbles import Bubbles
 from bubbles.backend.api import (
     auth,
     cluster,
+    host,
     services,
     status,
     storage,
@@ -72,6 +73,7 @@ class BubblesModule(MgrModule):
         self.api.include_router(auth.router)
         self.api.include_router(user.router)
         self.api.include_router(status.router)
+        self.api.include_router(host.router)
 
         staticdir = os.path.join(
             os.path.dirname(os.path.realpath(__file__)), "frontend/dist"

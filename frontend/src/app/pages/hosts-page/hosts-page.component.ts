@@ -1,45 +1,62 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
 import { finalize } from 'rxjs/operators';
 
-import { DeclarativeFormModalComponent } from '~/app/core/modals/declarative-form/declarative-form-modal.component';
 import { DatatableColumn } from '~/app/shared/models/datatable-column.type';
-import { NodesService, TokenReply } from '~/app/shared/services/api/nodes.service';
-import { Host, OrchService } from '~/app/shared/services/api/orch.service';
-import { DialogService } from '~/app/shared/services/dialog.service';
+import { CephShortVersionPipe } from '~/app/shared/pipes/ceph-short-version.pipe';
+import { Host, HostService } from '~/app/shared/services/api/host.service';
 
 @Component({
   selector: 'cb-hosts-page',
   templateUrl: './hosts-page.component.html',
   styleUrls: ['./hosts-page.component.scss']
 })
-export class HostsPageComponent {
+export class HostsPageComponent implements OnInit {
+  @ViewChild('servicesTpl', { static: true })
+  public servicesTpl?: TemplateRef<any>;
+
   loading = false;
   firstLoadComplete = false;
   data: Host[] = [];
-  columns: DatatableColumn[];
+  columns: DatatableColumn[] = [];
 
   constructor(
-    private dialogService: DialogService,
-    private nodesService: NodesService,
-    private orchService: OrchService
-  ) {
+    private cephShortVersionPipe: CephShortVersionPipe,
+    private hostService: HostService
+  ) {}
+
+  ngOnInit(): void {
     this.columns = [
       {
         name: TEXT('Hostname'),
         prop: 'hostname'
       },
       {
-        name: TEXT('Address'),
-        prop: 'address'
+        name: TEXT('Services'),
+        prop: 'services',
+        cellTemplate: this.servicesTpl
+      },
+      {
+        name: TEXT('Labels'),
+        prop: 'labels',
+        cellTemplateName: 'join'
+      },
+      {
+        name: TEXT('Status'),
+        prop: 'status'
+      },
+      {
+        name: TEXT('Version'),
+        prop: 'ceph_version',
+        pipe: this.cephShortVersionPipe
       }
     ];
   }
 
   loadData(): void {
     this.loading = true;
-    this.orchService
-      .hosts()
+    this.hostService
+      .list()
       .pipe(
         finalize(() => {
           this.loading = this.firstLoadComplete = true;
@@ -48,28 +65,5 @@ export class HostsPageComponent {
       .subscribe((data) => {
         this.data = data;
       });
-  }
-
-  onShowToken(): void {
-    this.nodesService.token().subscribe((res: TokenReply) => {
-      this.dialogService.open(DeclarativeFormModalComponent, undefined, {
-        title: TEXT('Authentication Token'),
-        subtitle: TEXT('Use this token to authenticate a new node when adding it to the cluster.'),
-        formConfig: {
-          fields: [
-            {
-              type: 'text',
-              name: 'token',
-              value: res.token,
-              readonly: true,
-              hasCopyToClipboardButton: true,
-              class: 'cb-text-monospaced'
-            }
-          ]
-        },
-        submitButtonVisible: false,
-        cancelButtonText: TEXT('Close')
-      });
-    });
   }
 }

@@ -1,7 +1,8 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { UserService } from '~/app/shared/services/api/user.service';
+import { TestingModule } from '~/app/testing.module';
 
 describe('UserService', () => {
   let service: UserService;
@@ -9,7 +10,7 @@ describe('UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
+      imports: [TestingModule]
     });
     service = TestBed.inject(UserService);
     httpTesting = TestBed.inject(HttpTestingController);
