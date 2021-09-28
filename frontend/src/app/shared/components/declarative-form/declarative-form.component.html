@@ -223,7 +223,8 @@
                      [ngClass]="{'is-invalid': showError(field.name, frm)}"
                      [id]="field.name + i"
                      [formControlName]="field.name"
-                     [value]="field.value">
+                     [value]="field.value"
+                     [checked]="field.checked">
               <label class="custom-control-label"
                      [for]="field.name + i">
                 {{ field.label! | translate }}
