@@ -41,7 +41,8 @@ async def login(
 
 @router.post("/logout")
 async def logout(
-    request: Request, token: JWT = Depends(jwt_auth_scheme)
+    request: Request,
+    token: JWT = Depends(jwt_auth_scheme)
 ) -> None:
     bubbles: Bubbles = request.app.state.bubbles
     rest_api_proxy = bubbles.ctrls.rest_api_proxy

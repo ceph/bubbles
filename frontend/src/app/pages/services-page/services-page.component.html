@@ -1,0 +1,41 @@
+<div class="cb-services-page"
+     fxLayout="column">
+  <div class="page-actions"
+       fxLayout="row"
+       fxLayoutAlign="start center">
+    <div ngbDropdown>
+      <button type="button"
+              class="btn btn-primary"
+              ngbDropdownToggle>
+        <span translate>Add</span>
+      </button>
+      <div ngbDropdownMenu>
+        <button ngbDropdownItem
+                disabled
+                (click)="onAdd('block')">
+          <span translate>Block Service</span>
+        </button>
+        <button ngbDropdownItem
+                (click)="onAdd('file')">
+          <span translate>File Service</span>
+        </button>
+        <button ngbDropdownItem
+                disabled
+                (click)="onAdd('object')">
+          <span translate>Object Service</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="cb-services-page-content">
+    <div *ngIf="!firstLoadComplete && loading"
+         class="progress">
+      <div class="progress-bar indeterminate"></div>
+    </div>
+    <cb-datatable [data]="data"
+                  [columns]="columns"
+                  [autoReload]="15000"
+                  (loadData)="loadData()">
+    </cb-datatable>
+  </div>
+</div>

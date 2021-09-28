@@ -1,6 +1,6 @@
 export type FormFieldConfig = {
   name: string;
-  type: 'text' | 'number' | 'password' | 'checkbox' | 'radio';
+  type: 'text' | 'number' | 'password' | 'checkbox' | 'radio' | 'select' | 'hidden' | 'binary';
   label?: string;
   value?: any;
   placeholder?: string;
@@ -29,6 +29,9 @@ export type FormFieldConfig = {
 
   // text | password
   hasCopyToClipboardButton?: boolean;
+
+  // dropdown
+  options?: Record<any, string>;
 };
 
 export type FormButtonConfig = {

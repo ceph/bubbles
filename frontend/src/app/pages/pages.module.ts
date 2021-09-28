@@ -12,6 +12,7 @@ import { EmptyPageComponent } from '~/app/pages/empty-page/empty-page.component'
 import { HostsPageComponent } from '~/app/pages/hosts-page/hosts-page.component';
 import { LoginPageComponent } from '~/app/pages/login-page/login-page.component';
 import { NotFoundPageComponent } from '~/app/pages/not-found-page/not-found-page.component';
+import { ServicesPageComponent } from '~/app/pages/services-page/services-page.component';
 import { UsersPageComponent } from '~/app/pages/users-page/users-page.component';
 import { SharedModule } from '~/app/shared/shared.module';
 
@@ -22,7 +23,8 @@ import { SharedModule } from '~/app/shared/shared.module';
     HostsPageComponent,
     LoginPageComponent,
     UsersPageComponent,
-    EmptyPageComponent
+    EmptyPageComponent,
+    ServicesPageComponent
   ],
   imports: [
     CommonModule,
