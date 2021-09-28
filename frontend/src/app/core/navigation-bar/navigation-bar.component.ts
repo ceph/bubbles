@@ -25,6 +25,11 @@ export class NavigationBarComponent implements OnInit {
       name: TEXT('Hosts'),
       icon: 'mdi mdi-server-network',
       route: '/hosts'
+    },
+    {
+      name: TEXT('Services'),
+      icon: 'mdi mdi-share-variant',
+      route: '/services'
     }
   ];
 

@@ -84,6 +84,9 @@ export class UsersPageComponent {
         }
       },
       {
+        type: 'divider'
+      },
+      {
         title: TEXT('Delete'),
         callback: (data: DatatableData) => {
           this.navigateTo('/user-management/users');

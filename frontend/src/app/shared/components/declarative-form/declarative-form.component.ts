@@ -11,6 +11,7 @@ import {
 import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
 import * as _ from 'lodash';
 
+import { bytesToSize, toBytes } from '~/app/functions.helper';
 import { CbValidators } from '~/app/shared/forms/validators';
 import {
   DeclarativeFormConfig,
@@ -71,7 +72,11 @@ export class DeclarativeFormComponent implements OnInit {
         }
       }
     }
-    return new FormControl(_.defaultTo(field.value, null), {
+    let value = _.defaultTo(field.value, null);
+    if (field.type === 'binary' && _.isNumber(value)) {
+      value = bytesToSize(field.value);
+    }
+    return new FormControl(value, {
       validators
     });
   }
@@ -83,7 +88,8 @@ export class DeclarativeFormComponent implements OnInit {
     _.forEach(this.config?.fields, (field: FormFieldConfig) => {
       _.defaultsDeep(field, {
         hasCopyToClipboardButton: false,
-        placeholder: ''
+        placeholder: '',
+        options: {}
       });
     });
     this.formGroup = this.createForm();
@@ -122,7 +128,16 @@ export class DeclarativeFormComponent implements OnInit {
   }
 
   get values(): Record<string, any> {
-    return this.formGroup?.value ?? {};
+    const values = this.formGroup?.value ?? {};
+    // Automatically convert the value of 'binary' fields.
+    const fields: FormFieldConfig[] = _.filter(this.config?.fields, ['type', 'binary']);
+    _.forEach(fields, (field: FormFieldConfig) => {
+      const value = values[field.name];
+      if (value) {
+        values[field.name] = toBytes(value);
+      }
+    });
+    return values;
   }
 
   get valid(): boolean {

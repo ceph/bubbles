@@ -6,29 +6,26 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
-from typing import Dict, List
-from fastapi import APIRouter, Request
-from pydantic import BaseModel, Field
+from typing import Callable, Dict
+
+from fastapi import APIRouter, Depends, Request
+
 from bubbles.bubbles import Bubbles
-from bubbles.backend.controllers.services import (
+from bubbles.backend.api import jwt_auth_scheme
+from bubbles.backend.models.service import (
     ServiceInfoModel,
     ServiceStatusModel,
+    ServicesModel,
 )
-
-
-class ListReply(BaseModel):
-    allocated: int = Field(0, title="Allocated bytes, total")
-    services: List[ServiceInfoModel] = Field([], title="Services")
-    status: Dict[str, ServiceStatusModel] = Field(
-        {}, title="status per service"
-    )
-
 
 router = APIRouter(prefix="/services", tags=["services"])
 
 
-@router.get("/list", response_model=ListReply)
-async def get_list(request: Request) -> ListReply:
+@router.get("/", response_model=ServicesModel)
+async def get_list(
+    request: Request,
+    _: Callable = Depends(jwt_auth_scheme)
+) -> ServicesModel:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.services is not None
 
@@ -39,11 +36,15 @@ async def get_list(request: Request) -> ListReply:
     for svc in svcs:
         status[svc.name] = await bubbles.ctrls.services.status(svc.name)
 
-    return ListReply(allocated=allocated, services=svcs, status=status)
+    return ServicesModel(allocated=allocated, services=svcs, status=status)
 
 
 @router.post("/create", response_model=bool)
-async def create(request: Request, info: ServiceInfoModel) -> bool:
+async def create(
+    request: Request,
+    info: ServiceInfoModel,
+    _: Callable = Depends(jwt_auth_scheme)
+) -> bool:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.services is not None
     return await bubbles.ctrls.services.create(info)
