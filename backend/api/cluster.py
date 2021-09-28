@@ -18,8 +18,7 @@ router = APIRouter(prefix="/cluster", tags=["cluster"])
 
 @router.get("/df", response_model=ClusterUsageStatsModel)
 async def get_df(
-    request: Request,
-    _: Callable = Depends(jwt_auth_scheme)
+    request: Request, _: Callable = Depends(jwt_auth_scheme)
 ) -> ClusterUsageStatsModel:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.cluster is not None

@@ -18,8 +18,7 @@ router = APIRouter(prefix="/status", tags=["status"])
 
 @router.get("/", name="Get the status information", response_model=StatusModel)
 async def get_status(
-    request: Request,
-    _: Callable = Depends(jwt_auth_scheme)
+    request: Request, _: Callable = Depends(jwt_auth_scheme)
 ) -> StatusModel:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.rest_api_proxy is not None

@@ -108,8 +108,7 @@ class JWTDenyList:
             self._cleanup(now)
 
     def save(self) -> None:
-        self._mgr.set_store("jwt_deny_list", json.dumps(
-            self._jti_dict))
+        self._mgr.set_store("jwt_deny_list", json.dumps(self._jti_dict))
 
     def add(self, token: JWT) -> None:
         self._jti_dict[token.jti] = token.exp

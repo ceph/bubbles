@@ -31,7 +31,7 @@ from bubbles.backend.api import (
     services,
     status,
     storage,
-    users
+    users,
 )
 
 

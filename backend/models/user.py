@@ -16,9 +16,13 @@ class UserModel(BaseModel):
     name: Optional[str] = Field(title="The full name")
     email: Optional[str] = Field(title="The email address")
     last_update: int = Field(
-        alias="lastUpdate", title="The Unix time stamp of the last update")
+        alias="lastUpdate", title="The Unix time stamp of the last update"
+    )
     enabled: bool = Field(title="Is the user enabled")
     pwd_expiration_date: Optional[int] = Field(
-        alias="pwdExpirationDate", title="The expiration date as Unix time stamp")
+        alias="pwdExpirationDate",
+        title="The expiration date as Unix time stamp",
+    )
     pwd_update_required: bool = Field(
-        alias="pwdUpdateRequired", title="Password update required")
+        alias="pwdUpdateRequired", title="Password update required"
+    )

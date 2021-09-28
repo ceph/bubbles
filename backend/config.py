@@ -20,8 +20,7 @@ class Config:
             self._config: ConfigModel = ConfigModel(version=1)
             self.save()
         else:
-            self._config = ConfigModel.parse_obj(
-                json.loads(config_options))
+            self._config = ConfigModel.parse_obj(json.loads(config_options))
 
     def save(self) -> None:
         self._mgr.set_store("config_options", self._config.json())

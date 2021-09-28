@@ -19,7 +19,9 @@ class RestApiProxyLoginModel(BaseModel):
     token: str = Field(title="The access token")
     username: str = Field(title="The user name")
     permissions: Dict[str, List[str]] = Field(title="The user privileges")
-    pwdExpirationDate: Optional[int] = Field(title="The expiration date as Unix time stamp")
+    pwdExpirationDate: Optional[int] = Field(
+        title="The expiration date as Unix time stamp"
+    )
     sso: bool = Field(title="SSO used")
     pwdUpdateRequired: bool = Field(title="Password update required")
 
@@ -37,8 +39,11 @@ class RestApiProxyController:
         :return: The URL.
         """
         if not self._base_url:
-            self._base_url = self._mgr.get("mgr_map").get(
-                "services", {}).get("dashboard", None)
+            self._base_url = (
+                self._mgr.get("mgr_map")
+                .get("services", {})
+                .get("dashboard", None)
+            )
             if not self._base_url:
                 return None
             self._base_url = self._base_url.rstrip("/")
@@ -52,10 +57,11 @@ class RestApiProxyController:
         :return: If successful, the authentication token is returned,
             otherwise an exception is thrown.
         """
-        response = self.request("POST", "/api/auth", json={
-            "username": username,
-            "password": password
-        })
+        response = self.request(
+            "POST",
+            "/api/auth",
+            json={"username": username, "password": password},
+        )
         # Store the token for further calls to the Dashboard REST API.
         login_response = RestApiProxyLoginModel.parse_obj(response)
         self._access_token = login_response.token
@@ -73,7 +79,7 @@ class RestApiProxyController:
         params: httpx._types.QueryParamTypes = None,
         data: httpx._types.RequestData = {},
         json: Any = None,
-        verify: bool = False
+        verify: bool = False,
     ) -> Dict:
         """
         Perform a request to the Dashboard REST API.
@@ -88,8 +94,7 @@ class RestApiProxyController:
         headers = {"Accept": "application/vnd.ceph.api.v1.0+json"}
         if not self.base_url:
             raise HTTPException(
-                status_code=500,
-                detail=f"Dashboard manager module not running."
+                status_code=500, detail=f"Dashboard manager module not running."
             )
         if self._access_token:
             headers["Authorization"] = f"Bearer {self._access_token}"
@@ -97,10 +102,17 @@ class RestApiProxyController:
             headers["Content-Type"] = "application/json"
         url = "{}/{}".format(self.base_url, path.lstrip("/"))
         response = httpx.request(
-            method, url, params=params, data=data, json=json,
-            headers=headers, verify=verify)
+            method,
+            url,
+            params=params,
+            data=data,
+            json=json,
+            headers=headers,
+            verify=verify,
+        )
         content = response.json()
         if response.is_error:
-            raise HTTPException(status_code=response.status_code,
-                                detail=content["detail"])
+            raise HTTPException(
+                status_code=response.status_code, detail=content["detail"]
+            )
         return content
