@@ -7,7 +7,7 @@ import { finalize } from 'rxjs/operators';
 import { DatatableActionItem } from '~/app/shared/models/datatable-action-item.type';
 import { DatatableColumn } from '~/app/shared/models/datatable-column.type';
 import { DatatableData } from '~/app/shared/models/datatable-data.type';
-import { User, UserService } from '~/app/shared/services/api/user.service';
+import { User, UsersService } from '~/app/shared/services/api/users.service';
 
 @Component({
   selector: 'cb-users-page',
@@ -23,7 +23,7 @@ export class UsersPageComponent {
   data: User[] = [];
   columns: DatatableColumn[];
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private usersService: UsersService, private router: Router) {
     this.columns = [
       {
         name: TEXT('Username'),
@@ -59,14 +59,14 @@ export class UsersPageComponent {
 
   loadData(): void {
     this.loading = true;
-    this.userService
+    this.usersService
       .list()
       .pipe(
         finalize(() => {
           this.loading = this.firstLoadComplete = true;
         })
       )
-      .subscribe((data) => {
+      .subscribe((data: User[]) => {
         this.data = data;
       });
   }

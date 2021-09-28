@@ -13,7 +13,7 @@ from bubbles.bubbles import Bubbles
 from bubbles.backend.api import jwt_auth_scheme
 from bubbles.backend.models.user import UserModel
 
-router = APIRouter(prefix="/user", tags=["user"])
+router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.get("/", name="Get list of users", response_model=List[UserModel])
