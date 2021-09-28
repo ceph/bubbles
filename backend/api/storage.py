@@ -18,8 +18,7 @@ router = APIRouter(prefix="/storage", tags=["storage"])
 
 @router.get("/stats", response_model=StorageStats)
 async def get_stats(
-    request: Request,
-    _: Callable = Depends(jwt_auth_scheme)
+    request: Request, _: Callable = Depends(jwt_auth_scheme)
 ) -> StorageStats:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.storage is not None

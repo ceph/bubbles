@@ -92,4 +92,6 @@ class ServiceStateModel(BaseModel):
 class ServicesModel(BaseModel):
     allocated: int = Field(0, title="Allocated bytes, total")
     services: List[ServiceInfoModel] = Field([], title="Services")
-    status: Dict[str, ServiceStatusModel] = Field({}, title="status per service")
+    status: Dict[str, ServiceStatusModel] = Field(
+        {}, title="status per service"
+    )

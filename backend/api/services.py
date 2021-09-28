@@ -23,8 +23,7 @@ router = APIRouter(prefix="/services", tags=["services"])
 
 @router.get("/", response_model=ServicesModel)
 async def get_list(
-    request: Request,
-    _: Callable = Depends(jwt_auth_scheme)
+    request: Request, _: Callable = Depends(jwt_auth_scheme)
 ) -> ServicesModel:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.services is not None
@@ -43,7 +42,7 @@ async def get_list(
 async def create(
     request: Request,
     info: ServiceInfoModel,
-    _: Callable = Depends(jwt_auth_scheme)
+    _: Callable = Depends(jwt_auth_scheme),
 ) -> bool:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.services is not None
