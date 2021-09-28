@@ -20,6 +20,13 @@ export type FormFieldConfig = {
   };
   onPaste?: (event: ClipboardEvent) => void;
 
+  // radio
+  // Note, radio buttons behave different to other form fields.
+  // The 'value' property defines what value is represented by
+  // this form field. If you want to check it, then you need to
+  // set the 'checked' property.
+  checked?: boolean;
+
   // text | password
   hasCopyToClipboardButton?: boolean;
 };
