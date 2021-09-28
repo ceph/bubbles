@@ -10,7 +10,7 @@ import httpx
 
 from fastapi import HTTPException
 from pydantic import BaseModel, Field
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from mgr_module import MgrModule
 
@@ -67,7 +67,13 @@ class RestApiProxyController:
         self.request("POST", "/api/auth/logout")
 
     def request(
-        self, method, path, params=None, data=None, json=None, verify=False
+        self,
+        method: str,
+        path: str,
+        params: httpx._types.QueryParamTypes = None,
+        data: httpx._types.RequestData = {},
+        json: Any = None,
+        verify: bool = False
     ) -> Dict:
         """
         Perform a request to the Dashboard REST API.
