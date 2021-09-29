@@ -7,7 +7,7 @@
 #
 from pydantic import BaseModel, Field
 
-from bubbles.backend.utils import random_string
+from bubbles.utils import random_string
 
 
 class AuthOptionsModel(BaseModel):

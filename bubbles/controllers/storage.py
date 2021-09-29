@@ -5,11 +5,11 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
-from bubbles.backend.controllers.services import ServicesController
-from bubbles.backend.models.df import ClusterUsageStatsModel
+from bubbles.controllers.services import ServicesController
+from bubbles.models.df import ClusterUsageStatsModel
 from pydantic import BaseModel, Field
 from mgr_module import MgrModule
-from bubbles.backend.controllers.cluster import ClusterController
+from bubbles.controllers.cluster import ClusterController
 
 
 class StorageStats(BaseModel):

@@ -9,7 +9,7 @@ import json
 
 from mgr_module import MgrModule
 
-from bubbles.backend.models.config import ConfigModel, OptionsModel
+from bubbles.models.config import ConfigModel, OptionsModel
 
 
 class Config:

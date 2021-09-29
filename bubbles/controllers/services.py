@@ -9,8 +9,8 @@
 from mgr_module import MgrModule
 from typing import Dict, List
 
-from bubbles.backend.errors import BubblesError
-from bubbles.backend.models.service import (
+from bubbles.errors import BubblesError
+from bubbles.models.service import (
     ServiceBackendEnum,
     ServiceInfoModel,
     ServiceModel,

@@ -11,8 +11,8 @@ from typing import Callable, Dict
 from fastapi import APIRouter, Depends, Request
 
 from bubbles.bubbles import Bubbles
-from bubbles.backend.api import jwt_auth_scheme
-from bubbles.backend.models.service import (
+from bubbles.api import jwt_auth_scheme
+from bubbles.models.service import (
     ServiceInfoModel,
     ServiceStatusModel,
     ServicesModel,

@@ -10,8 +10,8 @@ import asyncio
 from typing import Optional
 from mgr_module import MgrModule
 
-from bubbles.backend.config import Config
-from bubbles.backend.controllers.ctrls import Controllers
+from bubbles.config import Config
+from bubbles.controllers.ctrls import Controllers
 
 
 class Bubbles:

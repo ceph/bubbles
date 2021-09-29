@@ -6,7 +6,7 @@
 # version 2.1 of the License, or (at your option) any later version.
 #
 from mgr_module import MgrModule
-from bubbles.backend.models.df import ClusterUsageStatsModel
+from bubbles.models.df import ClusterUsageStatsModel
 
 
 class ClusterController:
