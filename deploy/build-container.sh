@@ -46,9 +46,8 @@ mkdist() {
   popd
 
   pushd ..
-  find backend -iname '*pycache*' -prune -false -o -iname '*.py' | \
+  find bubbles -iname '*pycache*' -prune -false -o -iname '*.py' | \
     xargs cp --parents --target-directory=deploy/dist
-  cp LICENSE README.md COPYING bubbles.py module.py __init__.py deploy/dist/
   popd
 }
 

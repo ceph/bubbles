@@ -7,12 +7,12 @@
 # version 2.1 of the License, or (at your option) any later version.
 #
 
-from bubbles.backend.controllers.storage import StorageController
+from bubbles.controllers.storage import StorageController
 from mgr_module import MgrModule
 from typing import Optional
-from bubbles.backend.controllers.cluster import ClusterController
-from bubbles.backend.controllers.rest_api_proxy import RestApiProxyController
-from bubbles.backend.controllers.services import ServicesController
+from bubbles.controllers.cluster import ClusterController
+from bubbles.controllers.rest_api_proxy import RestApiProxyController
+from bubbles.controllers.services import ServicesController
 
 
 class Controllers:

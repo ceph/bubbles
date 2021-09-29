@@ -16,7 +16,7 @@ import jwt
 from fastapi import Request, Response
 from fastapi.security.utils import get_authorization_scheme_param
 
-from bubbles.backend.models.config import AuthOptionsModel
+from bubbles.models.config import AuthOptionsModel
 
 
 class JWT(NamedTuple):

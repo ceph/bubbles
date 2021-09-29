@@ -24,7 +24,7 @@ from fastapi.staticfiles import StaticFiles
 
 from mgr_module import MgrModule
 from bubbles.bubbles import Bubbles
-from bubbles.backend.api import (
+from bubbles.api import (
     auth,
     cluster,
     host,

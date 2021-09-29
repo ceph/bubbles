@@ -10,16 +10,16 @@ from typing import Callable
 from fastapi import APIRouter, Depends, Request
 
 from bubbles.bubbles import Bubbles
-from bubbles.backend.api import jwt_auth_scheme
-from bubbles.backend.models.status import StatusModel
+from bubbles.api import jwt_auth_scheme
+from bubbles.controllers.storage import StorageStats
 
-router = APIRouter(prefix="/status", tags=["status"])
+router = APIRouter(prefix="/storage", tags=["storage"])
 
 
-@router.get("/", name="Get the status information", response_model=StatusModel)
-async def get_status(
+@router.get("/stats", response_model=StorageStats)
+async def get_stats(
     request: Request, _: Callable = Depends(jwt_auth_scheme)
-) -> StatusModel:
+) -> StorageStats:
     bubbles: Bubbles = request.app.state.bubbles
-    assert bubbles.ctrls.rest_api_proxy is not None
-    return StatusModel(dashboard_url=bubbles.ctrls.rest_api_proxy.base_url)
+    assert bubbles.ctrls.storage is not None
+    return bubbles.ctrls.storage.stats()

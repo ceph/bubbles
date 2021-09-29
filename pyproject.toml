@@ -13,7 +13,7 @@ extend-exclude = '''
     | \.ini$
     | LICENSE
     | \.toml$
-    | backend/typings
+    | bubbles/typings
   )
 )
 '''

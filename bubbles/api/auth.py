@@ -9,9 +9,9 @@ from fastapi import APIRouter, Depends, Request, Response
 from fastapi.security import OAuth2PasswordRequestForm
 
 from bubbles.bubbles import Bubbles
-from bubbles.backend.api import jwt_auth_scheme
-from bubbles.backend.auth import JWT, JWTDenyList, JWTMgr
-from bubbles.backend.models.auth import LoginModel
+from bubbles.api import jwt_auth_scheme
+from bubbles.auth import JWT, JWTDenyList, JWTMgr
+from bubbles.models.auth import LoginModel
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
