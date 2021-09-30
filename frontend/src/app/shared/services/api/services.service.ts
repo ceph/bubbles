@@ -32,20 +32,20 @@ export interface Constraints {
 export declare type ServiceType = 'file' | 'object' | 'block';
 export declare type ServiceBackend = 'cephfs' | 'nfs' | 'rbd' | 'iscsi' | 'rgw';
 
-export interface CreateServiceRequest {
+export type CreateServiceRequest = {
   name: string;
   type: ServiceType;
   size: number;
   replicas: number;
-}
+};
 
-export interface ServiceInfo {
+export type ServiceInfo = {
   name: string;
   size: number;
   replicas: number;
   type: ServiceType;
   backend: ServiceBackend;
-}
+};
 
 export type ServiceStorage = {
   name: string;

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { StorageService } from '~/app/shared/services/storage.service';
+import { StorageService } from '~/app/shared/services/api/storage.service';
 import { TestingModule } from '~/app/testing.module';
 
 describe('StorageService', () => {

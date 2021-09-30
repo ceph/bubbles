@@ -77,6 +77,9 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
             break;
         }
       }
+      if (_.isFunction(field.validators.custom)) {
+        validators.push(field.validators.custom);
+      }
     }
     let value = _.defaultTo(field.value, null);
     if (field.type === 'binary' && _.isNumber(value)) {
@@ -173,8 +176,14 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
     return this.formGroup?.valid ?? false;
   }
 
-  patchValues(values: DeclarativeFormValues): void {
+  patchValues(values: DeclarativeFormValues, markAsDirty: boolean = true): void {
     this.formGroup?.patchValue(values);
+    if (markAsDirty) {
+      _.forEach(_.keys(values), (key) => {
+        const control = this.formGroup?.get(key);
+        control?.markAsDirty();
+      });
+    }
   }
 
   /**

@@ -1,4 +1,4 @@
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 export type FormFieldConfig = {
   name: string;
@@ -19,6 +19,7 @@ export type FormFieldConfig = {
     requiredIf?: Record<any, any>;
     pattern?: string | RegExp;
     patternType?: 'hostAddress';
+    custom?: ValidatorFn;
   };
   onPaste?: (event: ClipboardEvent) => void;
   onValueChanges?: (value: any, control: AbstractControl, form: DeclarativeForm) => void;

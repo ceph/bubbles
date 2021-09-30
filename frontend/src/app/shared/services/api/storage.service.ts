@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-export declare type StorageStatsReply = {
+export declare type StorageStats = {
   total: number;
   available: number;
   allocated: number;
@@ -26,7 +26,7 @@ export class StorageService {
 
   public constructor(private http: HttpClient) {}
 
-  public stats(): Observable<StorageStatsReply> {
-    return this.http.get<StorageStatsReply>(`${this.url}/stats`);
+  public stats(): Observable<StorageStats> {
+    return this.http.get<StorageStats>(`${this.url}/stats`);
   }
 }
