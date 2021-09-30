@@ -1,6 +1,7 @@
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -10,11 +11,14 @@ import {
 } from '@angular/forms';
 import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
 import * as _ from 'lodash';
+import { Subscription } from 'rxjs';
 
 import { bytesToSize, toBytes } from '~/app/functions.helper';
 import { CbValidators } from '~/app/shared/forms/validators';
 import {
+  DeclarativeForm,
   DeclarativeFormConfig,
+  DeclarativeFormValues,
   FormButtonConfig,
   FormFieldConfig
 } from '~/app/shared/models/declarative-form-config.type';
@@ -27,12 +31,14 @@ let nextUniqueId = 0;
   templateUrl: './declarative-form.component.html',
   styleUrls: ['./declarative-form.component.scss']
 })
-export class DeclarativeFormComponent implements OnInit {
+export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDestroy {
   @Input()
   config?: DeclarativeFormConfig;
 
   @Input()
   formGroup?: FormGroup;
+
+  private subscriptions: Subscription = new Subscription();
 
   constructor(
     private clipboard: Clipboard,
@@ -93,6 +99,27 @@ export class DeclarativeFormComponent implements OnInit {
       });
     });
     this.formGroup = this.createForm();
+    // Initialize onValueChanges callbacks.
+    _.forEach(
+      _.filter(this.config?.fields, (field) => _.isFunction(field.onValueChanges)),
+      (field: FormFieldConfig) => {
+        if (this.formGroup) {
+          const control: AbstractControl | null = this.getControl(field.name);
+          if (control) {
+            this.subscriptions.add(
+              control.valueChanges.subscribe((value: any) => {
+                value = this.convertToRaw(value, field);
+                field.onValueChanges!(value, control, this);
+              })
+            );
+          }
+        }
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   createForm(): FormGroup {
@@ -101,6 +128,10 @@ export class DeclarativeFormComponent implements OnInit {
       controlsConfig[field.name] = DeclarativeFormComponent.createFormControl(field);
     });
     return this.formBuilder.group(controlsConfig);
+  }
+
+  getControl(path: string): AbstractControl | null {
+    return this.formGroup ? this.formGroup.get(path) : null;
   }
 
   onCopyToClipboard(field: FormFieldConfig): void {
@@ -127,14 +158,12 @@ export class DeclarativeFormComponent implements OnInit {
     }
   }
 
-  get values(): Record<string, any> {
+  get values(): DeclarativeFormValues {
     const values = this.formGroup?.value ?? {};
-    // Automatically convert the value of 'binary' fields.
-    const fields: FormFieldConfig[] = _.filter(this.config?.fields, ['type', 'binary']);
-    _.forEach(fields, (field: FormFieldConfig) => {
+    _.forEach(this.config?.fields, (field: FormFieldConfig) => {
       const value = values[field.name];
       if (value) {
-        values[field.name] = toBytes(value);
+        values[field.name] = this.convertToRaw(value, field);
       }
     });
     return values;
@@ -144,7 +173,7 @@ export class DeclarativeFormComponent implements OnInit {
     return this.formGroup?.valid ?? false;
   }
 
-  patchValues(values: Record<string, any>): void {
+  patchValues(values: DeclarativeFormValues): void {
     this.formGroup?.patchValue(values);
   }
 
@@ -161,5 +190,14 @@ export class DeclarativeFormComponent implements OnInit {
       ? (fgd.submitted || control.dirty) &&
           (errorCode ? control.hasError(errorCode) : control.invalid)
       : false;
+  }
+
+  private convertToRaw(value: any, field: FormFieldConfig): any {
+    switch (field.type) {
+      case 'binary':
+        value = toBytes(value);
+        break;
+    }
+    return value;
   }
 }
