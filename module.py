@@ -32,6 +32,9 @@ from bubbles.backend.api import (
     storage,
     users,
 )
+from bubbles.backend.api.ceph import (
+    fs,
+)
 
 
 class BubblesModule(MgrModule):
@@ -66,12 +69,16 @@ class BubblesModule(MgrModule):
         self.app.add_event_handler("startup", self._startup)
         self.app.add_event_handler("shutdown", self._shutdown)
 
+        # bubbles related endpoints
         self.api.include_router(services.router)
         self.api.include_router(cluster.router)
         self.api.include_router(storage.router)
         self.api.include_router(auth.router)
         self.api.include_router(users.router)
         self.api.include_router(host.router)
+
+        # ceph related endpoints
+        self.api.include_router(fs.router)
 
         staticdir = os.path.join(
             os.path.dirname(os.path.realpath(__file__)), "frontend/dist"
