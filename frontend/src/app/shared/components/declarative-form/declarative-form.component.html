@@ -74,6 +74,10 @@
                   translate>
               Maximum length is {{ field.validators?.maxLength }} characters.
             </span>
+            <span *ngIf="showError(field.name, frm, 'custom')"
+                  class="invalid-feedback">
+              {{ formGroup.getError('custom', field.name) | translate }}
+            </span>
           </div>
         </ng-template>
 
@@ -133,6 +137,10 @@
                   translate>
               Maximum length is {{ field.validators?.maxLength }} characters.
             </span>
+            <span *ngIf="showError(field.name, frm, 'custom')"
+                  class="invalid-feedback">
+              {{ formGroup.getError('custom', field.name) | translate }}
+            </span>
           </div>
         </ng-template>
 
@@ -183,6 +191,10 @@
                   translate>
               The value cannot exceed {{ field.validators?.max }}.
             </span>
+            <span *ngIf="showError(field.name, frm, 'custom')"
+                  class="invalid-feedback">
+              {{ formGroup.getError('custom', field.name) | translate }}
+            </span>
           </div>
         </ng-template>
 
@@ -209,6 +221,10 @@
                     class="invalid-feedback"
                     translate>
                 This field is required.
+              </span>
+              <span *ngIf="showError(field.name, frm, 'custom')"
+                    class="invalid-feedback">
+                {{ formGroup.getError('custom', field.name) | translate }}
               </span>
             </div>
           </div>
@@ -263,6 +279,10 @@
                   translate>
               This field is required.
             </span>
+            <span *ngIf="showError(field.name, frm, 'custom')"
+                  class="invalid-feedback">
+              {{ formGroup.getError('custom', field.name) | translate }}
+            </span>
           </div>
         </ng-template>
 
@@ -313,6 +333,10 @@
                   class="invalid-feedback"
                   translate>
               The value cannot exceed {{ field.validators?.max }}.
+            </span>
+            <span *ngIf="showError(field.name, frm, 'custom')"
+                  class="invalid-feedback">
+              {{ formGroup.getError('custom', field.name) | translate }}
             </span>
           </div>
         </ng-template>

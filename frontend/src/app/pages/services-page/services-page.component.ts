@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
+import { ValidationErrors, ValidatorFn } from '@angular/forms';
 import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
 import * as _ from 'lodash';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
@@ -7,12 +8,15 @@ import { forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 import { DeclarativeFormModalComponent } from '~/app/core/modals/declarative-form/declarative-form-modal.component';
-import { bytesToSize } from '~/app/functions.helper';
+import { bytesToSize, toBytes } from '~/app/functions.helper';
 import { translate } from '~/app/i18n.helper';
 import { DatatableActionItem } from '~/app/shared/models/datatable-action-item.type';
 import { DatatableColumn } from '~/app/shared/models/datatable-column.type';
 import { DatatableData } from '~/app/shared/models/datatable-data.type';
-import { DeclarativeForm } from '~/app/shared/models/declarative-form-config.type';
+import {
+  DeclarativeForm,
+  DeclarativeFormValues
+} from '~/app/shared/models/declarative-form-config.type';
 import { BytesToSizePipe } from '~/app/shared/pipes/bytes-to-size.pipe';
 import { RedundancyLevelPipe } from '~/app/shared/pipes/redundancy-level.pipe';
 import { CephFSAuthorization, CephfsService } from '~/app/shared/services/api/cephfs.service';
@@ -23,6 +27,7 @@ import {
   ServicesService,
   ServiceType
 } from '~/app/shared/services/api/services.service';
+import { StorageService, StorageStats } from '~/app/shared/services/api/storage.service';
 import { DialogService } from '~/app/shared/services/dialog.service';
 
 @Component({
@@ -45,7 +50,8 @@ export class ServicesPageComponent {
     private redundancyLevelPipe: RedundancyLevelPipe,
     private cephfsService: CephfsService,
     private dialogService: DialogService,
-    private localNodeService: LocalNodeService
+    private localNodeService: LocalNodeService,
+    private storageService: StorageService
   ) {
     this.columns = [
       {
@@ -98,86 +104,113 @@ export class ServicesPageComponent {
       case 'block':
         break;
       case 'file':
-        this.dialogService.open(
-          DeclarativeFormModalComponent,
-          (result) => {
-            if (_.isPlainObject(result)) {
-              this.createService(result as ServiceInfo);
+        this.storageService.stats().subscribe((stats: StorageStats) => {
+          this.dialogService.open(
+            DeclarativeFormModalComponent,
+            (result: DeclarativeFormValues | boolean) => {
+              if (_.isPlainObject(result)) {
+                this.createService(result as ServiceInfo);
+              }
+            },
+            {
+              title: TEXT('File Service'),
+              submitButtonText: TEXT('Create'),
+              formConfig: {
+                fields: [
+                  {
+                    type: 'hidden',
+                    name: 'type',
+                    value: 'file'
+                  },
+                  {
+                    type: 'select',
+                    name: 'backend',
+                    label: TEXT('Type'),
+                    value: 'nfs',
+                    options: {
+                      nfs: 'NFS',
+                      cephfs: 'CephFS'
+                    },
+                    validators: {
+                      required: true
+                    }
+                  },
+                  {
+                    type: 'text',
+                    name: 'name',
+                    label: TEXT('Name'),
+                    value: '',
+                    validators: {
+                      required: true
+                    }
+                  },
+                  {
+                    type: 'binary',
+                    name: 'available',
+                    label: TEXT('Available Capacity'),
+                    value: stats.available,
+                    readonly: true
+                  },
+                  {
+                    type: 'binary',
+                    name: 'allocated',
+                    label: TEXT('Allocated Capacity'),
+                    value: stats.allocated,
+                    readonly: true
+                  },
+                  {
+                    type: 'binary',
+                    name: 'size',
+                    label: TEXT('Estimated Required Capacity'),
+                    value: '1 GiB',
+                    validators: {
+                      required: true
+                    },
+                    onValueChanges: (
+                      value: any,
+                      control: AbstractControl,
+                      form: DeclarativeForm
+                    ) => {
+                      const rawSize = (value as number) * (form.values.replicas as number);
+                      form.patchValues({ rawSize: bytesToSize(rawSize) });
+                    }
+                  },
+                  {
+                    type: 'select',
+                    name: 'replicas',
+                    label: TEXT('Number Of Replicas'),
+                    value: 1,
+                    options: {
+                      1: this.redundancyLevelPipe.transform(1, 'flavor'),
+                      2: this.redundancyLevelPipe.transform(2, 'flavor'),
+                      3: this.redundancyLevelPipe.transform(3, 'flavor')
+                    },
+                    validators: {
+                      required: true
+                    },
+                    onValueChanges: (
+                      value: any,
+                      control: AbstractControl,
+                      form: DeclarativeForm
+                    ) => {
+                      const rawSize = form.values.size * (value as number);
+                      form.patchValues({ rawSize: bytesToSize(rawSize) });
+                    }
+                  },
+                  {
+                    type: 'text',
+                    name: 'rawSize',
+                    readonly: true,
+                    label: TEXT('Raw Required Capacity'),
+                    validators: {
+                      custom: this.budgetValidator(stats)
+                    }
+                  }
+                ]
+              }
             }
-          },
-          {
-            title: TEXT('File Service'),
-            submitButtonText: TEXT('Create'),
-            formConfig: {
-              fields: [
-                {
-                  type: 'hidden',
-                  name: 'type',
-                  value: 'file'
-                },
-                {
-                  type: 'select',
-                  name: 'backend',
-                  label: TEXT('Type'),
-                  value: 'nfs',
-                  options: {
-                    nfs: 'NFS',
-                    cephfs: 'CephFS'
-                  },
-                  validators: {
-                    required: true
-                  }
-                },
-                {
-                  type: 'text',
-                  name: 'name',
-                  label: TEXT('Name'),
-                  value: '',
-                  validators: {
-                    required: true
-                  }
-                },
-                {
-                  type: 'binary',
-                  name: 'size',
-                  label: TEXT('Estimated Required Capacity'),
-                  value: '1 GiB',
-                  validators: {
-                    required: true
-                  },
-                  onValueChanges: (value: any, control: AbstractControl, form: DeclarativeForm) => {
-                    const rawSize = (value as number) * (form.values.replicas as number);
-                    form.patchValues({ rawSize: bytesToSize(rawSize) });
-                  }
-                },
-                {
-                  type: 'select',
-                  name: 'replicas',
-                  label: TEXT('Number Of Replicas'),
-                  value: 1,
-                  options: {
-                    1: this.redundancyLevelPipe.transform(1, 'flavor'),
-                    2: this.redundancyLevelPipe.transform(2, 'flavor'),
-                    3: this.redundancyLevelPipe.transform(3, 'flavor')
-                  },
-                  validators: {
-                    required: true
-                  },
-                  onValueChanges: (value: any, control: AbstractControl, form: DeclarativeForm) => {
-                    const rawSize = form.values.size * (value as number);
-                    form.patchValues({ rawSize: bytesToSize(rawSize) });
-                  }
-                },
-                {
-                  type: 'text',
-                  name: 'rawSize',
-                  readonly: true,
-                  label: TEXT('Raw Required Capacity')
-                }
-              ]
-            }
-          }
-        );
+          );
+        });
         break;
       case 'object':
         break;
@@ -345,5 +378,19 @@ export class ServicesPageComponent {
         ]
       }
     });
+  }
+
+  private budgetValidator(stats: StorageStats): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (_.isEmpty(control.value)) {
+        return null;
+      }
+      const value = toBytes(control.value);
+      const overBudget = (value || 0) > stats.unallocated;
+      const unallocated = bytesToSize(stats.unallocated);
+      return overBudget
+        ? { custom: TEXT(`Not enough capacity available, only ${unallocated} are free.`) }
+        : null;
+    };
   }
 }

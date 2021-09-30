@@ -11,15 +11,15 @@ from fastapi import APIRouter, Depends, Request
 
 from bubbles.bubbles import Bubbles
 from bubbles.backend.api import jwt_auth_scheme
-from bubbles.backend.controllers.storage import StorageStats
+from bubbles.backend.models.storage import StorageStatsModel
 
 router = APIRouter(prefix="/storage", tags=["storage"])
 
 
-@router.get("/stats", response_model=StorageStats)
+@router.get("/stats", response_model=StorageStatsModel)
 async def get_stats(
     request: Request, _: Callable = Depends(jwt_auth_scheme)
-) -> StorageStats:
+) -> StorageStatsModel:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.storage is not None
     return bubbles.ctrls.storage.stats()
