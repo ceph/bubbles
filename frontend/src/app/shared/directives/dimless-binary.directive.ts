@@ -57,14 +57,14 @@ export class DimlessBinaryDirective implements OnInit {
 
   /**
    * Default unit that should be used when user do not type a unit.
-   * By default, "MiB" will be used.
+   * By default, "B" will be used.
    *
    * Example:
-   *   Given defaultUnit=null, if user type 7, then model will be updated to 7MiB
+   *   Given defaultUnit=null, if user type 7, then model will be updated to 7B
    *   Given defaultUnit=k, if user type 7, then model will be updated to 7KiB
    */
   @Input()
-  defaultUnit?: string;
+  defaultUnit = 'b';
 
   private el: HTMLInputElement;
 
@@ -83,7 +83,7 @@ export class DimlessBinaryDirective implements OnInit {
 
   setValue(value: string) {
     if (/^[\d.]+$/.test(value)) {
-      value += this.defaultUnit || 'm';
+      value += this.defaultUnit;
     }
     const size = toBytes(value);
     const roundedSize = this.round(size);

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
 import * as _ from 'lodash';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
@@ -6,10 +7,12 @@ import { forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 import { DeclarativeFormModalComponent } from '~/app/core/modals/declarative-form/declarative-form-modal.component';
+import { bytesToSize } from '~/app/functions.helper';
 import { translate } from '~/app/i18n.helper';
 import { DatatableActionItem } from '~/app/shared/models/datatable-action-item.type';
 import { DatatableColumn } from '~/app/shared/models/datatable-column.type';
 import { DatatableData } from '~/app/shared/models/datatable-data.type';
+import { DeclarativeForm } from '~/app/shared/models/declarative-form-config.type';
 import { BytesToSizePipe } from '~/app/shared/pipes/bytes-to-size.pipe';
 import { RedundancyLevelPipe } from '~/app/shared/pipes/redundancy-level.pipe';
 import { CephFSAuthorization, CephfsService } from '~/app/shared/services/api/cephfs.service';
@@ -137,10 +140,14 @@ export class ServicesPageComponent {
                 {
                   type: 'binary',
                   name: 'size',
-                  label: TEXT('Size'),
+                  label: TEXT('Estimated Required Capacity'),
                   value: '1 GiB',
                   validators: {
                     required: true
+                  },
+                  onValueChanges: (value: any, control: AbstractControl, form: DeclarativeForm) => {
+                    const rawSize = (value as number) * (form.values.replicas as number);
+                    form.patchValues({ rawSize: bytesToSize(rawSize) });
                   }
                 },
                 {
@@ -155,7 +162,17 @@ export class ServicesPageComponent {
                   },
                   validators: {
                     required: true
+                  },
+                  onValueChanges: (value: any, control: AbstractControl, form: DeclarativeForm) => {
+                    const rawSize = form.values.size * (value as number);
+                    form.patchValues({ rawSize: bytesToSize(rawSize) });
                   }
+                },
+                {
+                  type: 'text',
+                  name: 'rawSize',
+                  readonly: true,
+                  label: TEXT('Raw Required Capacity')
                 }
               ]
             }

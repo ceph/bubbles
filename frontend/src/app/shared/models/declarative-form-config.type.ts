@@ -1,3 +1,5 @@
+import { AbstractControl } from '@angular/forms';
+
 export type FormFieldConfig = {
   name: string;
   type: 'text' | 'number' | 'password' | 'checkbox' | 'radio' | 'select' | 'hidden' | 'binary';
@@ -19,6 +21,7 @@ export type FormFieldConfig = {
     patternType?: 'hostAddress';
   };
   onPaste?: (event: ClipboardEvent) => void;
+  onValueChanges?: (value: any, control: AbstractControl, form: DeclarativeForm) => void;
 
   // radio
   // Note, radio buttons behave different to other form fields.
@@ -40,6 +43,14 @@ export type FormButtonConfig = {
   class?: string;
   click?: (buttonConfig: FormButtonConfig, values: Record<string, any>) => void;
 };
+
+export type DeclarativeFormValues = Record<string, any>;
+
+export interface DeclarativeForm {
+  getControl(path: string): AbstractControl | null;
+  get values(): DeclarativeFormValues;
+  patchValues(values: DeclarativeFormValues): void;
+}
 
 export type DeclarativeFormConfig = {
   id?: string; // A unique form ID.
