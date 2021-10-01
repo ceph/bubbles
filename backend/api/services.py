@@ -22,7 +22,7 @@ router = APIRouter(prefix="/services", tags=["services"])
 
 
 @router.get("/", response_model=ServicesModel)
-async def get_list(
+async def list_services(
     request: Request, _: Callable = Depends(jwt_auth_scheme)
 ) -> ServicesModel:
     bubbles: Bubbles = request.app.state.bubbles
@@ -39,11 +39,22 @@ async def get_list(
 
 
 @router.post("/create", response_model=bool)
-async def create(
+async def create_service(
     request: Request,
     info: ServiceInfoModel,
-    _: Callable = Depends(jwt_auth_scheme),
+    _: Callable = Depends(jwt_auth_scheme)
 ) -> bool:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.services is not None
     return await bubbles.ctrls.services.create(info)
+
+
+@router.delete("/{name}", name="Delete a service by name")
+async def delete_service(
+    name: str,
+    request: Request,
+    _: Callable = Depends(jwt_auth_scheme)
+) -> None:
+    bubbles: Bubbles = request.app.state.bubbles
+    assert bubbles.ctrls.services is not None
+    return await bubbles.ctrls.services.delete(name)

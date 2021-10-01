@@ -21,16 +21,4 @@ export class UsersService {
   public list(): Observable<User[]> {
     return this.http.get<User[]>(`${this.url}/`);
   }
-
-  public create(user: User): Observable<void> {
-    return this.http.post<void>(`${this.url}/create`, user);
-  }
-
-  public delete(username: string): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${username}`);
-  }
-
-  public update(username: string, user: Partial<User>): Observable<User> {
-    return this.http.patch<User>(`${this.url}/${username}`, user);
-  }
 }

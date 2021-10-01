@@ -95,13 +95,17 @@ export class ServicesService {
     return this.http.get<Services>(`${this.url}/`);
   }
 
-  public exists(service_name: string): Observable<boolean> {
-    return this.http.get<ServiceInfo>(`${this.url}/${service_name}`).pipe(
+  public exists(name: string): Observable<boolean> {
+    return this.http.get<ServiceInfo>(`${this.url}/${name}`).pipe(
       mapTo(true),
       catchError((error) => {
         error.preventDefault();
         return of(false);
       })
     );
+  }
+
+  public delete(name: string): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${name}`);
   }
 }

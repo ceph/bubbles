@@ -65,11 +65,18 @@ class ServicesController:
         self._save()
         return True
 
-    async def status(self, svcname: str) -> ServiceStatusModel:
+    async def delete(self, name: str) -> None:
+        try:
+            self._services.pop(name)
+        except KeyError:
+            raise ServiceNotFoundError()
+        self._save()
+
+    async def status(self, name: str) -> ServiceStatusModel:
         status = ServiceStatusModel(
-            name=svcname, status=ServiceStatusEnum.NONE, info=[]
+            name=name, status=ServiceStatusEnum.NONE, info=[]
         )
-        if svcname not in self._services:
+        if name not in self._services:
             status.status = ServiceStatusEnum.ERROR
             status.info.append(
                 ServiceStatusInfo(
