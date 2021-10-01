@@ -43,7 +43,7 @@ async def list_services(
 async def create_service(
     request: Request,
     info: ServiceInfoModel,
-    _: Callable = Depends(jwt_auth_scheme)
+    _: Callable = Depends(jwt_auth_scheme),
 ) -> bool:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.services is not None
@@ -52,21 +52,18 @@ async def create_service(
 
 @router.delete("/{name}", name="Delete a service by name")
 async def delete_service(
-    name: str,
-    request: Request,
-    _: Callable = Depends(jwt_auth_scheme)
+    name: str, request: Request, _: Callable = Depends(jwt_auth_scheme)
 ) -> None:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.services is not None
     return await bubbles.ctrls.services.delete(name)
 
 
-@router.get("/{name}", name="Get a service by name",
-            response_model=ServiceInfoModel)
+@router.get(
+    "/{name}", name="Get a service by name", response_model=ServiceInfoModel
+)
 async def get_service(
-    name: str,
-    request: Request,
-    _: Callable = Depends(jwt_auth_scheme)
+    name: str, request: Request, _: Callable = Depends(jwt_auth_scheme)
 ) -> ServiceInfoModel:
     bubbles: Bubbles = request.app.state.bubbles
     assert bubbles.ctrls.services is not None
