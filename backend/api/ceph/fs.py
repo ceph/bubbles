@@ -37,3 +37,25 @@ async def ls(
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
         )
+
+
+@router.get(
+    "/{name}",
+    name="Get detail about a Ceph filesystem",
+    response_model=CephFSListEntryModel,
+)
+async def get(
+    request: Request,
+    name: str,
+    _: Callable = Depends(jwt_auth_scheme),
+) -> CephFSListEntryModel:
+    bubbles = request.app.state.bubbles
+    try:
+        for fs in bubbles.ctrls.cephfs.ls():
+            if fs.name == name:
+                return fs
+        raise HTTPException(status.HTTP_404_NOT_FOUND)
+    except Error as e:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
