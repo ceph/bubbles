@@ -44,7 +44,7 @@ class ServicesController:
     def services(self) -> List[ServiceInfoModel]:
         return [svc.info for svc in self._services.values()]
 
-    def get(self, name: str) -> ServiceInfoModel:
+    async def get(self, name: str) -> ServiceInfoModel:
         if name not in self._services:
             raise ServiceNotFoundError()
         return self._services[name].info

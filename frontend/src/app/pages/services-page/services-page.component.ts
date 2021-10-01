@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
 import { ValidationErrors, ValidatorFn } from '@angular/forms';
 import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
 import * as _ from 'lodash';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { forkJoin } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { forkJoin, Observable, of } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import { DeclarativeFormModalComponent } from '~/app/core/modals/declarative-form/declarative-form-modal.component';
 import { bytesToSize, toBytes } from '~/app/functions.helper';
@@ -124,6 +124,16 @@ export class ServicesPageComponent {
                     value: 'file'
                   },
                   {
+                    type: 'text',
+                    name: 'name',
+                    label: TEXT('Name'),
+                    placeholder: TEXT('Enter the name of this service'),
+                    validators: {
+                      required: true,
+                      asyncCustom: this.nameValidator()
+                    }
+                  },
+                  {
                     type: 'select',
                     name: 'backend',
                     label: TEXT('Type'),
@@ -137,21 +147,12 @@ export class ServicesPageComponent {
                     }
                   },
                   {
-                    type: 'text',
-                    name: 'name',
-                    label: TEXT('Name'),
-                    placeholder: TEXT('Enter the name of this service'),
-                    validators: {
-                      required: true
-                    }
-                  },
-                  {
                     type: 'container',
                     fields: [
                       {
                         type: 'binary',
                         name: 'available',
-                        label: TEXT('Overall Capacity'),
+                        label: TEXT('Available Capacity'),
                         value: stats.available,
                         hint: TEXT('The overall available capacity.'),
                         readonly: true
@@ -159,17 +160,17 @@ export class ServicesPageComponent {
                       {
                         type: 'binary',
                         name: 'allocated',
-                        label: TEXT('Used Capacity'),
+                        label: TEXT('Allocated Capacity'),
                         value: stats.allocated,
-                        hint: TEXT('The currently used capacity.'),
+                        hint: TEXT('The currently allocated capacity.'),
                         readonly: true
                       },
                       {
                         type: 'binary',
                         name: 'free',
-                        label: TEXT('Free Capacity'),
+                        label: TEXT('Unallocated Capacity'),
                         value: stats.unallocated,
-                        hint: TEXT('The currently free capacity.'),
+                        hint: TEXT('The currently unallocated capacity.'),
                         readonly: true
                       }
                     ]
@@ -423,6 +424,23 @@ export class ServicesPageComponent {
         ]
       }
     });
+  }
+
+  private nameValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      if (_.isEmpty(control.value)) {
+        return of(null);
+      }
+      return this.servicesService.exists(control.value).pipe(
+        map((resp: boolean) => {
+          if (!resp) {
+            return null;
+          } else {
+            return { custom: TEXT('The service name is already in use.') };
+          }
+        })
+      );
+    };
   }
 
   private budgetValidator(stats: StorageStats): ValidatorFn {
