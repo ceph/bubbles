@@ -94,17 +94,26 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
     this.config = _.defaultsDeep(this.config, {
       id: `cb-declarative-form-${++nextUniqueId}`
     });
-    _.forEach(this.config?.fields, (field: FormFieldConfig) => {
+    const fields: Array<FormFieldConfig> = this.getFields();
+    _.forEach(fields, (field: FormFieldConfig) => {
       _.defaultsDeep(field, {
         hasCopyToClipboardButton: false,
         placeholder: '',
         options: {}
       });
+      switch (field.type) {
+        case 'checkbox':
+        case 'radio':
+          _.defaultsDeep(field, {
+            id: `${field.name}-${++nextUniqueId}`
+          });
+          break;
+      }
     });
     this.formGroup = this.createForm();
     // Initialize onValueChanges callbacks.
     _.forEach(
-      _.filter(this.config?.fields, (field) => _.isFunction(field.onValueChanges)),
+      _.filter(fields, (field) => _.isFunction(field.onValueChanges)),
       (field: FormFieldConfig) => {
         if (this.formGroup) {
           const control: AbstractControl | null = this.getControl(field.name);
@@ -127,7 +136,7 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
 
   createForm(): FormGroup {
     const controlsConfig: Record<string, FormControl> = {};
-    _.forEach(this.config?.fields, (field: FormFieldConfig) => {
+    _.forEach(this.getFields(), (field: FormFieldConfig) => {
       controlsConfig[field.name] = DeclarativeFormComponent.createFormControl(field);
     });
     return this.formBuilder.group(controlsConfig);
@@ -163,7 +172,7 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
 
   get values(): DeclarativeFormValues {
     const values = this.formGroup?.value ?? {};
-    _.forEach(this.config?.fields, (field: FormFieldConfig) => {
+    _.forEach(this.getFields(), (field: FormFieldConfig) => {
       const value = values[field.name];
       if (value) {
         values[field.name] = this.convertToRaw(value, field);
@@ -199,6 +208,18 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
       ? (fgd.submitted || control.dirty) &&
           (errorCode ? control.hasError(errorCode) : control.invalid)
       : false;
+  }
+
+  private getFields(): Array<FormFieldConfig> {
+    const flatten = (fields: Array<FormFieldConfig>): Array<FormFieldConfig> =>
+      _.flatMap(fields, (field: FormFieldConfig) => {
+        if (_.isArray(field.fields)) {
+          return flatten(field.fields);
+        } else {
+          return field;
+        }
+      });
+    return flatten(this.config?.fields || []);
   }
 
   private convertToRaw(value: any, field: FormFieldConfig): any {

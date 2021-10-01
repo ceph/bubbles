@@ -25,30 +25,4 @@ describe('UsersService', () => {
     const req = httpTesting.expectOne('api/users/');
     expect(req.request.method).toBe('GET');
   });
-
-  it('should call create', () => {
-    /* eslint-disable @typescript-eslint/naming-convention */
-    service
-      .create({
-        username: 'foo',
-        password: 'test123',
-        full_name: 'foo bar',
-        disabled: true
-      })
-      .subscribe();
-    const req = httpTesting.expectOne('api/users/create');
-    expect(req.request.method).toBe('POST');
-  });
-
-  it('should call delete', () => {
-    service.delete('foo').subscribe();
-    const req = httpTesting.expectOne('api/users/foo');
-    expect(req.request.method).toBe('DELETE');
-  });
-
-  it('should call update', () => {
-    service.update('foo', { full_name: 'baz' }).subscribe();
-    const req = httpTesting.expectOne('api/users/foo');
-    expect(req.request.method).toBe('PATCH');
-  });
 });

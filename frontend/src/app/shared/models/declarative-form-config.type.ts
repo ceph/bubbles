@@ -2,7 +2,16 @@ import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 export type FormFieldConfig = {
   name: string;
-  type: 'text' | 'number' | 'password' | 'checkbox' | 'radio' | 'select' | 'hidden' | 'binary';
+  type:
+    | 'text'
+    | 'number'
+    | 'password'
+    | 'checkbox'
+    | 'radio'
+    | 'select'
+    | 'hidden'
+    | 'binary'
+    | 'container';
   label?: string;
   value?: any;
   placeholder?: string;
@@ -24,18 +33,27 @@ export type FormFieldConfig = {
   onPaste?: (event: ClipboardEvent) => void;
   onValueChanges?: (value: any, control: AbstractControl, form: DeclarativeForm) => void;
 
-  // radio
+  // --- radio ---
   // Note, radio buttons behave different to other form fields.
   // The 'value' property defines what value is represented by
   // this form field. If you want to check it, then you need to
   // set the 'checked' property.
   checked?: boolean;
 
-  // text | password
+  // --- text | password ---
   hasCopyToClipboardButton?: boolean;
 
-  // dropdown
+  // --- dropdown ---
   options?: Record<any, string>;
+
+  // --- container ---
+  fields?: Array<FormFieldConfig>;
+  // Fields in a container will respect the 'flex' configuration.
+  // Specifies the size of the field in percent.
+  flex?: number;
+
+  // internal only
+  id?: string;
 };
 
 export type FormButtonConfig = {

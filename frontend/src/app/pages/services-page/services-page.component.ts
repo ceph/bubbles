@@ -10,6 +10,7 @@ import { finalize } from 'rxjs/operators';
 import { DeclarativeFormModalComponent } from '~/app/core/modals/declarative-form/declarative-form-modal.component';
 import { bytesToSize, toBytes } from '~/app/functions.helper';
 import { translate } from '~/app/i18n.helper';
+import { DialogComponent } from '~/app/shared/components/dialog/dialog.component';
 import { DatatableActionItem } from '~/app/shared/models/datatable-action-item.type';
 import { DatatableColumn } from '~/app/shared/models/datatable-column.type';
 import { DatatableData } from '~/app/shared/models/datatable-data.type';
@@ -139,75 +140,91 @@ export class ServicesPageComponent {
                     type: 'text',
                     name: 'name',
                     label: TEXT('Name'),
-                    value: '',
+                    placeholder: TEXT('Enter the name of this service'),
                     validators: {
                       required: true
                     }
                   },
                   {
-                    type: 'binary',
-                    name: 'available',
-                    label: TEXT('Available Capacity'),
-                    value: stats.available,
-                    readonly: true
+                    type: 'container',
+                    fields: [
+                      {
+                        type: 'binary',
+                        name: 'available',
+                        label: TEXT('Overall Capacity'),
+                        value: stats.available,
+                        hint: TEXT('The overall available capacity in this cluster.'),
+                        readonly: true
+                      },
+                      {
+                        type: 'binary',
+                        name: 'allocated',
+                        label: TEXT('Allocated Capacity'),
+                        value: stats.allocated,
+                        hint: TEXT('The currently allocated capacity in this cluster.'),
+                        readonly: true
+                      }
+                    ]
                   },
                   {
-                    type: 'binary',
-                    name: 'allocated',
-                    label: TEXT('Allocated Capacity'),
-                    value: stats.allocated,
-                    readonly: true
-                  },
-                  {
-                    type: 'binary',
-                    name: 'size',
-                    label: TEXT('Estimated Required Capacity'),
-                    value: '1 GiB',
-                    validators: {
-                      required: true
-                    },
-                    onValueChanges: (
-                      value: any,
-                      control: AbstractControl,
-                      form: DeclarativeForm
-                    ) => {
-                      const rawSize = (value as number) * (form.values.replicas as number);
-                      form.patchValues({ rawSize: bytesToSize(rawSize) });
-                    }
-                  },
-                  {
-                    type: 'select',
-                    name: 'replicas',
-                    label: TEXT('Number Of Replicas'),
-                    value: 1,
-                    options: {
-                      1: this.redundancyLevelPipe.transform(1, 'flavor'),
-                      2: this.redundancyLevelPipe.transform(2, 'flavor'),
-                      3: this.redundancyLevelPipe.transform(3, 'flavor')
-                    },
-                    validators: {
-                      required: true
-                    },
-                    onValueChanges: (
-                      value: any,
-                      control: AbstractControl,
-                      form: DeclarativeForm
-                    ) => {
-                      const rawSize = form.values.size * (value as number);
-                      form.patchValues({ rawSize: bytesToSize(rawSize) });
-                    }
+                    type: 'container',
+                    fields: [
+                      {
+                        type: 'binary',
+                        name: 'size',
+                        label: TEXT('Estimated Required Capacity'),
+                        placeholder: TEXT('Enter the capacity of this service'),
+                        validators: {
+                          required: true
+                        },
+                        onValueChanges: (
+                          value: any,
+                          control: AbstractControl,
+                          form: DeclarativeForm
+                        ) => {
+                          const rawSize = (value as number) * (form.values.replicas as number);
+                          form.patchValues({ rawSize: bytesToSize(rawSize) });
+                        }
+                      },
+                      {
+                        type: 'select',
+                        name: 'replicas',
+                        label: TEXT('Number Of Replicas'),
+                        value: 1,
+                        options: {
+                          1: this.redundancyLevelPipe.transform(1, 'flavor'),
+                          2: this.redundancyLevelPipe.transform(2, 'flavor'),
+                          3: this.redundancyLevelPipe.transform(3, 'flavor')
+                        },
+                        validators: {
+                          required: true
+                        },
+                        onValueChanges: (
+                          value: any,
+                          control: AbstractControl,
+                          form: DeclarativeForm
+                        ) => {
+                          const rawSize = form.values.size * (value as number);
+                          form.patchValues({ rawSize: bytesToSize(rawSize) });
+                        }
+                      }
+                    ]
                   },
                   {
                     type: 'text',
                     name: 'rawSize',
                     readonly: true,
                     label: TEXT('Raw Required Capacity'),
+                    hint: TEXT('The estimated raw capacity of this service.'),
                     validators: {
                       custom: this.budgetValidator(stats)
                     }
                   }
                 ]
               }
+            },
+            {
+              size: 'lg'
             }
           );
         });
@@ -294,7 +311,7 @@ export class ServicesPageComponent {
           },
           {
             title: TEXT('Delete'),
-            callback: (data: DatatableData) => {}
+            callback: (data: DatatableData) => this.deleteService(data.name)
           }
         );
         break;
@@ -328,7 +345,7 @@ export class ServicesPageComponent {
           },
           {
             title: TEXT('Delete'),
-            callback: (data: DatatableData) => {}
+            callback: (data: DatatableData) => this.deleteService(data.name)
           }
         );
     }
@@ -341,6 +358,26 @@ export class ServicesPageComponent {
       .create(serviceInfo)
       .pipe(finalize(() => this.blockUI.stop()))
       .subscribe(() => this.loadData());
+  }
+
+  private deleteService(name: string): void {
+    this.dialogService.open(
+      DialogComponent,
+      (res: boolean) => {
+        if (res) {
+          this.blockUI.start(translate(TEXT('Please wait, deleting service ...')));
+          this.servicesService
+            .delete(name)
+            .pipe(finalize(() => this.blockUI.stop()))
+            .subscribe(() => this.loadData());
+        }
+      },
+      {
+        type: 'yesNo',
+        icon: 'question',
+        message: TEXT(`Do you really want to delete service <strong>${name}</strong>?`)
+      }
+    );
   }
 
   /**
