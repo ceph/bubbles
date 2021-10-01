@@ -6,9 +6,10 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
-from typing import Callable, List
+from typing import Callable, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+from pydantic import BaseModel
 
 from bubbles.bubbles import Bubbles
 from bubbles.backend.api import jwt_auth_scheme
@@ -20,6 +21,26 @@ from bubbles.backend.models.ceph.fs import (
 )
 
 router = APIRouter(prefix="/ceph/fs", tags=["ceph"])
+
+
+class ServiceRequest(BaseModel):
+    placement: Optional[str] = "*"
+
+
+@router.put("/{name}", name="Create a Ceph filesystem")
+async def create(
+    request: Request,
+    name: str,
+    req: ServiceRequest,
+    _: Callable = Depends(jwt_auth_scheme),
+) -> CephFSListEntryModel:
+    bubbles = request.app.state.bubbles
+    try:
+        return bubbles.ctrls.cephfs.create(name=name, placement=req.placement)
+    except Error as e:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
 
 
 @router.get(

@@ -9,7 +9,7 @@ import json
 import logging
 from mgr_module import MgrModule, MonCommandFailed
 from pydantic.tools import parse_obj_as
-from typing import List
+from typing import List, Optional
 
 from bubbles.backend.models.ceph.fs import (
     CephFSListEntryModel,
@@ -22,11 +22,35 @@ class Error(Exception):
     pass
 
 
+class NotFound(Error):
+    pass
+
+
 class CephFSController:
     _mgr: MgrModule
 
     def __init__(self, mgr: MgrModule) -> None:
         self._mgr = mgr
+
+    def create(
+        self, name: str, placement: Optional[str] = None
+    ) -> CephFSListEntryModel:
+        cmd = {
+            "prefix": "fs volume create",
+            "name": name,
+        }
+        if placement:
+            cmd["placement"] = placement
+
+        try:
+            _, out, _ = self._mgr.check_mon_command(cmd)
+        except MonCommandFailed as e:
+            raise Error(e)
+
+        for fs in self.ls():
+            if name == fs.name:
+                return fs
+        raise NotFound(f"unknown fs: {fs.name}")
 
     def ls(self) -> List[CephFSListEntryModel]:
         try:
