@@ -1,4 +1,4 @@
-import { AbstractControl, ValidatorFn } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 
 export type FormFieldConfig = {
   name: string;
@@ -28,7 +28,10 @@ export type FormFieldConfig = {
     requiredIf?: Record<any, any>;
     pattern?: string | RegExp;
     patternType?: 'hostAddress';
+    // The custom validators must return an error object with
+    // the property 'custom' for the error message.
     custom?: ValidatorFn;
+    asyncCustom?: AsyncValidatorFn;
   };
   onPaste?: (event: ClipboardEvent) => void;
   onValueChanges?: (value: any, control: AbstractControl, form: DeclarativeForm) => void;

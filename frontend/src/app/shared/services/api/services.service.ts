@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 import { Observable, of } from 'rxjs';
 import { catchError, mapTo } from 'rxjs/operators';
 
@@ -95,11 +96,17 @@ export class ServicesService {
     return this.http.get<Services>(`${this.url}/`);
   }
 
+  public get(name: string): Observable<ServiceInfo> {
+    return this.http.get<ServiceInfo>(`${this.url}/${name}`);
+  }
+
   public exists(name: string): Observable<boolean> {
-    return this.http.get<ServiceInfo>(`${this.url}/${name}`).pipe(
+    return this.get(name).pipe(
       mapTo(true),
       catchError((error) => {
-        error.preventDefault();
+        if (_.isFunction(error.preventDefault)) {
+          error.preventDefault();
+        }
         return of(false);
       })
     );

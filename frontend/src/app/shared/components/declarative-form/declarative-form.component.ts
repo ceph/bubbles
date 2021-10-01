@@ -2,6 +2,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
+  AsyncValidatorFn,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -48,6 +49,7 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
 
   private static createFormControl(field: FormFieldConfig): FormControl {
     const validators: Array<ValidatorFn> = [];
+    const asyncValidator: Array<AsyncValidatorFn> = [];
     if (field.validators) {
       if (_.isNumber(field.validators.min)) {
         validators.push(Validators.min(field.validators.min));
@@ -80,14 +82,15 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
       if (_.isFunction(field.validators.custom)) {
         validators.push(field.validators.custom);
       }
+      if (_.isFunction(field.validators.asyncCustom)) {
+        asyncValidator.push(field.validators.asyncCustom);
+      }
     }
     let value = _.defaultTo(field.value, null);
     if (field.type === 'binary' && _.isNumber(value)) {
       value = bytesToSize(field.value);
     }
-    return new FormControl(value, {
-      validators
-    });
+    return new FormControl(value, validators, asyncValidator);
   }
 
   ngOnInit(): void {
