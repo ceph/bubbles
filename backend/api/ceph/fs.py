@@ -17,6 +17,7 @@ from bubbles.backend.controllers.ceph.fs import (
     Error,
 )
 from bubbles.backend.models.ceph.fs import (
+    CephFSAuthorizationModel,
     CephFSListEntryModel,
 )
 
@@ -76,6 +77,30 @@ async def get(
             if fs.name == name:
                 return fs
         raise HTTPException(status.HTTP_404_NOT_FOUND)
+    except Error as e:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
+
+
+@router.put(
+    "/{name}/auth",
+    name="Create an auth entity to access a Ceph filesystem",
+    response_model=CephFSAuthorizationModel,
+)
+async def auth_put(
+    request: Request,
+    name: str,
+    client_id: Optional[str] = None,
+    _: Callable = Depends(jwt_auth_scheme),
+) -> CephFSAuthorizationModel:
+    bubbles = request.app.state.bubbles
+    try:
+        return bubbles.ctrls.cephfs.set_auth(name, client_id)
+    except Error as e:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)

@@ -7,7 +7,19 @@
 #
 from typing import List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+
+class CephFSCapsModel(BaseModel):
+    mds: str = Field("", title="mds capabilities")
+    mon: str = Field("", title="mon capabilities")
+    osd: str = Field("", title="osd capabilities")
+
+
+class CephFSAuthorizationModel(BaseModel):
+    entity: str
+    key: str
+    caps: CephFSCapsModel
 
 
 class CephFSListEntryModel(BaseModel):

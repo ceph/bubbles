@@ -9,13 +9,16 @@ import json
 import logging
 from mgr_module import MgrModule, MonCommandFailed
 from pydantic.tools import parse_obj_as
-from typing import List, Optional
+from typing import List, NewType, Optional
 
 from bubbles.backend.models.ceph.fs import (
+    CephFSAuthorizationModel,
     CephFSListEntryModel,
 )
 
 logger = logging.getLogger(__name__)
+
+AuthEntity = NewType("AuthEntity", str)
 
 
 class Error(Exception):
@@ -64,3 +67,32 @@ class CephFSController:
             raise Error(e)
 
         return parse_obj_as(List[CephFSListEntryModel], json.loads(out))
+
+    def _get_auth_entity(
+        self,
+        fsname: str,
+        clientid: Optional[str] = None,
+    ) -> AuthEntity:
+        if not clientid:
+            clientid = "bubbles"
+        return AuthEntity(f"client.{fsname}.{clientid}")
+
+    def set_auth(
+        self,
+        fsname: str,
+        clientid: Optional[str] = None,
+    ) -> CephFSAuthorizationModel:
+        try:
+            _, out, _ = self._mgr.check_mon_command(
+                {
+                    "prefix": "fs authorize",
+                    "filesystem": fsname,
+                    "entity": self._get_auth_entity(fsname, clientid),
+                    "caps": ["/", "rw"],
+                    "format": "json",
+                }
+            )
+        except MonCommandFailed as e:
+            raise Error(e)
+
+        return parse_obj_as(List[CephFSAuthorizationModel], json.loads(out))[0]
