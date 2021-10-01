@@ -25,6 +25,10 @@ class Error(Exception):
     pass
 
 
+class NotAuthorized(Error):
+    pass
+
+
 class NotFound(Error):
     pass
 
@@ -94,5 +98,26 @@ class CephFSController:
             )
         except MonCommandFailed as e:
             raise Error(e)
+
+        return parse_obj_as(List[CephFSAuthorizationModel], json.loads(out))[0]
+
+    def get_auth(
+        self,
+        fsname: str,
+        clientid: Optional[str] = None,
+    ) -> CephFSAuthorizationModel:
+        try:
+            _, out, _ = self._mgr.check_mon_command(
+                {
+                    "prefix": "auth get",
+                    "entity": self._get_auth_entity(fsname, clientid),
+                    "format": "json",
+                }
+            )
+        except MonCommandFailed as e:
+            # TODO: ..
+            # if e.rc == errno.ENOENT:
+            #    raise NotAuthorized(e.message)
+            raise NotAuthorized(e)
 
         return parse_obj_as(List[CephFSAuthorizationModel], json.loads(out))[0]

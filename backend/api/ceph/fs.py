@@ -15,6 +15,7 @@ from bubbles.bubbles import Bubbles
 from bubbles.backend.api import jwt_auth_scheme
 from bubbles.backend.controllers.ceph.fs import (
     Error,
+    NotAuthorized,
 )
 from bubbles.backend.models.ceph.fs import (
     CephFSAuthorizationModel,
@@ -101,6 +102,24 @@ async def auth_put(
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
         )
+
+
+@router.get(
+    "/{name}/auth",
+    name="Get a list of auth entities to access a Ceph filesystem",
+    response_model=CephFSAuthorizationModel,
+)
+async def auth_get(
+    request: Request,
+    name: str,
+    client_id: Optional[str] = None,
+    _: Callable = Depends(jwt_auth_scheme),
+) -> List[CephFSAuthorizationModel]:
+    bubbles = request.app.state.bubbles
+    try:
+        return bubbles.ctrls.cephfs.get_auth(name, client_id)
+    except NotAuthorized as e:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail=str(e))
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
