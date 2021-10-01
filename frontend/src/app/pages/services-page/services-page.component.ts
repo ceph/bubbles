@@ -153,15 +153,23 @@ export class ServicesPageComponent {
                         name: 'available',
                         label: TEXT('Overall Capacity'),
                         value: stats.available,
-                        hint: TEXT('The overall available capacity in this cluster.'),
+                        hint: TEXT('The overall available capacity.'),
                         readonly: true
                       },
                       {
                         type: 'binary',
                         name: 'allocated',
-                        label: TEXT('Allocated Capacity'),
+                        label: TEXT('Used Capacity'),
                         value: stats.allocated,
-                        hint: TEXT('The currently allocated capacity in this cluster.'),
+                        hint: TEXT('The currently used capacity.'),
+                        readonly: true
+                      },
+                      {
+                        type: 'binary',
+                        name: 'free',
+                        label: TEXT('Free Capacity'),
+                        value: stats.unallocated,
+                        hint: TEXT('The currently free capacity.'),
                         readonly: true
                       }
                     ]
