@@ -5,8 +5,12 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
-from mgr_module import MgrModule
+from typing import Any, Dict
+
+from bubbles.backend.models.cluster import ClusterStatusModel
 from bubbles.backend.models.df import ClusterUsageStatsModel
+
+from mgr_module import MgrModule
 
 
 class ClusterController:
@@ -14,6 +18,12 @@ class ClusterController:
 
     def __init__(self, mgr: MgrModule) -> None:
         self._mgr = mgr
+
+    def status(self) -> ClusterStatusModel:
+        cmd: Dict[str, Any] = {"prefix": "status", "format": "json"}
+        _, out, _ = self._mgr.mon_command(cmd)
+        status = ClusterStatusModel.parse_raw(out)
+        return status
 
     def df(self) -> ClusterUsageStatsModel:
         return ClusterUsageStatsModel.get(self._mgr)

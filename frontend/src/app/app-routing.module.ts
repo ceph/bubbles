@@ -16,37 +16,40 @@ import { NotFoundPageComponent } from '~/app/pages/not-found-page/not-found-page
 import { ServicesPageComponent } from '~/app/pages/services-page/services-page.component';
 import { UsersPageComponent } from '~/app/pages/users-page/users-page.component';
 import { DialogComponent } from '~/app/shared/components/dialog/dialog.component';
+import { ClusterStatus } from '~/app/shared/services/api/cluster.service';
 import { AuthGuardService } from '~/app/shared/services/auth-guard.service';
+import { ClusterStatusService } from '~/app/shared/services/cluster-status.service';
 import { DialogService } from '~/app/shared/services/dialog.service';
-import { SystemStatus, SystemStatusService } from '~/app/shared/services/system-status.service';
 
 @Injectable()
 export class CephDashboardRedirectResolver implements Resolve<any> {
   constructor(
     private dialogService: DialogService,
-    private systemStatusService: SystemStatusService
+    private clusterStatusService: ClusterStatusService
   ) {}
 
   resolve(route: ActivatedRouteSnapshot): any {
     const url = decodeURIComponent(route.paramMap.get('url')!);
     if (_.isString(url)) {
-      this.systemStatusService.systemStatus$
-        .pipe(first())
-        .subscribe((systemStatus: SystemStatus) => {
-          this.dialogService.open(
-            DialogComponent,
-            (res: boolean) => {
-              if (res) {
-                window.open(`${systemStatus.dashboard_url}/#${url}`, '_blank');
-              }
-            },
-            {
-              type: 'okCancel',
-              icon: 'info',
-              message: TEXT('This will redirect you to the Ceph Dashboard.')
+      this.clusterStatusService.status$.pipe(first()).subscribe((clusterStatus: ClusterStatus) => {
+        const dashboardUrl: string | null = _.get(clusterStatus, 'mgrmap.services.dashboard', null);
+        if (!_.isString(dashboardUrl)) {
+          return;
+        }
+        this.dialogService.open(
+          DialogComponent,
+          (res: boolean) => {
+            if (res) {
+              window.open(`${_.trimEnd(dashboardUrl, '/')}/#${url}`, '_blank');
             }
-          );
-        });
+          },
+          {
+            type: 'okCancel',
+            icon: 'info',
+            message: TEXT('This will redirect you to the Ceph Dashboard.')
+          }
+        );
+      });
     }
     return EMPTY;
   }

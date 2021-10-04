@@ -1,5 +1,5 @@
 <cb-widget [loadData]="loadData.bind(this)"
-           title="Health"
+           title="{{ 'Health' | translate }}"
            [setStatus]="setHealthStatusIndicator.bind(this)"
            (loadDataEvent)="setHealthStatus($event)">
   <div class="cb-health-dashboard-widget"

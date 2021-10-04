@@ -4,7 +4,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { ComponentsModule } from '~/app/shared/components/components.module';
 import { DirectivesModule } from '~/app/shared/directives/directives.module';
 import { PipesModule } from '~/app/shared/pipes/pipes.module';
-import { SystemStatusService } from '~/app/shared/services/system-status.service';
+import { ClusterStatusService } from '~/app/shared/services/cluster-status.service';
 
 @NgModule({
   exports: [ComponentsModule, DirectivesModule, PipesModule],
@@ -16,7 +16,7 @@ export class SharedModule {
       ngModule: SharedModule,
       providers: [
         // These services must be singletons across the whole app.
-        SystemStatusService
+        ClusterStatusService
       ]
     };
   }

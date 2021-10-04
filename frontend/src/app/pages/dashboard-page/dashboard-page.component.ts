@@ -86,10 +86,10 @@ export class DashboardPageComponent {
       enabledByDefault: true
     },
     {
-      id: 'volumes',
-      title: TEXT('Volumes'),
-      cols: 6,
-      rows: 4,
+      id: 'events',
+      title: TEXT('Events'),
+      cols: 10,
+      rows: 7,
       enabledByDefault: false
     },
     {

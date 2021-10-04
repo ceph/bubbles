@@ -3,29 +3,31 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-export interface HealthCheckSummary {
+export type ClusterUsageStats = Record<string, any>;
+
+export type HealthCheckSummary = {
   message: string;
   count: number;
-}
+};
 
-export interface HealthStatus {
+export type HealthCheck = {
+  severity: string;
+  summary: HealthCheckSummary;
+  muted: boolean;
+};
+
+export type HealthStatus = {
   status: string;
-  checks: { [id: string]: HealthCheckSummary };
-}
+  checks: { [id: string]: HealthCheck };
+};
 
-export interface ClusterStatus {
+export type ClusterStatus = {
   fsid: string;
-  /* eslint-disable @typescript-eslint/naming-convention */
   election_epoch: number;
   quorum: number[];
   quorum_names: string[];
   quorum_age: number;
   health: HealthStatus;
-}
-
-export type Status = {
-  cluster?: ClusterStatus;
-  dashboard_url?: string;
 };
 
 export type IORate = {
@@ -46,22 +48,33 @@ export type ClientIO = {
   services: ServiceIO[];
 };
 
+export type Event = {
+  ts: number;
+  severity: string;
+  message: string;
+};
+
 @Injectable({
   providedIn: 'root'
 })
-export class StatusService {
-  private url = 'api/status';
+export class ClusterService {
+  private url = 'api/cluster';
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Get the current status.
-   */
-  status(): Observable<Status> {
-    return this.http.get<Status>(`${this.url}/`);
+  df(): Observable<ClusterUsageStats> {
+    return this.http.get<ClusterUsageStats>(`${this.url}/df`);
+  }
+
+  status(): Observable<ClusterStatus> {
+    return this.http.get<ClusterStatus>(`${this.url}/status`);
   }
 
   clientIO(): Observable<ClientIO> {
     return this.http.get<ClientIO>(`${this.url}/client-io-rates`);
+  }
+
+  events(): Observable<Event[]> {
+    return this.http.get<Event[]>(`${this.url}/events`);
   }
 }
