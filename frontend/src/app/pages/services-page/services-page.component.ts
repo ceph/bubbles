@@ -4,8 +4,8 @@ import { ValidationErrors, ValidatorFn } from '@angular/forms';
 import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
 import * as _ from 'lodash';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { forkJoin, Observable, of } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { forkJoin, Observable, of, timer } from 'rxjs';
+import { finalize, map, switchMapTo } from 'rxjs/operators';
 
 import { DeclarativeFormModalComponent } from '~/app/core/modals/declarative-form/declarative-form-modal.component';
 import { bytesToSize, toBytes } from '~/app/functions.helper';
@@ -256,10 +256,10 @@ export class ServicesPageComponent {
     switch (serviceInfo.backend) {
       case 'cephfs':
         result.push(
-          {
-            title: TEXT('Edit'),
-            callback: (data: DatatableData) => {}
-          },
+          // {
+          //   title: TEXT('Edit'),
+          //   callback: (data: DatatableData) => {}
+          // },
           {
             title: TEXT('Show credentials'),
             callback: (data: DatatableData) => {
@@ -326,18 +326,15 @@ export class ServicesPageComponent {
         break;
       case 'nfs':
         result.push(
-          {
-            title: TEXT('Edit'),
-            callback: (data: DatatableData) => {}
-          },
+          // {
+          //   title: TEXT('Edit'),
+          //   callback: (data: DatatableData) => {}
+          // },
           {
             title: TEXT('Show mount command'),
             callback: (data: DatatableData) => {
-              forkJoin({
-                auth: this.cephfsService.authorization(data.name),
-                inventory: this.localNodeService.inventory()
-              }).subscribe((res) => {
-                const ipAddr = this.getIpAddrFromInventory(res.inventory);
+              this.localNodeService.inventory().subscribe((res) => {
+                const ipAddr = this.getIpAddrFromInventory(res);
                 const cmdArgs: Array<string> = [
                   'mount',
                   '-t',
@@ -428,10 +425,11 @@ export class ServicesPageComponent {
 
   private nameValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      if (_.isEmpty(control.value)) {
+      if (control.pristine || _.isEmpty(control.value)) {
         return of(null);
       }
-      return this.servicesService.exists(control.value).pipe(
+      return timer(200).pipe(
+        switchMapTo(this.servicesService.exists(control.value)),
         map((resp: boolean) => {
           if (!resp) {
             return null;
