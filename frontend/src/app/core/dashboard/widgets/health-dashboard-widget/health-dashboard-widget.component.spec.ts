@@ -1,18 +1,18 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { DashboardModule } from '~/app/core/dashboard/dashboard.module';
 import { HealthDashboardWidgetComponent } from '~/app/core/dashboard/widgets/health-dashboard-widget/health-dashboard-widget.component';
-import { Status } from '~/app/shared/services/api/status.service';
+import { ClusterStatus } from '~/app/shared/services/api/cluster.service';
+import { TestingModule } from '~/app/testing.module';
 
 describe('HealthDashboardWidgetComponent', () => {
   let component: HealthDashboardWidgetComponent;
   let fixture: ComponentFixture<HealthDashboardWidgetComponent>;
-  let mockStatus: Status;
+  let mockStatus: ClusterStatus;
   // @ts-ignore
-  const setStatus = (status: string) => (mockStatus.cluster.health.status = status);
+  const setStatus = (status: string) => (mockStatus.health.status = status);
   const expectUpdatedFields = ({
     isError = false,
     isWarn = false,
@@ -39,17 +39,12 @@ describe('HealthDashboardWidgetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        DashboardModule,
-        BrowserAnimationsModule,
-        TranslateModule.forRoot(),
-        HttpClientTestingModule
-      ]
+      imports: [DashboardModule, BrowserAnimationsModule, TestingModule, TranslateModule.forRoot()]
     }).compileComponents();
   });
 
   beforeEach(() => {
-    mockStatus = { cluster: { health: { status: 'health_ok' } } } as Status;
+    mockStatus = { health: { status: 'health_ok' } } as ClusterStatus;
     fixture = TestBed.createComponent(HealthDashboardWidgetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -75,7 +70,7 @@ describe('HealthDashboardWidgetComponent', () => {
   });
 
   it('should update fields as expected while waiting for cluster', () => {
-    mockStatus = { cluster: undefined } as Status;
+    mockStatus = {} as ClusterStatus;
     expectUpdatedFields({ statusText: '', boxShadow: 'info', hasStatus: false });
   });
 });

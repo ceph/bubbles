@@ -1,10 +1,10 @@
 <cb-widget [loadData]="loadData.bind(this)"
-           title="Volumes"
+           title="{{ 'Events' | translate }}"
            (loadDataEvent)="updateData($event)">
-  <div class="cb-volumes-dashboard-widget"
+  <div class="cb-events-dashboard-widget"
        fxLayout="row"
        fxLayoutAlign="center center">
-    <div class="cb-volumes-dashboard-widget-table"
+    <div class="cb-events-dashboard-widget-table"
          fxFlex
          fxLayout="column">
       <cb-datatable [data]="data"

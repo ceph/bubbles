@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 
 import { BytesToSizePipe } from '~/app/shared/pipes/bytes-to-size.pipe';
-import { ClientIO, StatusService } from '~/app/shared/services/api/status.service';
+import { ClientIO, ClusterService } from '~/app/shared/services/api/cluster.service';
 
 @Component({
   selector: 'cb-performance-dashboard-widget',
@@ -22,7 +22,7 @@ export class PerformanceDashboardWidgetComponent {
   chartDataWrite: any[] = [];
   chartDataRead: any[] = [];
 
-  constructor(public service: StatusService) {}
+  constructor(public clusterService: ClusterService) {}
 
   updateChartData($data: ClientIO) {
     this.chartDataWrite = this.mapServiceRate($data, 'write');
@@ -53,7 +53,7 @@ export class PerformanceDashboardWidgetComponent {
   }
 
   loadData(): Observable<ClientIO> {
-    return this.service.clientIO();
+    return this.clusterService.clientIO();
   }
 
   private mapServiceRate(

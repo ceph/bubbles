@@ -1,5 +1,5 @@
 <cb-widget [loadData]="loadData.bind(this)"
-           title="System Information"
+           title="{{ 'System Information' | translate }}"
            (loadDataEvent)="updateData($event)">
   <div class="cb-sys-info-dashboard-widget"
        fxLayout="row"

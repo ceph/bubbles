@@ -1,0 +1,14 @@
+@import 'styles.scss';
+
+.cb-events-dashboard-widget {
+  .cb-events-dashboard-widget-table {
+    .cb-events-dashboard-widget-loader {
+      height: 4px;
+    }
+  }
+}
+
+.cb-events-dashboard-widget.error {
+  @extend .cb-color-theme-error;
+  height: 50px;
+}

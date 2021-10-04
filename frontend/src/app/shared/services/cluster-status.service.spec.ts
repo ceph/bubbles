@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SystemStatusService } from '~/app/shared/services/system-status.service';
+import { ClusterStatusService } from '~/app/shared/services/cluster-status.service';
 import { TestingModule } from '~/app/testing.module';
 
-describe('SystemStatusService', () => {
-  let service: SystemStatusService;
+describe('ClusterStatusService', () => {
+  let service: ClusterStatusService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TestingModule]
     });
-    service = TestBed.inject(SystemStatusService);
+    service = TestBed.inject(ClusterStatusService);
   });
 
   it('should be created', () => {

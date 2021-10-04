@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 
 import { translate } from '~/app/i18n.helper';
 import { WidgetHealthStatus } from '~/app/shared/components/widget/widget.component';
-import { Status, StatusService } from '~/app/shared/services/api/status.service';
+import { ClusterStatus } from '~/app/shared/services/api/cluster.service';
+import { ClusterStatusService } from '~/app/shared/services/cluster-status.service';
 
 type HealthMetaObj = { boxShadow: WidgetHealthStatus; statusText: string; setLocalVar: () => void };
 
@@ -46,9 +47,9 @@ export class HealthDashboardWidgetComponent {
     }
   };
 
-  public constructor(private statusService: StatusService) {}
+  public constructor(private clusterStatusService: ClusterStatusService) {}
 
-  setHealthStatus(status: Status) {
+  setHealthStatus(status: ClusterStatus) {
     this.isError = this.isWarn = this.isOkay = false;
     this.hasStatus = true;
     const healthObj = this.getHealthObj(status);
@@ -56,17 +57,17 @@ export class HealthDashboardWidgetComponent {
     healthObj.setLocalVar();
   }
 
-  loadData(): Observable<Status> {
-    return this.statusService.status();
+  loadData(): Observable<ClusterStatus> {
+    return this.clusterStatusService.status$;
   }
 
-  setHealthStatusIndicator(status: Status): WidgetHealthStatus {
+  setHealthStatusIndicator(status: ClusterStatus): WidgetHealthStatus {
     return this.getHealthObj(status).boxShadow;
   }
 
-  private getHealthObj(status: Status): HealthMetaObj {
+  private getHealthObj(status: ClusterStatus): HealthMetaObj {
     return this.healthMetaObjs[
-      !status.cluster ? 'waitingForStatus' : status.cluster.health.status.toLowerCase()
+      !status?.health ? 'waitingForStatus' : status.health.status.toLowerCase()
     ];
   }
 }
