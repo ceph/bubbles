@@ -6,7 +6,7 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
-from typing import Callable
+from typing import Callable, List
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel
@@ -35,6 +35,24 @@ async def dump(
     bubbles = request.app.state.bubbles
     try:
         return bubbles.ctrls.osd.dump()
+    except Error as e:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
+
+
+@router.get(
+    "/pool",
+    name="Get a list of all OSD names",
+    response_model=List[str],
+)
+async def pool_ls(
+    request: Request,
+    _: Callable = Depends(jwt_auth_scheme),
+) -> List[str]:
+    bubbles = request.app.state.bubbles
+    try:
+        return [p.pool_name for p in bubbles.ctrls.osd.get_pools()]
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)

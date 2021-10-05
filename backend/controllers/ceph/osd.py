@@ -8,9 +8,11 @@
 import json
 import logging
 from mgr_module import MgrModule, MonCommandFailed
+from typing import List
 
 from bubbles.backend.models.ceph.osd import (
     OSDMapModel,
+    PoolModel,
 )
 
 logger = logging.getLogger(__name__)
@@ -29,3 +31,6 @@ class OSD:
     def dump(self) -> OSDMapModel:
         osdmap = self._mgr.get_osdmap()
         return OSDMapModel.parse_obj(osdmap.dump())
+
+    def get_pools(self) -> List[PoolModel]:
+        return self.dump().pools
