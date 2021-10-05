@@ -23,3 +23,9 @@ class OSDMapModel(BaseModel):
     fsid: str
     flags_set: List[str]
     pools: List[PoolModel]
+
+
+class PoolRequest(BaseModel):
+    size: int = 3
+    min_size: int = 1
+    crush_rule: str = "replicated_rule"
