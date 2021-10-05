@@ -6,7 +6,7 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
-from typing import Callable, List
+from typing import Callable, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel
@@ -15,9 +15,11 @@ from bubbles.bubbles import Bubbles
 from bubbles.backend.api import jwt_auth_scheme
 from bubbles.backend.controllers.ceph.osd import (
     Error,
+    NotFound,
 )
 from bubbles.backend.models.ceph.osd import (
     OSDMapModel,
+    PoolModel,
 )
 
 router = APIRouter(prefix="/ceph/osd", tags=["ceph"])
@@ -53,6 +55,27 @@ async def pool_ls(
     bubbles = request.app.state.bubbles
     try:
         return [p.pool_name for p in bubbles.ctrls.osd.get_pools()]
+    except Error as e:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
+
+
+@router.get(
+    "/pool/{name}",
+    name="Get an OSD pool",
+    response_model=PoolModel,
+)
+async def get_pool(
+    request: Request,
+    name: str,
+    _: Callable = Depends(jwt_auth_scheme),
+) -> PoolModel:
+    bubbles = request.app.state.bubbles
+    try:
+        return bubbles.ctrls.osd.get_pool(name)
+    except NotFound as e:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail=str(e))
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)

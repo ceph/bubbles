@@ -8,7 +8,7 @@
 import json
 import logging
 from mgr_module import MgrModule, MonCommandFailed
-from typing import List
+from typing import Dict, List, Union
 
 from bubbles.backend.models.ceph.osd import (
     OSDMapModel,
@@ -19,6 +19,10 @@ logger = logging.getLogger(__name__)
 
 
 class Error(Exception):
+    pass
+
+
+class NotFound(Error):
     pass
 
 
@@ -34,3 +38,9 @@ class OSD:
 
     def get_pools(self) -> List[PoolModel]:
         return self.dump().pools
+
+    def get_pool(self, name: str) -> PoolModel:
+        for pool in self.get_pools():
+            if pool.pool_name == name:
+                return pool
+        raise NotFound(f"unknown pool: {name}")
