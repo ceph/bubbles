@@ -93,8 +93,8 @@ export class DashboardPageComponent {
       enabledByDefault: false
     },
     {
-      id: 'sysInfo',
-      title: TEXT('System Information'),
+      id: 'services',
+      title: TEXT('Services'),
       cols: 7,
       rows: 9,
       enabledByDefault: false

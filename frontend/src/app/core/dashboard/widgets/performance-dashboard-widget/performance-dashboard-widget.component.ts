@@ -1,10 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
-import { GaugeComponent } from '@swimlane/ngx-charts';
+import { Component } from '@angular/core';
+import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
+import { EChartsOption } from 'echarts';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 
-import { BytesToSizePipe } from '~/app/shared/pipes/bytes-to-size.pipe';
-import { ClientIO, ClusterService } from '~/app/shared/services/api/cluster.service';
+import { bytesToSize } from '~/app/functions.helper';
+import { ClusterStatus } from '~/app/shared/services/api/cluster.service';
+import { ClusterStatusService } from '~/app/shared/services/cluster-status.service';
 
 @Component({
   selector: 'cb-performance-dashboard-widget',
@@ -12,58 +14,116 @@ import { ClientIO, ClusterService } from '~/app/shared/services/api/cluster.serv
   styleUrls: ['./performance-dashboard-widget.component.scss']
 })
 export class PerformanceDashboardWidgetComponent {
-  @ViewChild('read', { static: true })
-  readChart!: GaugeComponent;
-  @ViewChild('write', { static: true })
-  writeChart!: GaugeComponent;
+  pieChartInitOpts = {
+    height: '160px'
+  };
+  iopsPieChartOpts: EChartsOption = {
+    title: {
+      left: 'center',
+      top: 'center',
+      subtext: 'IOPS',
+      itemGap: 0
+    },
+    tooltip: {
+      trigger: 'item',
+      position: 'inside',
+      formatter: '{b} ({d}%)'
+    },
+    legend: {
+      bottom: '0%',
+      left: 'center'
+    },
+    series: [
+      {
+        type: 'pie',
+        center: ['50%', '50%'],
+        radius: ['50%', '70%'],
+        label: {
+          show: false
+        },
+        data: []
+      }
+    ]
+  };
+  rwPieChartOpts: EChartsOption = {
+    title: {
+      left: 'center',
+      top: 'center',
+      subtext: 'B/s',
+      itemGap: 0
+    },
+    tooltip: {
+      trigger: 'item',
+      position: 'inside',
+      formatter: '{b} ({d}%)'
+    },
+    legend: {
+      bottom: '0%',
+      left: 'center'
+    },
+    series: [
+      {
+        type: 'pie',
+        center: ['50%', '50%'],
+        radius: ['50%', '70%'],
+        label: {
+          show: false
+        },
+        data: []
+      }
+    ]
+  };
 
-  sizeUpdated = false;
+  constructor(public clusterStatusService: ClusterStatusService) {}
 
-  chartDataWrite: any[] = [];
-  chartDataRead: any[] = [];
-
-  constructor(public clusterService: ClusterService) {}
-
-  updateChartData($data: ClientIO) {
-    this.chartDataWrite = this.mapServiceRate($data, 'write');
-    this.chartDataRead = this.mapServiceRate($data, 'read');
-
-    // This is a somewhat dumb workaround to force the charts to adapt
-    // their size to the parent container. This is caused by the change
-    // detection strategy 'ChangeDetectionStrategy.OnPush' of the chart.
-    // The size of the charts is otherwise rendered with 600x400 pixels
-    // and only updated the second time the data is loaded (which is 15
-    // seconds by default).
-    if (!this.sizeUpdated) {
-      setTimeout(() => {
-        this.readChart.update();
-        this.writeChart.update();
-        this.sizeUpdated = true;
-      });
-    }
+  loadData(): Observable<ClusterStatus> {
+    return this.clusterStatusService.status$;
   }
 
-  valueFormatting(c: any) {
-    // Note, this implementation is by intention, do NOT use code like
-    // 'valueFormatting.bind(this)', otherwise this method is called
-    // over and over again because Angular CD seems to assume something
-    // has been changed.
-    const pipe = new BytesToSizePipe();
-    return pipe.transform(c) + '/s';
-  }
-
-  loadData(): Observable<ClientIO> {
-    return this.clusterService.clientIO();
-  }
-
-  private mapServiceRate(
-    $data: ClientIO,
-    rate: 'read' | 'write'
-  ): { name: string; value: number }[] {
-    _.orderBy($data.services, ['io_rate.rate'], ['desc']);
-    return _.take($data.services, 5).map((s) => ({
-      name: `${s.service_name} (${s.service_type})`,
-      value: s.io_rate[rate]
-    }));
+  updateData(status: ClusterStatus) {
+    const iopsTotal = status.pgmap.read_op_per_sec + status.pgmap.write_op_per_sec;
+    _.set(this.iopsPieChartOpts, 'title.text', iopsTotal);
+    _.set(this.iopsPieChartOpts, 'series[0].data', [
+      {
+        name: `${TEXT('Read')}: ${status.pgmap.read_op_per_sec}/s`,
+        value: status.pgmap.read_op_per_sec,
+        itemStyle: {
+          color: '#f58b1f'
+        }
+      },
+      {
+        name: `${TEXT('Write')}: ${status.pgmap.write_op_per_sec}/s`,
+        value: status.pgmap.write_op_per_sec,
+        itemStyle: {
+          color: '#009ccc'
+        }
+      }
+    ]);
+    // Force change-detection to redraw the chart.
+    this.iopsPieChartOpts = _.cloneDeep(this.iopsPieChartOpts);
+    const rwTotal = _.split(
+      bytesToSize(status.pgmap.read_bytes_sec + status.pgmap.write_bytes_sec),
+      ' '
+    );
+    _.set(this.rwPieChartOpts, 'title.text', rwTotal[0]);
+    _.set(this.rwPieChartOpts, 'title.subtext', rwTotal[1]);
+    _.set(this.rwPieChartOpts, 'series[0].data', [
+      {
+        name: `${TEXT('Read')}: ${bytesToSize(status.pgmap.read_bytes_sec)}/s`,
+        value: status.pgmap.read_bytes_sec,
+        itemStyle: {
+          color: '#f58b1f'
+        }
+      },
+      {
+        name: `${TEXT('Write')}: ${bytesToSize(status.pgmap.write_bytes_sec)}/s`,
+        value: status.pgmap.write_bytes_sec,
+        itemStyle: {
+          color: '#009ccc'
+        }
+      }
+    ]);
+    // Force change-detection to redraw the chart.
+    this.rwPieChartOpts = _.cloneDeep(this.rwPieChartOpts);
   }
 }

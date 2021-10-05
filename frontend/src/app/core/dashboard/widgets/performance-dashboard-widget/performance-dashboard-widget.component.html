@@ -1,36 +1,30 @@
 <cb-widget [loadData]="loadData.bind(this)"
-           title="{{ 'Performance' | translate }}"
-           (loadDataEvent)="updateChartData($event)">
+           widgetTitle="{{ 'Performance' | translate }}"
+           (loadDataEvent)="updateData($event)"
+           [reloadTime]="0">
   <div class="cb-performance-dashboard-widget"
-       fxFlexFill
-       fxLayout="column"
-       fxLayoutAlign="start stretch">
-    <div fxFlexFill
-         fxLayout="row"
-         fxLayoutAlign="center stretch">
-      <div fxFlex="50">
-        <ngx-charts-gauge #read
-                          [ngClass]="{visible: sizeUpdated}"
-                          [results]="chartDataRead"
-                          [showAxis]="false"
-                          [tooltipDisabled]="false"
-                          units="Read"
-                          [valueFormatting]="valueFormatting"
-                          [animations]="false">
-        </ngx-charts-gauge>
-      </div>
-      <div fxFlex="50">
-        <ngx-charts-gauge #write
-                          [ngClass]="{visible: sizeUpdated}"
-                          [results]="chartDataWrite"
-                          [showAxis]="false"
-                          [tooltipDisabled]="false"
-                          units="Write"
-                          [valueFormatting]="valueFormatting"
-                          [animations]="false">
-        </ngx-charts-gauge>
+       fxLayout="row">
+    <div fxLayout="column"
+         fxFlex="50">
+      <span class="cb-text-center"
+            translate>
+        Client Read/Write
+      </span>
+      <div echarts
+           [initOpts]="pieChartInitOpts"
+           [options]="iopsPieChartOpts">
       </div>
     </div>
-    <!-- Area chart will come below as soon as rate series are available -->
+    <div fxLayout="column"
+         fxFlex="50">
+      <span class="cb-text-center"
+            translate>
+        Client Throughput
+      </span>
+      <div echarts
+           [initOpts]="pieChartInitOpts"
+           [options]="rwPieChartOpts">
+      </div>
+    </div>
   </div>
 </cb-widget>

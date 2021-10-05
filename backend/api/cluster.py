@@ -43,6 +43,7 @@ async def get_status(
 async def get_events(
     request: Request, _: Callable = Depends(jwt_auth_scheme)
 ) -> List[EventModel]:
+    # ToDo: Replace mocked data by live data.
     events = [
         {
             "ts": 1633362463,

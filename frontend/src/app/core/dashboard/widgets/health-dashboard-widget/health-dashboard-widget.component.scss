@@ -1,7 +1,11 @@
-.cb-health-dashboard-widget {
-  padding: 16px;
+@use 'sass:math';
 
-  .cb-health-dashboard-widget-text {
-    margin-left: 8px;
+@import 'styles.scss';
+
+.cb-health-dashboard-widget {
+  padding: math.div($cb-padding, 2);
+
+  i:before {
+    vertical-align: middle;
   }
 }

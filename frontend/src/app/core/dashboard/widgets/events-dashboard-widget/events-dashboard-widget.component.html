@@ -1,18 +1,12 @@
 <cb-widget [loadData]="loadData.bind(this)"
-           title="{{ 'Events' | translate }}"
+           widgetTitle="{{ 'Events' | translate }}"
            (loadDataEvent)="updateData($event)">
-  <div class="cb-events-dashboard-widget"
-       fxLayout="row"
-       fxLayoutAlign="center center">
-    <div class="cb-events-dashboard-widget-table"
-         fxFlex
-         fxLayout="column">
-      <cb-datatable [data]="data"
-                    [columns]="columns"
-                    [pageSize]="5"
-                    [autoReload]="false"
-                    [hidePageSize]="true">
-      </cb-datatable>
-    </div>
+  <div class="cb-events-dashboard-widget">
+    <cb-datatable [data]="data"
+                  [columns]="columns"
+                  [pageSize]="5"
+                  [autoReload]="false"
+                  [hidePageSize]="true">
+    </cb-datatable>
   </div>
 </cb-widget>
