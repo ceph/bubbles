@@ -29,7 +29,7 @@ async def get_df(
 @router.get(
     "/status",
     name="Get the cluster status information",
-    response_model=ClusterStatusModel
+    response_model=ClusterStatusModel,
 )
 async def get_status(
     request: Request, _: Callable = Depends(jwt_auth_scheme)
@@ -43,13 +43,16 @@ async def get_status(
 async def get_events(
     request: Request, _: Callable = Depends(jwt_auth_scheme)
 ) -> List[EventModel]:
-    events = [{
-        "ts": 1633362463,
-        "severity": "info",
-        "message": "fooo bar asdasdlkasjd aksdjlas dasjdlsakjd asdkasld asdas."
-    }, {
-        "ts": 1633363417,
-        "severity": "warn",
-        "message": "Lorem ipsum dolor sit amet, sed diam voluptua."
-    }]
+    events = [
+        {
+            "ts": 1633362463,
+            "severity": "info",
+            "message": "fooo bar asdasdlkasjd aksdjlas dasjdlsakjd asdkasld asdas.",
+        },
+        {
+            "ts": 1633363417,
+            "severity": "warn",
+            "message": "Lorem ipsum dolor sit amet, sed diam voluptua.",
+        },
+    ]
     return [EventModel.parse_obj(event) for event in events]
