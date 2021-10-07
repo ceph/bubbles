@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { EMPTY, Observable, of, ReplaySubject, Subscription } from 'rxjs';
-import { catchError, delay, filter, mergeMap, repeat, tap } from 'rxjs/operators';
+import { catchError, delay, filter, repeat, switchMap, tap } from 'rxjs/operators';
 
 import { ClusterService, ClusterStatus } from '~/app/shared/services/api/cluster.service';
 
@@ -20,13 +20,17 @@ export class ClusterStatusService implements OnDestroy {
     this.subscription = of(true)
       .pipe(
         filter(() => this.router.url !== '/login'),
-        mergeMap(() => this.clusterService.status()),
-        catchError((error) => {
-          if (_.isFunction(error.preventDefault)) {
-            error.preventDefault();
-          }
-          return EMPTY;
-        }),
+        switchMap(() =>
+          this.clusterService.status().pipe(
+            catchError((error) => {
+              // Prevent default error handling.
+              if (_.isFunction(error.preventDefault)) {
+                error.preventDefault();
+              }
+              return EMPTY;
+            })
+          )
+        ),
         tap((res: ClusterStatus) => {
           this.statusSource.next(res);
         }),

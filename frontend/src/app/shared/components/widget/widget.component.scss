@@ -1,5 +1,7 @@
 @import 'styles.scss';
 
+$card-title-height: 40px;
+
 div.cb-dashboard-widget {
   // Needed for box shadow
   margin: 5px;
@@ -9,11 +11,11 @@ div.cb-dashboard-widget {
   min-width: calc(100% - 10px) !important;
 
   .card-body {
-    padding: unset;
+    padding: 0;
     background-color: $cb-color-theme-primary-complementary;
 
     .card-title {
-      height: 52px;
+      height: $card-title-height;
       padding: $cb-padding;
 
       .btn {
@@ -26,7 +28,8 @@ div.cb-dashboard-widget {
     }
 
     .card-text {
-      height: calc(100% - 52px);
+      height: calc(100% - #{$card-title-height});
+      overflow: auto;
     }
   }
 
@@ -44,6 +47,11 @@ div.cb-dashboard-widget {
 
   &.error {
     @extend .cb-color-theme-error;
+
     box-shadow: 0 0 5px 2px $cb-color-danger !important;
+
+    .card-body {
+      background-color: transparent;
+    }
   }
 }

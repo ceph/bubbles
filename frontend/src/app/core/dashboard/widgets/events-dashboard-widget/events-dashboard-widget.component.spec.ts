@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
@@ -7,6 +6,7 @@ import { of } from 'rxjs';
 import { DashboardModule } from '~/app/core/dashboard/dashboard.module';
 import { EventsDashboardWidgetComponent } from '~/app/core/dashboard/widgets/events-dashboard-widget/events-dashboard-widget.component';
 import { ClusterService, Event } from '~/app/shared/services/api/cluster.service';
+import { TestingModule } from '~/app/testing.module';
 import { FixtureHelper } from '~/testing/unit-test-helper';
 
 describe('EventsDashboardWidgetComponent', () => {
@@ -28,7 +28,7 @@ describe('EventsDashboardWidgetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardModule, HttpClientTestingModule, TranslateModule.forRoot()]
+      imports: [DashboardModule, TestingModule, TranslateModule.forRoot()]
     }).compileComponents();
   });
 

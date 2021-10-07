@@ -1,9 +1,8 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { DashboardModule } from '~/app/core/dashboard/dashboard.module';
+import { TestingModule } from '~/app/testing.module';
 
 import { PerformanceDashboardWidgetComponent } from './performance-dashboard-widget.component';
 
@@ -13,12 +12,7 @@ describe('PerformanceDashboardWidgetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        DashboardModule,
-        TranslateModule.forRoot(),
-        BrowserAnimationsModule,
-        HttpClientTestingModule
-      ]
+      imports: [DashboardModule, TestingModule, TranslateModule.forRoot()]
     }).compileComponents();
   });
 

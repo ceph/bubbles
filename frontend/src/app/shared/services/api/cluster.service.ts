@@ -21,6 +21,33 @@ export type HealthStatus = {
   checks: { [id: string]: HealthCheck };
 };
 
+export type PGState = {
+  state_name: string;
+  count: number;
+};
+
+export type PGMap = {
+  pgs_by_state: PGState[];
+  num_pgs: number;
+  num_pools: number;
+  num_objects: number;
+  // storage statistics
+  data_bytes: number;
+  bytes_used: number;
+  bytes_avail: number;
+  bytes_total: number;
+  // pg statistics
+  inactive_pgs_ratio: number;
+  degraded_objects: number;
+  degraded_total: number;
+  degraded_ratio: number;
+  // client io
+  read_bytes_sec: number;
+  write_bytes_sec: number;
+  read_op_per_sec: number;
+  write_op_per_sec: number;
+};
+
 export type ClusterStatus = {
   fsid: string;
   election_epoch: number;
@@ -28,6 +55,7 @@ export type ClusterStatus = {
   quorum_names: string[];
   quorum_age: number;
   health: HealthStatus;
+  pgmap: PGMap;
 };
 
 export type IORate = {

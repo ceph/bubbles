@@ -1,7 +1,8 @@
 <cb-widget [loadData]="loadData.bind(this)"
-           title="{{ 'Health' | translate }}"
+           widgetTitle="{{ 'Health' | translate }}"
            [setStatus]="setHealthStatusIndicator.bind(this)"
-           (loadDataEvent)="setHealthStatus($event)">
+           (loadDataEvent)="setHealthStatus($event)"
+           [reloadTime]="0">
   <div class="cb-health-dashboard-widget"
        [class.cb-color-theme-ok]="isOkay"
        [class.cb-color-theme-error]="isError || !hasStatus"
@@ -15,6 +16,6 @@
        class="mdi mdi-thumb-down"></i>
     <i *ngIf="isWarn"
        class="mdi mdi-alert-circle-outline"></i>
-    <span class="cb-health-dashboard-widget-text">{{ statusText }}</span>
+    <span class="ml-2">{{ statusText }}</span>
   </div>
 </cb-widget>
