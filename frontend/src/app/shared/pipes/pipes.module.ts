@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+import { ArrayPipe } from '~/app/shared/pipes/array.pipe';
 import { BytesToSizePipe } from '~/app/shared/pipes/bytes-to-size.pipe';
 import { CephShortVersionPipe } from '~/app/shared/pipes/ceph-short-version.pipe';
 import { MapPipe } from '~/app/shared/pipes/map.pipe';
@@ -12,6 +13,7 @@ import { ToStringPipe } from '~/app/shared/pipes/to-string.pipe';
 
 @NgModule({
   declarations: [
+    ArrayPipe,
     BytesToSizePipe,
     CephShortVersionPipe,
     SanitizePipe,
@@ -22,6 +24,7 @@ import { ToStringPipe } from '~/app/shared/pipes/to-string.pipe';
     ToStringPipe
   ],
   providers: [
+    ArrayPipe,
     BytesToSizePipe,
     CephShortVersionPipe,
     SanitizePipe,
@@ -32,6 +35,7 @@ import { ToStringPipe } from '~/app/shared/pipes/to-string.pipe';
     ToStringPipe
   ],
   exports: [
+    ArrayPipe,
     BytesToSizePipe,
     CephShortVersionPipe,
     SanitizePipe,
