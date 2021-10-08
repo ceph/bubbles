@@ -12,7 +12,10 @@ import { bytesToSize, toBytes } from '~/app/functions.helper';
 import { translate } from '~/app/i18n.helper';
 import { DialogComponent } from '~/app/shared/components/dialog/dialog.component';
 import { DatatableActionItem } from '~/app/shared/models/datatable-action-item.type';
-import { DatatableColumn } from '~/app/shared/models/datatable-column.type';
+import {
+  DatatableCellTemplateName,
+  DatatableColumn
+} from '~/app/shared/models/datatable-column.type';
 import { DatatableData } from '~/app/shared/models/datatable-data.type';
 import {
   DeclarativeForm,
@@ -62,7 +65,7 @@ export class ServicesPageComponent {
       {
         name: TEXT('Type'),
         prop: 'type',
-        cellTemplateName: 'map',
+        cellTemplateName: DatatableCellTemplateName.map,
         cellTemplateConfig: {
           file: TEXT('File'),
           object: TEXT('Object'),
@@ -72,7 +75,7 @@ export class ServicesPageComponent {
       {
         name: TEXT('Backend'),
         prop: 'backend',
-        cellTemplateName: 'map',
+        cellTemplateName: DatatableCellTemplateName.map,
         cellTemplateConfig: {
           cephfs: 'CephFS',
           nfs: 'NFS',
@@ -94,7 +97,7 @@ export class ServicesPageComponent {
       {
         name: '',
         prop: '',
-        cellTemplateName: 'actionMenu',
+        cellTemplateName: DatatableCellTemplateName.actionMenu,
         cellTemplateConfig: this.onActionMenu.bind(this)
       }
     ];

@@ -40,6 +40,8 @@ export class DatatableComponent implements OnInit, OnDestroy {
   mapTpl?: TemplateRef<any>;
   @ViewChild('joinTpl', { static: true })
   joinTpl?: TemplateRef<any>;
+  @ViewChild('badgeTpl', { static: true })
+  badgeTpl?: TemplateRef<any>;
 
   @Input()
   get data(): DatatableData[] {
@@ -136,7 +138,8 @@ export class DatatableComponent implements OnInit, OnDestroy {
       yesNoIcon: this.yesNoIconTpl!,
       actionMenu: this.actionMenuTpl!,
       map: this.mapTpl!,
-      join: this.joinTpl!
+      join: this.joinTpl!,
+      badge: this.badgeTpl!
     };
   }
 

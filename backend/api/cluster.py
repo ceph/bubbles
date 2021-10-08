@@ -55,5 +55,10 @@ async def get_events(
             "severity": "warn",
             "message": "Lorem ipsum dolor sit amet, sed diam voluptua.",
         },
+        {
+            "ts": 1633213519,
+            "severity": "danger",
+            "message": "dasda ffkv dolor sit ametasdha jhdakjsh 4232 asdasd sadasdas.",
+        },
     ]
     return [EventModel.parse_obj(event) for event in events]

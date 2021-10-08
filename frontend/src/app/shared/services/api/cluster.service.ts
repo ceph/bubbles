@@ -78,7 +78,7 @@ export type ClientIO = {
 
 export type Event = {
   ts: number;
-  severity: string;
+  severity: 'info' | 'warn' | 'danger';
   message: string;
 };
 

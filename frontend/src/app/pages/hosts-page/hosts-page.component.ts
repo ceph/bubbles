@@ -2,7 +2,10 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
 import { finalize } from 'rxjs/operators';
 
-import { DatatableColumn } from '~/app/shared/models/datatable-column.type';
+import {
+  DatatableCellTemplateName,
+  DatatableColumn
+} from '~/app/shared/models/datatable-column.type';
 import { CephShortVersionPipe } from '~/app/shared/pipes/ceph-short-version.pipe';
 import { Host, HostService } from '~/app/shared/services/api/host.service';
 
@@ -39,7 +42,7 @@ export class HostsPageComponent implements OnInit {
       {
         name: TEXT('Labels'),
         prop: 'labels',
-        cellTemplateName: 'join'
+        cellTemplateName: DatatableCellTemplateName.join
       },
       {
         name: TEXT('Status'),

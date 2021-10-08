@@ -5,7 +5,7 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Literal
 
 from pydantic import BaseModel, Field
 
@@ -102,5 +102,5 @@ class ClusterStatusModel(BaseModel):
 
 class EventModel(BaseModel):
     ts: int = Field(title="The Unix time stamp")
-    severity: str
+    severity: Literal["info", "warn", "danger"]
     message: str

@@ -5,7 +5,10 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { finalize } from 'rxjs/operators';
 
 import { DatatableActionItem } from '~/app/shared/models/datatable-action-item.type';
-import { DatatableColumn } from '~/app/shared/models/datatable-column.type';
+import {
+  DatatableCellTemplateName,
+  DatatableColumn
+} from '~/app/shared/models/datatable-column.type';
 import { DatatableData } from '~/app/shared/models/datatable-data.type';
 import { User, UsersService } from '~/app/shared/services/api/users.service';
 
@@ -40,18 +43,18 @@ export class UsersPageComponent {
       {
         name: TEXT('Roles'),
         prop: 'roles',
-        cellTemplateName: 'join'
+        cellTemplateName: DatatableCellTemplateName.join
       },
       {
         name: TEXT('Enabled'),
         prop: 'enabled',
-        cellTemplateName: 'checkIcon'
+        cellTemplateName: DatatableCellTemplateName.checkIcon
       },
       {
         name: '',
         prop: '',
         unsortable: true,
-        cellTemplateName: 'actionMenu',
+        cellTemplateName: DatatableCellTemplateName.actionMenu,
         cellTemplateConfig: this.onActionMenu.bind(this)
       }
     ];
