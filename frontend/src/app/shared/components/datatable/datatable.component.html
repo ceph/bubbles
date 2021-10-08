@@ -140,13 +140,13 @@
 </ng-template>
 
 <ng-template #badgeTpl
-             let-column="column"
-             let-value="value">
+             let-value="value"
+             let-column="column">
   <span *ngFor="let item of (value | array); last as last">
     <span class="badge"
-          [ngClass]="(column?.customTemplateConfig?.map && column?.customTemplateConfig?.map[item]?.class) ? column.customTemplateConfig.map[item].class : (column?.customTemplateConfig?.class ? column.customTemplateConfig.class : 'cb-color-theme-white')"
-          *ngIf="(column?.customTemplateConfig?.map && column?.customTemplateConfig?.map[item]?.value) ? column.customTemplateConfig.map[item].value : column?.customTemplateConfig?.prefix ? column.customTemplateConfig.prefix + item : item">
-      {{ (column?.customTemplateConfig?.map && column?.customTemplateConfig?.map[item]?.value) ? column.customTemplateConfig.map[item].value : column?.customTemplateConfig?.prefix ? column.customTemplateConfig.prefix + item : item }}
+          [ngClass]="(column?.cellTemplateConfig?.map && column?.cellTemplateConfig?.map[item]?.class) ? column.cellTemplateConfig.map[item].class : (column?.cellTemplateConfig?.class ? column.cellTemplateConfig.class : 'cb-color-theme-gunmetal')"
+          *ngIf="(column?.cellTemplateConfig?.map && column?.cellTemplateConfig?.map[item]?.value) ? column.cellTemplateConfig.map[item].value : column?.cellTemplateConfig?.prefix ? column.cellTemplateConfig.prefix + item : item">
+      {{ (column?.cellTemplateConfig?.map && column?.cellTemplateConfig?.map[item]?.value) ? column.cellTemplateConfig.map[item].value : column?.cellTemplateConfig?.prefix ? column.cellTemplateConfig.prefix + item : item }}
     </span>
     <span *ngIf="!last">&nbsp;</span>
   </span>

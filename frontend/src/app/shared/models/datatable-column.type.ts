@@ -22,7 +22,7 @@ export enum DatatableCellTemplateName {
   map = 'map',
   // Joins the cell value by comma.
   join = 'join',
-  // Display the cell value as a badge.
+  // Display the cell value as badge(s).
   // {
   //   ...
   //   cellTemplateName: DatatableCellTemplateName.badge,
