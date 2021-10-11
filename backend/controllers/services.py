@@ -9,10 +9,14 @@
 import logging
 
 from mgr_module import MgrModule
+from pathlib import Path
 from typing import Dict, List
 
 from bubbles.backend.controllers import ceph
 from bubbles.backend.errors import BubblesError
+from bubbles.backend.models.ceph.nfs import (
+    CephFSExportRequest,
+)
 from bubbles.backend.models.service import (
     ServiceBackendEnum,
     ServiceInfoModel,
@@ -71,6 +75,8 @@ class ServicesController:
         if info.type == ServiceTypeEnum.FILE:
             if info.backend == ServiceBackendEnum.CEPHFS:
                 self._create_cephfs(info)
+            elif info.backend == ServiceBackendEnum.NFS:
+                self._create_nfs(info)
             else:
                 raise NotImplementedError(
                     f"unknown service backend: {info.backend}"
@@ -112,6 +118,36 @@ class ServicesController:
             logger.exception(e)
             # do nothing else, the service still works without an authorized
             # client.
+
+        return True
+
+    def _create_nfs(self, info: ServiceInfoModel) -> bool:
+        # create a cephfs
+        self._create_cephfs(info)
+
+        # create an generic NFS service
+        nfs_svc_id = "bubbles"
+        nfs_svc_placement = "*"
+        nfs = ceph.nfs.NFSController(self._mgr)
+        if nfs_svc_id not in nfs.cluster.ls():
+            try:
+                nfs.cluster.create(nfs_svc_id, placement=nfs_svc_placement)
+            except ceph.nfs.Error as e:
+                raise ServiceError(f"unable to create nfs service: {e}")
+
+        # export the root of the created cephfs service
+        req = CephFSExportRequest(
+            fs_name=info.name,
+            fs_path="/",
+            pseudo_path=str(Path("/").joinpath(info.name)),
+        )
+        try:
+            nfs.export.create(
+                nfs_svc_id,
+                req,
+            )
+        except ceph.nfs.Error as e:
+            raise ServiceError("unable to create nfs export")
 
         return True
 
