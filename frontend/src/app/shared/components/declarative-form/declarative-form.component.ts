@@ -21,8 +21,10 @@ import {
   DeclarativeFormConfig,
   DeclarativeFormValues,
   FormButtonConfig,
-  FormFieldConfig
+  FormFieldConfig,
+  FormFieldModifier
 } from '~/app/shared/models/declarative-form-config.type';
+import { ConstraintService } from '~/app/shared/services/constraint.service';
 import { NotificationService } from '~/app/shared/services/notification.service';
 
 let nextUniqueId = 0;
@@ -79,6 +81,14 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
             break;
         }
       }
+      if (_.isPlainObject(field.validators.constraint)) {
+        validators.push(
+          CbValidators.constraint(
+            field.validators.constraint!.constraint,
+            field.validators.constraint!.errorMessage
+          )
+        );
+      }
       if (_.isFunction(field.validators.custom)) {
         validators.push(field.validators.custom);
       }
@@ -118,17 +128,53 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
     _.forEach(
       _.filter(fields, (field) => _.isFunction(field.onValueChanges)),
       (field: FormFieldConfig) => {
-        if (this.formGroup) {
-          const control: AbstractControl | null = this.getControl(field.name);
-          if (control) {
+        const control: AbstractControl | null = this.getControl(field.name);
+        if (control) {
+          this.subscriptions.add(
+            control.valueChanges.subscribe((value: any) => {
+              value = this.convertToRaw(value, field);
+              field.onValueChanges!(value, control, this);
+            })
+          );
+        }
+      }
+    );
+    // Initialize field 'modifiers' that are applied when the specified
+    // constraint succeeds.
+    _.forEach(
+      _.filter(fields, (field) => !_.isEmpty(field.modifiers)),
+      (field: FormFieldConfig) => {
+        _.forEach(field.modifiers, (modifier: FormFieldModifier) => {
+          const props = ConstraintService.getProps(modifier.constraint);
+          _.pull(props, field.name);
+          // Get notified about changes to the form fields that are
+          // involved in the constraint. On value changes, test the
+          // constraint and modify the target field if necessary.
+          _.forEach(props, (prop: string) => {
             this.subscriptions.add(
-              control.valueChanges.subscribe((value: any) => {
-                value = this.convertToRaw(value, field);
-                field.onValueChanges!(value, control, this);
+              this.getControl(prop)?.valueChanges.subscribe(() => {
+                const successful = ConstraintService.test(modifier.constraint, this.values);
+                const opposite = _.defaultTo(modifier?.opposite, true);
+                const control: AbstractControl | null = this.getControl(field.name);
+                switch (modifier.type) {
+                  case 'readonly':
+                    if (successful) {
+                      control?.disable();
+                    }
+                    if (!successful && opposite) {
+                      control?.enable();
+                    }
+                    break;
+                  case 'value':
+                    if (successful) {
+                      control?.setValue(modifier.data);
+                    }
+                    break;
+                }
               })
             );
-          }
-        }
+          });
+        });
       }
     );
   }
@@ -174,7 +220,7 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
   }
 
   get values(): DeclarativeFormValues {
-    const values = this.formGroup?.value ?? {};
+    const values = this.formGroup?.getRawValue() ?? {};
     _.forEach(this.getFields(), (field: FormFieldConfig) => {
       const value = values[field.name];
       if (value) {
