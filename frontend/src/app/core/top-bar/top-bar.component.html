@@ -6,8 +6,15 @@
           (click)="onToggleNavigation()">
     <i class="mdi mdi-menu"></i>
   </button>
+  <div class="vr"></div>
   <cb-breadcrumbs></cb-breadcrumbs>
   <span fxFlex></span>
+  <button class="btn btn-simple"
+          title="{{ 'Switch to Ceph Dashboard' | translate }}"
+          (click)="onSwitchToCephDashboard()">
+    <i class="mdi mdi-home-switch"></i>
+  </button>
+  <div class="vr"></div>
   <cb-language-button></cb-language-button>
   <div ngbDropdown>
     <button class="btn btn-simple"
