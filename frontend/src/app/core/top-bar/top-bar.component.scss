@@ -7,4 +7,10 @@
   ::ng-deep .btn {
     color: $cb-color-submenu-item-text;
   }
+
+  .vr {
+    align-self: center;
+    background-color: $cb-color-site-header-text;
+    height: 50%;
+  }
 }

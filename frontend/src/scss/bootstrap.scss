@@ -225,3 +225,13 @@ $table-accent-bg: dc.$cb-color-table-accent-background !default;
     width: 100%;
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////
+// Vertical rule
+.vr {
+  display: inline-block;
+  align-self: stretch;
+  width: 1px;
+  min-height: 1em;
+  opacity: 0.25;
+}
