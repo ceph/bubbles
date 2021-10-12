@@ -189,6 +189,7 @@ export class ServicesPageComponent {
                         validators: {
                           required: true
                         },
+                        defaultUnit: 'g',
                         onValueChanges: (
                           value: any,
                           control: AbstractControl,

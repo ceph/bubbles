@@ -57,14 +57,14 @@ export class DimlessBinaryDirective implements OnInit {
 
   /**
    * Default unit that should be used when user do not type a unit.
-   * By default, "B" will be used.
+   * By default, "b" will be used.
    *
    * Example:
    *   Given defaultUnit=null, if user type 7, then model will be updated to 7B
    *   Given defaultUnit=k, if user type 7, then model will be updated to 7KiB
    */
   @Input()
-  defaultUnit = 'b';
+  defaultUnit?: 'b' | 'k' | 'm' | 'g' | 't' | 'p' | 'e' | 'z' | 'y';
 
   private el: HTMLInputElement;
 
@@ -78,6 +78,7 @@ export class DimlessBinaryDirective implements OnInit {
   }
 
   ngOnInit() {
+    this.defaultUnit = _.defaultTo(this.defaultUnit, 'b');
     this.setValue(this.el.value);
   }
 
