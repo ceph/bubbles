@@ -5,7 +5,7 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel
 
@@ -23,3 +23,16 @@ class NFSServiceModel(BaseModel):
 
 class NFSServiceRequest(BaseModel):
     placement: Optional[str] = "*"
+
+
+class NFSExportModel(BaseModel):
+    export_id: int
+    path: str
+    pseudo: str
+    access_type: str
+    squash: str
+    security_label: bool
+    protocols: List[str]
+    transports: List[str]
+    fsal: Dict  # TODO: create model for this?
+    clients: List[str]

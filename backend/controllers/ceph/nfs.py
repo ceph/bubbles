@@ -14,6 +14,7 @@ from typing import List, Optional
 
 from bubbles.backend.models.ceph.nfs import (
     NFSDaemonModel,
+    NFSExportModel,
     NFSServiceModel,
 )
 
@@ -95,8 +96,41 @@ class NFSCluster:
         raise NotFound(f"unknown nfs service name: {name}")
 
 
+class NFSExport:
+    _mgr: MgrModule
+
+    def __init__(self, mgr: MgrModule) -> None:
+        self._mgr = mgr
+
+    def _ls(
+        self, service_id: str, detail: bool = False
+    ) -> List[NFSExportModel]:
+        try:
+            _, out, _ = self._mgr.check_mon_command(
+                {
+                    "prefix": "nfs export ls",
+                    "cluster_id": service_id,
+                    "detailed": detail,  # TODO: `detailed` -> `detail`?
+                    "format": "json",
+                }
+            )
+        except MonCommandFailed as e:
+            raise Error(e)
+
+        ret: List[NFSExportModel] = []
+        if out:
+            for export in json.loads(out):
+                ret.append(NFSExportModel(**export))
+        return ret
+
+    def ls(self, service_id: str) -> List[int]:
+        return sorted([e.export_id for e in self._ls(service_id, detail=True)])
+
+
 class NFSController:
     cluster: NFSCluster
+    export: NFSExport
 
     def __init__(self, mgr: MgrModule) -> None:
         self.cluster = NFSCluster(mgr)
+        self.export = NFSExport(mgr)

@@ -98,3 +98,20 @@ async def service_get(
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
         )
+
+
+@router.get(
+    "/export/{service_id}", name="list nfs export ids", response_model=List[int]
+)
+async def export_ls(
+    request: Request,
+    service_id: str,
+    _: Callable = Depends(jwt_auth_scheme),
+) -> List[int]:
+    bubbles = request.app.state.bubbles
+    try:
+        return bubbles.ctrls.nfs.export.ls(service_id)
+    except Error as e:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
