@@ -44,6 +44,24 @@ async def service_create(
         )
 
 
+@router.delete(
+    "/service/{name}",
+    name="delete an nfs service",
+)
+async def service_delete(
+    request: Request,
+    name: str,
+    _: Callable = Depends(jwt_auth_scheme),
+) -> None:
+    bubbles = request.app.state.bubbles
+    try:
+        return bubbles.ctrls.nfs.cluster.delete(name)
+    except Error as e:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
+
+
 @router.get(
     "/service",
     name="list nfs service names",

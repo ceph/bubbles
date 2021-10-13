@@ -46,6 +46,17 @@ class NFSCluster:
 
         return self.get(name)
 
+    def delete(self, name: str) -> None:
+        try:
+            _, _, _ = self._mgr.check_mon_command(
+                {
+                    "prefix": "nfs cluster delete",
+                    "cluster_id": name,
+                }
+            )
+        except MonCommandFailed as e:
+            raise Error(e)
+
     def ls(self) -> List[str]:
         try:
             _, out, _ = self._mgr.check_mon_command(
