@@ -14,6 +14,7 @@ from bubbles.backend.controllers.cluster import ClusterController
 from bubbles.backend.controllers.rest_api_proxy import RestApiProxyController
 from bubbles.backend.controllers.services import ServicesController
 from bubbles.backend.controllers.ceph.fs import CephFSController
+from bubbles.backend.controllers.ceph.nfs import NFSController
 from bubbles.backend.controllers.ceph.osd import OSD
 
 
@@ -22,8 +23,11 @@ class Controllers:
     cluster: Optional[ClusterController] = None
     storage: Optional[StorageController] = None
     rest_api_proxy: Optional[RestApiProxyController] = None
+
     cephfs: Optional[CephFSController] = None
+    nfs: Optional[NFSController] = None
     osd: Optional[OSD] = None
+
     _mgr: MgrModule
 
     def __init__(self, mgr: MgrModule):
@@ -34,5 +38,8 @@ class Controllers:
         self.cluster = ClusterController(self._mgr)
         self.storage = StorageController(self._mgr, self.cluster, self.services)
         self.rest_api_proxy = RestApiProxyController(self._mgr)
+
+        # ceph related controllers
         self.cephfs = CephFSController(self._mgr)
+        self.nfs = NFSController(self._mgr)
         self.osd = OSD(self._mgr)

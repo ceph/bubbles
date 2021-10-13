@@ -34,6 +34,7 @@ from bubbles.backend.api import (
 )
 from bubbles.backend.api.ceph import (
     fs,
+    nfs,
     osd,
 )
 
@@ -80,6 +81,7 @@ class BubblesModule(MgrModule):
 
         # ceph related endpoints
         self.api.include_router(fs.router)
+        self.api.include_router(nfs.router)
         self.api.include_router(osd.router)
 
         staticdir = os.path.join(
