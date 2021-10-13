@@ -13,7 +13,9 @@ from pydantic.tools import parse_obj_as
 from typing import List, Optional
 
 from bubbles.backend.models.ceph.nfs import (
+    NFSBackingStoreEnum,
     NFSDaemonModel,
+    CephFSExportRequest,
     NFSExportModel,
     NFSServiceModel,
 )
@@ -101,6 +103,37 @@ class NFSExport:
 
     def __init__(self, mgr: MgrModule) -> None:
         self._mgr = mgr
+
+    def create(
+        self,
+        service_id: str,
+        req: CephFSExportRequest,
+    ) -> NFSExportModel:
+        # TODO: fixup for `rgw`
+        cmd = {
+            "prefix": f"nfs export create {req.backing}",
+            "cluster_id": service_id,
+            "fsname": req.fs_name,
+            "pseudo_path": req.pseudo_path,
+            "readonly": req.readonly,
+        }
+        if req.fs_path:
+            cmd["path"] = req.fs_path
+        if req.squash:
+            cmd["squash"] = req.squash
+        if req.client_addr:
+            cmd["client_addr"] = req.client_addr
+
+        try:
+            _, out, _ = self._mgr.check_mon_command(cmd)
+        except MonCommandFailed as e:
+            raise Error(e)
+
+        # find the newly created export
+        for export in self._ls(service_id, detail=True):
+            if req.pseudo_path == export.pseudo:
+                return export
+        raise Error(f"failed to create nfs export")
 
     def _ls(
         self, service_id: str, detail: bool = False

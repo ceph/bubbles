@@ -17,6 +17,7 @@ from bubbles.backend.controllers.ceph.nfs import (
     NotFound,
 )
 from bubbles.backend.models.ceph.nfs import (
+    CephFSExportRequest,
     NFSExportModel,
     NFSServiceModel,
     NFSServiceRequest,
@@ -95,6 +96,29 @@ async def service_get(
         return bubbles.ctrls.nfs.cluster.get(name)
     except NotFound as e:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=str(e))
+    except Error as e:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
+
+
+@router.post(
+    "/export/{service_id}",
+    name="create an nfs export",
+    response_model=NFSExportModel,
+)
+async def export_create(
+    request: Request,
+    service_id: str,
+    req: CephFSExportRequest,
+    _: Callable = Depends(jwt_auth_scheme),
+) -> NFSExportModel:
+    bubbles = request.app.state.bubbles
+    try:
+        return bubbles.ctrls.nfs.export.create(
+            service_id=service_id,
+            req=req,
+        )
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
