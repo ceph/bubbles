@@ -9,12 +9,22 @@ import json
 import logging
 
 from mgr_module import MgrModule, MonCommandFailed
-from typing import List
+from pydantic.tools import parse_obj_as
+from typing import List, Optional
+
+from bubbles.backend.models.ceph.nfs import (
+    NFSDaemonModel,
+    NFSServiceModel,
+)
 
 logger = logging.getLogger(__name__)
 
 
 class Error(Exception):
+    pass
+
+
+class NotFound(Error):
     pass
 
 
@@ -36,6 +46,30 @@ class NFSCluster:
 
         # TODO: fix `nfs cluster ls` to return json formatting
         return out.split() if out else []
+
+    def _info(self, name: Optional[str] = None) -> List[NFSServiceModel]:
+        cmd = {
+            "prefix": "nfs cluster info",
+            "format": "json",
+        }
+        if name:
+            cmd["cluster_id"] = name
+
+        _, out, _ = self._mgr.check_mon_command(cmd)
+        services = json.loads(out)
+
+        ret: List[NFSServiceModel] = []
+        for k, v in services.items():
+            daemons = parse_obj_as(List[NFSDaemonModel], v["backend"])
+            ret.append(NFSServiceModel(name=name, daemons=daemons))
+        return ret
+
+    def get(self, name: str) -> NFSServiceModel:
+        for svc in self._info(name=name):
+            if name == svc.name:
+                return svc
+            assert False
+        raise NotFound(f"unknown nfs service name: {name}")
 
 
 class NFSController:

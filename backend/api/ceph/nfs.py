@@ -14,6 +14,10 @@ from bubbles.bubbles import Bubbles
 from bubbles.backend.api import jwt_auth_scheme
 from bubbles.backend.controllers.ceph.nfs import (
     Error,
+    NotFound,
+)
+from bubbles.backend.models.ceph.nfs import (
+    NFSServiceModel,
 )
 
 router = APIRouter(prefix="/ceph/nfs", tags=["ceph"])
@@ -30,6 +34,27 @@ async def service_ls(
     bubbles = request.app.state.bubbles
     try:
         return bubbles.ctrls.nfs.cluster.ls()
+    except Error as e:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
+
+
+@router.get(
+    "/service/{name}",
+    name="nfs service detail",
+    response_model=NFSServiceModel,
+)
+async def service_get(
+    request: Request,
+    name: str,
+    _: Callable = Depends(jwt_auth_scheme),
+) -> NFSServiceModel:
+    bubbles = request.app.state.bubbles
+    try:
+        return bubbles.ctrls.nfs.cluster.get(name)
+    except NotFound as e:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail=str(e))
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
