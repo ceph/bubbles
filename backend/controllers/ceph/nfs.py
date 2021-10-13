@@ -135,6 +135,19 @@ class NFSExport:
                 return export
         raise Error(f"failed to create nfs export")
 
+    def delete(self, service_id: str, export_id: int) -> None:
+        export = self.get(service_id, export_id)
+        try:
+            _, out, _ = self._mgr.check_mon_command(
+                {
+                    "prefix": "nfs export delete",
+                    "cluster_id": service_id,
+                    "pseudo_path": export.pseudo,
+                }
+            )
+        except MonCommandFailed as e:
+            raise Error(e)
+
     def _ls(
         self, service_id: str, detail: bool = False
     ) -> List[NFSExportModel]:

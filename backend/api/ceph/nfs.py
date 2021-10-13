@@ -125,6 +125,25 @@ async def export_create(
         )
 
 
+@router.delete(
+    "/export/{service_id}/{export_id}",
+    name="delete an nfs export",
+)
+async def export_delete(
+    request: Request,
+    service_id: str,
+    export_id: int,
+    _: Callable = Depends(jwt_auth_scheme),
+) -> None:
+    bubbles = request.app.state.bubbles
+    try:
+        return bubbles.ctrls.nfs.export.delete(service_id, export_id)
+    except Error as e:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
+
+
 @router.get(
     "/export/{service_id}", name="list nfs export ids", response_model=List[int]
 )
