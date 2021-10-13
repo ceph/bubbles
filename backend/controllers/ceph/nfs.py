@@ -126,6 +126,14 @@ class NFSExport:
     def ls(self, service_id: str) -> List[int]:
         return sorted([e.export_id for e in self._ls(service_id, detail=True)])
 
+    def get(self, service_id: str, export_id: int) -> NFSExportModel:
+        for export in self._ls(service_id, detail=True):
+            if export_id == export.export_id:
+                return export
+        raise NotFound(
+            f"nfs export {export_id} not found in nfs cluster {service_id}"
+        )
+
 
 class NFSController:
     cluster: NFSCluster
