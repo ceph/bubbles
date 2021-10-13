@@ -18,9 +18,30 @@ from bubbles.backend.controllers.ceph.nfs import (
 )
 from bubbles.backend.models.ceph.nfs import (
     NFSServiceModel,
+    NFSServiceRequest,
 )
 
 router = APIRouter(prefix="/ceph/nfs", tags=["ceph"])
+
+
+@router.put(
+    "/service/{name}",
+    name="create an nfs service",
+    response_model=NFSServiceModel,
+)
+async def service_create(
+    request: Request,
+    name: str,
+    req: NFSServiceRequest,
+    _: Callable = Depends(jwt_auth_scheme),
+) -> NFSServiceModel:
+    bubbles = request.app.state.bubbles
+    try:
+        return bubbles.ctrls.nfs.cluster.create(name, placement=req.placement)
+    except Error as e:
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
+        )
 
 
 @router.get(

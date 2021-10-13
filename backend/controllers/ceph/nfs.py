@@ -34,6 +34,18 @@ class NFSCluster:
     def __init__(self, mgr: MgrModule) -> None:
         self._mgr = mgr
 
+    def create(self, name: str, placement: Optional[str]) -> NFSServiceModel:
+        cmd = {
+            "prefix": "nfs cluster create",
+            "cluster_id": name,
+        }
+        if placement:
+            cmd["placement"] = placement
+
+        _, out, _ = self._mgr.check_mon_command(cmd)
+
+        return self.get(name)
+
     def ls(self) -> List[str]:
         try:
             _, out, _ = self._mgr.check_mon_command(

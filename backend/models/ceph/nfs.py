@@ -5,7 +5,7 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -19,3 +19,7 @@ class NFSDaemonModel(BaseModel):
 class NFSServiceModel(BaseModel):
     name: str
     daemons: List[NFSDaemonModel]
+
+
+class NFSServiceRequest(BaseModel):
+    placement: Optional[str] = "*"
