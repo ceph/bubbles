@@ -153,27 +153,12 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
           _.forEach(props, (prop: string) => {
             this.subscriptions.add(
               this.getControl(prop)?.valueChanges.subscribe(() => {
-                const successful = ConstraintService.test(modifier.constraint, this.values);
-                const opposite = _.defaultTo(modifier?.opposite, true);
-                const control: AbstractControl | null = this.getControl(field.name);
-                switch (modifier.type) {
-                  case 'readonly':
-                    if (successful) {
-                      control?.disable();
-                    }
-                    if (!successful && opposite) {
-                      control?.enable();
-                    }
-                    break;
-                  case 'value':
-                    if (successful) {
-                      control?.setValue(modifier.data);
-                    }
-                    break;
-                }
+                this.applyModifier(field, modifier);
               })
             );
           });
+          // Finally apply the modifier to the form field.
+          this.applyModifier(field, modifier);
         });
       }
     );
@@ -278,5 +263,26 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
         break;
     }
     return value;
+  }
+
+  private applyModifier(field: FormFieldConfig, modifier: FormFieldModifier) {
+    const successful = ConstraintService.test(modifier.constraint, this.values);
+    const opposite = _.defaultTo(modifier?.opposite, true);
+    const control: AbstractControl | null = this.getControl(field.name);
+    switch (modifier.type) {
+      case 'readonly':
+        if (successful) {
+          control?.disable();
+        }
+        if (!successful && opposite) {
+          control?.enable();
+        }
+        break;
+      case 'value':
+        if (successful) {
+          control?.setValue(modifier.data);
+        }
+        break;
+    }
   }
 }
