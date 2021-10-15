@@ -1,0 +1,10 @@
+<cb-widget [loadData]="loadData.bind(this)"
+           widgetTitle="{{ 'Client Throughput' | translate }}"
+           (loadDataEvent)="updateData($event)"
+           [reloadTime]="0">
+  <div class="cb-performance-bytes-dashboard-widget d-flex align-items-center justify-content-center"
+       echarts
+       [initOpts]="initOpts"
+       [options]="options">
+  </div>
+</cb-widget>

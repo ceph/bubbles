@@ -57,5 +57,9 @@
           0 0.25rem 0.5rem $cb-color-transparent-black, 0 0.5rem 1rem $cb-color-transparent-black;
       }
     }
+
+    .content {
+      overflow: scroll;
+    }
   }
 }

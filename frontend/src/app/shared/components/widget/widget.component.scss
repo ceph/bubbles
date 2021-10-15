@@ -3,13 +3,6 @@
 $card-title-height: 40px;
 
 div.cb-dashboard-widget {
-  // Needed for box shadow
-  margin: 5px;
-  height: calc(100% - 10px) !important;
-  min-height: calc(100% - 10px) !important;
-  width: calc(100% - 10px) !important;
-  min-width: calc(100% - 10px) !important;
-
   .card-body {
     padding: 0;
     background-color: $cb-color-theme-primary-complementary;
@@ -26,32 +19,31 @@ div.cb-dashboard-widget {
         display: none;
       }
     }
-
-    .card-text {
-      height: calc(100% - #{$card-title-height});
-      overflow: auto;
-    }
   }
 
   &.info {
-    box-shadow: 0 0 5px 2px $cb-color-info !important;
+    box-shadow: 0 0 1px 1px $cb-color-info !important;
   }
 
   &.success {
-    box-shadow: 0 0 5px 2px $cb-color-success !important;
+    box-shadow: 0 0 1px 1px $cb-color-success !important;
   }
 
   &.warning {
-    box-shadow: 0 0 5px 2px $cb-color-warning !important;
+    box-shadow: 0 0 1px 1px $cb-color-warning !important;
   }
 
   &.error {
     @extend .cb-color-theme-error;
 
-    box-shadow: 0 0 5px 2px $cb-color-danger !important;
+    box-shadow: 0 0 1px 1px $cb-color-danger !important;
 
     .card-body {
       background-color: transparent;
+    }
+
+    .card-text {
+      height: $card-title-height;
     }
   }
 }

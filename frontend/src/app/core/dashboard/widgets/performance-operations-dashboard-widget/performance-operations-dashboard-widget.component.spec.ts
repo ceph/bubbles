@@ -1,14 +1,14 @@
+/* eslint-disable max-len */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { DashboardModule } from '~/app/core/dashboard/dashboard.module';
+import { PerformanceOperationsDashboardWidgetComponent } from '~/app/core/dashboard/widgets/performance-operations-dashboard-widget/performance-operations-dashboard-widget.component';
 import { TestingModule } from '~/app/testing.module';
 
-import { PerformanceDashboardWidgetComponent } from './performance-dashboard-widget.component';
-
-describe('PerformanceDashboardWidgetComponent', () => {
-  let component: PerformanceDashboardWidgetComponent;
-  let fixture: ComponentFixture<PerformanceDashboardWidgetComponent>;
+describe('PerformanceOperationsDashboardWidgetComponent', () => {
+  let component: PerformanceOperationsDashboardWidgetComponent;
+  let fixture: ComponentFixture<PerformanceOperationsDashboardWidgetComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -17,7 +17,7 @@ describe('PerformanceDashboardWidgetComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PerformanceDashboardWidgetComponent);
+    fixture = TestBed.createComponent(PerformanceOperationsDashboardWidgetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
