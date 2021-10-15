@@ -1,48 +1,31 @@
-<div class="cb-dashboard-page"
-     fxLayout="column">
-
-  <div class="header">
-    <div ngbDropdown>
-      <button class="btn btn-outline-default"
-              ngbDropdownToggle
-              translate>
-        Settings
-      </button>
-      <div ngbDropdownMenu>
-        <button *ngFor="let widget of widgets | sortBy:['title']"
-                ngbDropdownItem
-                (click)="onToggleWidget(widget.id)">
-          <i *ngIf="!enabled.includes(widget.id)"
-             class="{{ icons.checkboxBlank }} mr-1">
-          </i>
-          <i *ngIf="enabled.includes(widget.id)"
-             class="{{ icons.checkboxMarked }} mr-1">
-          </i>
-          <span>{{ widget.title | translate }}</span>
-        </button>
-      </div>
+<div class="cb-dashboard-page">
+  <section>
+    <div class="title"
+         translate>
+      Status
     </div>
-  </div>
-
-  <div class="content">
-    <gridster [options]="gridsterConfig">
-      <gridster-item *ngFor="let item of gridsterItems"
-                     [item]="item">
-        <ng-container [ngSwitch]="item.type">
-          <ng-template [ngSwitchCase]="'performance'">
-            <cb-performance-dashboard-widget></cb-performance-dashboard-widget>
-          </ng-template>
-          <ng-template [ngSwitchCase]="'events'">
-            <cb-events-dashboard-widget></cb-events-dashboard-widget>
-          </ng-template>
-          <ng-template [ngSwitchCase]="'health'">
-            <cb-health-dashboard-widget></cb-health-dashboard-widget>
-          </ng-template>
-          <ng-template [ngSwitchCase]="'services'">
-            <cb-services-dashboard-widget></cb-services-dashboard-widget>
-          </ng-template>
-        </ng-container>
-      </gridster-item>
-    </gridster>
-  </div>
+    <div class="row">
+      <cb-health-dashboard-widget class="widget status"></cb-health-dashboard-widget>
+      <cb-events-dashboard-widget class="widget col-auto"></cb-events-dashboard-widget>
+    </div>
+  </section>
+  <section>
+    <div class="title"
+         translate>
+      Capacity
+    </div>
+    <div class="row">
+      <cb-services-dashboard-widget class="widget capacity"></cb-services-dashboard-widget>
+    </div>
+  </section>
+  <section>
+    <div class="title"
+         translate>
+      Performance
+    </div>
+    <div class="row">
+      <cb-performance-bytes-dashboard-widget class="widget performance"></cb-performance-bytes-dashboard-widget>
+      <cb-performance-operations-dashboard-widget class="widget performance"></cb-performance-operations-dashboard-widget>
+    </div>
+  </section>
 </div>

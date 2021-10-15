@@ -3,13 +3,10 @@
            [setStatus]="setHealthStatusIndicator.bind(this)"
            (loadDataEvent)="setHealthStatus($event)"
            [reloadTime]="0">
-  <div class="cb-health-dashboard-widget"
+  <div class="cb-health-dashboard-widget d-flex align-items-center justify-content-center"
        [class.cb-color-theme-ok]="isOkay"
        [class.cb-color-theme-error]="isError || !hasStatus"
-       [class.cb-color-theme-warn]="isWarn"
-       fxLayout="row"
-       fxLayoutAlign="center center"
-       fxFlexFill>
+       [class.cb-color-theme-warn]="isWarn">
     <i *ngIf="isOkay"
        class="mdi mdi-thumb-up"></i>
     <i *ngIf="isError"

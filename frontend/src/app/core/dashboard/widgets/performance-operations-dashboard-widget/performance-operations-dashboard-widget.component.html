@@ -1,0 +1,10 @@
+<cb-widget [loadData]="loadData.bind(this)"
+           widgetTitle="{{ 'Client Read/Write' | translate }}"
+           (loadDataEvent)="updateData($event)"
+           [reloadTime]="0">
+  <div class="cb-performance-operations-dashboard-widget d-flex align-items-center justify-content-center"
+       echarts
+       [initOpts]="initOpts"
+       [options]="options">
+  </div>
+</cb-widget>
