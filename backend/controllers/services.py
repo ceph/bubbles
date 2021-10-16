@@ -6,10 +6,17 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
+import logging
+
 from mgr_module import MgrModule
+from pathlib import Path
 from typing import Dict, List
 
+from bubbles.backend.controllers import ceph
 from bubbles.backend.errors import BubblesError
+from bubbles.backend.models.ceph.nfs import (
+    CephFSExportRequest,
+)
 from bubbles.backend.models.service import (
     ServiceBackendEnum,
     ServiceInfoModel,
@@ -21,6 +28,8 @@ from bubbles.backend.models.service import (
     ServiceStatusModel,
     ServiceTypeEnum,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class ServiceError(BubblesError):
@@ -61,8 +70,85 @@ class ServicesController:
         if info.name in self._services:
             return False
 
+        # TODO: check_requirements(size, replicas)
+
+        if info.type == ServiceTypeEnum.FILE:
+            if info.backend == ServiceBackendEnum.CEPHFS:
+                self._create_cephfs(info)
+            elif info.backend == ServiceBackendEnum.NFS:
+                self._create_nfs(info)
+            else:
+                raise NotImplementedError(
+                    f"unknown service backend: {info.backend}"
+                )
+        else:
+            raise NotImplementedError(f"unknwon service type: {info.type}")
+
         self._services[info.name] = ServiceModel(info=info, pools=[])
         self._save()
+        return True
+
+    def _create_cephfs(self, info: ServiceInfoModel) -> bool:
+        # create the ceph filesystem
+        cephfs = ceph.fs.CephFSController(self._mgr)
+        try:
+            fs = cephfs.create(info.name)
+        except ceph.fs.Error as e:
+            raise ServiceError("unable to create cephfs service") from e
+
+        # adjust the OSD pool size
+        osd = ceph.osd.OSD(self._mgr)
+
+        metadata_pool = osd.get_pool(fs.metadata_pool)
+        if metadata_pool.size != info.replicas:
+            osd.set_pool_size(metadata_pool.pool_name, info.replicas)
+
+        for name in fs.data_pools:
+            data_pool = osd.get_pool(name)
+            if data_pool.size != info.replicas:
+                osd.set_pool_size(data_pool.pool_name, info.replicas)
+
+        # create cephfs default user
+        logger.debug("authorize default user")
+        try:
+            cephfs.set_auth(info.name)
+            logger.info(f"created cephfs client for service '{info.name}'")
+        except ceph.fs.Error as e:
+            logger.error(f"Unable to authorize cephfs client: {str(e)}")
+            logger.exception(e)
+            # do nothing else, the service still works without an authorized
+            # client.
+
+        return True
+
+    def _create_nfs(self, info: ServiceInfoModel) -> bool:
+        # create a cephfs
+        self._create_cephfs(info)
+
+        # create an generic NFS service
+        nfs_svc_id = "bubbles"
+        nfs_svc_placement = "*"
+        nfs = ceph.nfs.NFSController(self._mgr)
+        if nfs_svc_id not in nfs.cluster.ls():
+            try:
+                nfs.cluster.create(nfs_svc_id, placement=nfs_svc_placement)
+            except ceph.nfs.Error as e:
+                raise ServiceError(f"unable to create nfs service: {e}")
+
+        # export the root of the created cephfs service
+        req = CephFSExportRequest(
+            fs_name=info.name,
+            fs_path="/",
+            pseudo_path=str(Path("/").joinpath(info.name)),
+        )
+        try:
+            nfs.export.create(
+                nfs_svc_id,
+                req,
+            )
+        except ceph.nfs.Error as e:
+            raise ServiceError("unable to create nfs export")
+
         return True
 
     async def delete(self, name: str) -> None:
