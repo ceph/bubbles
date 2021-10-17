@@ -2,8 +2,11 @@
   <div class="card-body">
     <div class="card-title"
          fxLayout="row"
-         fxLayoutAlign="space-between center">
-      {{ widgetTitle | translate }}
+         fxLayoutAlign="space-between center"
+         (click)="toggleCollapsed()">
+      <span class="cb-text-no-wrap">
+        {{ widgetTitle | translate }}
+      </span>
       <div *ngIf="actionMenu"
            ngbDropdown
            display="dynamic"
@@ -22,17 +25,29 @@
           </a>
         </div>
       </div>
+      <div *ngIf="!error">
+        <i *ngIf="!isCollapsed"
+           class="mdi mdi-unfold-less-horizontal"
+           title="{{ 'Minimize' | translate }}">
+        </i>
+        <i *ngIf="isCollapsed"
+           class="mdi mdi-unfold-more-horizontal"
+           title="{{ 'Maximize' | translate }}">
+        </i>
+      </div>
     </div>
     <div *ngIf="!firstLoadComplete && loading"
          class="progress">
       <div class="progress-bar indeterminate"></div>
     </div>
     <div *ngIf="!error && firstLoadComplete"
-         class="card-text">
+         class="card-text"
+         #collapse="ngbCollapse"
+         [(ngbCollapse)]="isCollapsed">
       <ng-content></ng-content>
     </div>
     <div *ngIf="error && !loading"
-         class="card-text"
+         class="card-text p-2"
          fxLayout="column"
          fxLayoutAlign="center center">
       <i class="mdi mdi-lan-disconnect"></i>
