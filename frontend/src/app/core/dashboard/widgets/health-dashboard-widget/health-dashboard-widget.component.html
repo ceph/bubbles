@@ -3,7 +3,7 @@
            [setStatus]="setHealthStatusIndicator.bind(this)"
            (loadDataEvent)="setHealthStatus($event)"
            [reloadTime]="0">
-  <div class="cb-health-dashboard-widget d-flex align-items-center justify-content-center"
+  <div class="cb-health-dashboard-widget d-flex align-items-center justify-content-center p-2"
        [class.cb-color-theme-ok]="isOkay"
        [class.cb-color-theme-error]="isError || !hasStatus"
        [class.cb-color-theme-warn]="isWarn">

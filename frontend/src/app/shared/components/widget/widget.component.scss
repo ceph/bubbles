@@ -8,6 +8,7 @@ div.cb-dashboard-widget {
     background-color: $cb-color-theme-primary-complementary;
 
     .card-title {
+      cursor: pointer;
       height: $card-title-height;
       padding: $cb-padding;
 
@@ -17,6 +18,10 @@ div.cb-dashboard-widget {
 
       .dropdown-toggle::after {
         display: none;
+      }
+
+      i:before {
+        vertical-align: middle;
       }
     }
   }
@@ -40,10 +45,6 @@ div.cb-dashboard-widget {
 
     .card-body {
       background-color: transparent;
-    }
-
-    .card-text {
-      height: $card-title-height;
     }
   }
 }
