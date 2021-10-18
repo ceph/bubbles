@@ -3,35 +3,10 @@
 .cb-dashboard-page {
   margin: $cb-margin;
 
-  section {
-    .title {
-      @extend .mb-2;
-
-      font-size: 1.25rem;
-    }
-
-    .row {
-      .widget {
-        @extend .flex-column;
-        @extend .mb-4;
-      }
-
-      .status {
-        @extend .col-12;
-        @extend .col-md-4;
-        @extend .col-lg-3;
-      }
-
-      .capacity {
-        @extend .col-auto;
-      }
-
-      .performance {
-        @extend .col-12;
-        @extend .col-md-6;
-        @extend .col-lg-4;
-        @extend .col-xl-3;
-      }
+  .row {
+    .widget {
+      @extend .flex-column;
+      @extend .mb-4;
     }
   }
 }
