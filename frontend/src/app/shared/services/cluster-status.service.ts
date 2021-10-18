@@ -23,6 +23,8 @@ export class ClusterStatusService implements OnDestroy {
         switchMap(() =>
           this.clusterService.status().pipe(
             catchError((error) => {
+              // Forward error to subscribers.
+              this.statusSource.error(error);
               // Prevent default error handling.
               if (_.isFunction(error.preventDefault)) {
                 error.preventDefault();

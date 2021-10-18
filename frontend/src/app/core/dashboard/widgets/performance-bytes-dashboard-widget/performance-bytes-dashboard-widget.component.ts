@@ -65,14 +65,14 @@ export class PerformanceBytesDashboardWidgetComponent {
         name: `${TEXT('Read')}: ${bytesToSize(status.pgmap.read_bytes_sec)}/s`,
         value: status.pgmap.read_bytes_sec,
         itemStyle: {
-          color: '#f58b1f'
+          color: '#009ccc'
         }
       },
       {
         name: `${TEXT('Write')}: ${bytesToSize(status.pgmap.write_bytes_sec)}/s`,
         value: status.pgmap.write_bytes_sec,
         itemStyle: {
-          color: '#009ccc'
+          color: '#f58b1f'
         }
       }
     ]);

@@ -11,6 +11,7 @@ import { HealthDashboardWidgetComponent } from '~/app/core/dashboard/widgets/hea
 import { PerformanceBytesDashboardWidgetComponent } from '~/app/core/dashboard/widgets/performance-bytes-dashboard-widget/performance-bytes-dashboard-widget.component';
 import { PerformanceOperationsDashboardWidgetComponent } from '~/app/core/dashboard/widgets/performance-operations-dashboard-widget/performance-operations-dashboard-widget.component';
 import { ServicesDashboardWidgetComponent } from '~/app/core/dashboard/widgets/services-dashboard-widget/services-dashboard-widget.component';
+import { StorageUtilizationDashboardWidgetComponent } from '~/app/core/dashboard/widgets/storage-utilization-dashboard-widget/storage-utilization-dashboard-widget.component';
 import { SharedModule } from '~/app/shared/shared.module';
 
 @NgModule({
@@ -19,14 +20,16 @@ import { SharedModule } from '~/app/shared/shared.module';
     HealthDashboardWidgetComponent,
     ServicesDashboardWidgetComponent,
     PerformanceBytesDashboardWidgetComponent,
-    PerformanceOperationsDashboardWidgetComponent
+    PerformanceOperationsDashboardWidgetComponent,
+    StorageUtilizationDashboardWidgetComponent
   ],
   exports: [
     EventsDashboardWidgetComponent,
     HealthDashboardWidgetComponent,
     ServicesDashboardWidgetComponent,
     PerformanceBytesDashboardWidgetComponent,
-    PerformanceOperationsDashboardWidgetComponent
+    PerformanceOperationsDashboardWidgetComponent,
+    StorageUtilizationDashboardWidgetComponent
   ],
   imports: [
     CommonModule,

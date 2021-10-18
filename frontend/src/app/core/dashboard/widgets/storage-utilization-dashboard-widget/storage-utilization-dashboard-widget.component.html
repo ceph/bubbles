@@ -1,0 +1,10 @@
+<cb-widget [loadData]="loadData.bind(this)"
+           widgetTitle="{{ 'Storage Utilization' | translate }}"
+           [setStatus]="setHealthStatusIndicator.bind(this)"
+           (loadDataEvent)="updateData($event)">
+  <div class="cb-storage-stats-dashboard-widget d-flex align-items-center justify-content-center"
+       echarts
+       [initOpts]="initOpts"
+       [options]="options">
+  </div>
+</cb-widget>
