@@ -15,7 +15,8 @@ export enum WidgetHealthStatus {
   info = 'info',
   success = 'success',
   warning = 'warning',
-  error = 'error'
+  error = 'error',
+  unknown = 'unknown'
 }
 
 @Component({
@@ -72,7 +73,7 @@ export class WidgetComponent implements OnInit, OnDestroy {
             err.preventDefault();
           }
           this.loading = false;
-          this.status = WidgetHealthStatus.error;
+          this.status = WidgetHealthStatus.unknown;
           this.error = true;
           return EMPTY;
         }),

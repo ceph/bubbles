@@ -26,22 +26,24 @@ div.cb-dashboard-widget {
     }
   }
 
-  &.info {
-    box-shadow: 0 0 1px 1px $cb-color-info !important;
+  &.status.info {
+    box-shadow: 0 0 1px 1px $glass-color-info !important;
   }
 
-  &.success {
-    box-shadow: 0 0 1px 1px $cb-color-success !important;
+  &.status.success {
+    box-shadow: 0 0 1px 1px $glass-color-success !important;
   }
 
-  &.warning {
-    box-shadow: 0 0 1px 1px $cb-color-warning !important;
+  &.status.warning {
+    box-shadow: 0 0 1px 1px $glass-color-warning !important;
+  }
+
+  &.status.error {
+    box-shadow: 0 0 1px 1px $glass-color-danger !important;
   }
 
   &.error {
-    @extend .cb-color-theme-error;
-
-    box-shadow: 0 0 1px 1px $cb-color-danger !important;
+    @extend .glass-color-theme-error;
 
     .card-body {
       background-color: transparent;

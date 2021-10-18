@@ -1,4 +1,5 @@
-<div class="card cb-dashboard-widget {{ status }}">
+<div class="card cb-dashboard-widget status {{ status }}"
+     [ngClass]="{'error': error}">
   <div class="card-body">
     <div class="card-title"
          fxLayout="row"
