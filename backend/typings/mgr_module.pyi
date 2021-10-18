@@ -1,6 +1,4 @@
-import ceph_module
 import logging
-from rados import Rados
 import sqlite3
 from enum import IntEnum
 from typing import (
@@ -15,6 +13,9 @@ from typing import (
     Tuple,
     Union,
 )
+
+import ceph_module
+from rados import Rados
 
 ERROR_MSG_EMPTY_INPUT_FILE: str
 ERROR_MSG_NO_INPUT_FILE: str

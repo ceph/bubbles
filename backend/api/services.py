@@ -8,16 +8,16 @@
 #
 from typing import Callable, Dict
 
-from fastapi import APIRouter, Depends, Request, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 
-from bubbles.bubbles import Bubbles
 from bubbles.backend.api import jwt_auth_scheme
 from bubbles.backend.controllers.services import ServiceNotFoundError
 from bubbles.backend.models.service import (
     ServiceInfoModel,
-    ServiceStatusModel,
     ServicesModel,
+    ServiceStatusModel,
 )
+from bubbles.bubbles import Bubbles
 
 router = APIRouter(prefix="/services", tags=["services"])
 

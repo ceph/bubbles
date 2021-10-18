@@ -7,16 +7,14 @@
 # version 2.1 of the License, or (at your option) any later version.
 #
 import logging
-
-from mgr_module import MgrModule
 from pathlib import Path
 from typing import Dict, List
 
+from mgr_module import MgrModule
+
 from bubbles.backend.controllers import ceph
 from bubbles.backend.errors import BubblesError
-from bubbles.backend.models.ceph.nfs import (
-    CephFSExportRequest,
-)
+from bubbles.backend.models.ceph.nfs import CephFSExportRequest
 from bubbles.backend.models.service import (
     ServiceBackendEnum,
     ServiceInfoModel,

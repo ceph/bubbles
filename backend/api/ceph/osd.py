@@ -11,17 +11,10 @@ from typing import Callable, List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel
 
-from bubbles.bubbles import Bubbles
 from bubbles.backend.api import jwt_auth_scheme
-from bubbles.backend.controllers.ceph.osd import (
-    Error,
-    NotFound,
-)
-from bubbles.backend.models.ceph.osd import (
-    OSDMapModel,
-    PoolModel,
-    PoolRequest,
-)
+from bubbles.backend.controllers.ceph.osd import Error, NotFound
+from bubbles.backend.models.ceph.osd import OSDMapModel, PoolModel, PoolRequest
+from bubbles.bubbles import Bubbles
 
 router = APIRouter(prefix="/ceph/osd", tags=["ceph"])
 

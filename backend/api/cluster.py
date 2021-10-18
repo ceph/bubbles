@@ -9,10 +9,10 @@ from typing import Callable, List
 
 from fastapi import APIRouter, Depends, Request
 
-from bubbles.bubbles import Bubbles
 from bubbles.backend.api import jwt_auth_scheme
 from bubbles.backend.models.cluster import ClusterStatusModel, EventModel
 from bubbles.backend.models.df import ClusterUsageStatsModel
+from bubbles.bubbles import Bubbles
 
 router = APIRouter(prefix="/cluster", tags=["cluster"])
 

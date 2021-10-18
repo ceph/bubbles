@@ -7,9 +7,10 @@
 #
 import json
 import logging
+from typing import List, NewType, Optional
+
 from mgr_module import MgrModule, MonCommandFailed
 from pydantic.tools import parse_obj_as
-from typing import List, NewType, Optional
 
 from bubbles.backend.models.ceph.fs import (
     CephFSAuthorizationModel,

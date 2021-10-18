@@ -7,10 +7,10 @@
 #
 from mgr_module import MgrModule
 
+from bubbles.backend.controllers.cluster import ClusterController
 from bubbles.backend.controllers.services import ServicesController
 from bubbles.backend.models.df import ClusterUsageStatsModel
 from bubbles.backend.models.storage import StorageStatsModel
-from bubbles.backend.controllers.cluster import ClusterController
 
 
 class StorageController:

@@ -10,11 +10,10 @@ import uuid
 from datetime import datetime, timezone
 from typing import Dict, NamedTuple, Optional, Union
 
-from mgr_module import MgrModule
-
 import jwt
 from fastapi import Request, Response
 from fastapi.security.utils import get_authorization_scheme_param
+from mgr_module import MgrModule
 
 from bubbles.backend.models.config import AuthOptionsModel
 

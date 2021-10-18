@@ -9,9 +9,9 @@ from typing import Callable
 
 from fastapi import APIRouter, Depends, Request
 
-from bubbles.bubbles import Bubbles
 from bubbles.backend.api import jwt_auth_scheme
 from bubbles.backend.models.storage import StorageStatsModel
+from bubbles.bubbles import Bubbles
 
 router = APIRouter(prefix="/storage", tags=["storage"])
 

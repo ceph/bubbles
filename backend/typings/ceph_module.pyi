@@ -3,6 +3,7 @@
 # Without this file, all classes have undefined base classes.
 
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple, Union
+
 try:
     from typing import Protocol  # Protocol was added in Python 3.8
 except ImportError:
