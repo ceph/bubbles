@@ -60,14 +60,14 @@ export class PerformanceOperationsDashboardWidgetComponent {
         name: `${TEXT('Read')}: ${status.pgmap.read_op_per_sec}/s`,
         value: status.pgmap.read_op_per_sec,
         itemStyle: {
-          color: '#f58b1f'
+          color: '#009ccc'
         }
       },
       {
         name: `${TEXT('Write')}: ${status.pgmap.write_op_per_sec}/s`,
         value: status.pgmap.write_op_per_sec,
         itemStyle: {
-          color: '#009ccc'
+          color: '#f58b1f'
         }
       }
     ]);
