@@ -200,6 +200,12 @@ First, we need to check a few bits of information:
  the guest VMs to the local registry we deployed before. Typically this will be
  a `virbr` interface. We will be assuming it's `192.168.122.1`.
 
+ 3. An SSH keypair in $HOME/.ssh/[id_rsa|id_rsa.pub|id_dsa|id_dsa.pub] or kcli
+ configured to set up keys elsewhere.
+
+ 4. Have your user in the appropriate `libvirtd` group, or run the following
+ with `sudo`.
+
 Deploying a three node Ceph cluster, bootstrapped by `cephadm`, becomes a
 trivial task:
 
