@@ -244,7 +244,7 @@ default, the plan deploys VMs with a single NIC, so it should be easy to spot.
 Alternatively, one can run
 
 ```
-    # ifconfig eth0 | grep 'inet ' | awk '{print $2}'
+    # ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1
 ```
 
 Which will provide the configured IP address for the single NIC available in the
