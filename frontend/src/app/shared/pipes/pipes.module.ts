@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { ArrayPipe } from '~/app/shared/pipes/array.pipe';
 import { BytesToSizePipe } from '~/app/shared/pipes/bytes-to-size.pipe';
 import { CephShortVersionPipe } from '~/app/shared/pipes/ceph-short-version.pipe';
+import { JoinPipe } from '~/app/shared/pipes/join.pipe';
 import { MapPipe } from '~/app/shared/pipes/map.pipe';
 import { RedundancyLevelPipe } from '~/app/shared/pipes/redundancy-level.pipe';
 import { RelativeDatePipe } from '~/app/shared/pipes/relative-date.pipe';
@@ -21,7 +22,8 @@ import { ToStringPipe } from '~/app/shared/pipes/to-string.pipe';
     RelativeDatePipe,
     RedundancyLevelPipe,
     MapPipe,
-    ToStringPipe
+    ToStringPipe,
+    JoinPipe
   ],
   providers: [
     ArrayPipe,
@@ -32,7 +34,8 @@ import { ToStringPipe } from '~/app/shared/pipes/to-string.pipe';
     RelativeDatePipe,
     RedundancyLevelPipe,
     MapPipe,
-    ToStringPipe
+    ToStringPipe,
+    JoinPipe
   ],
   exports: [
     ArrayPipe,
@@ -43,7 +46,8 @@ import { ToStringPipe } from '~/app/shared/pipes/to-string.pipe';
     RelativeDatePipe,
     RedundancyLevelPipe,
     MapPipe,
-    ToStringPipe
+    ToStringPipe,
+    JoinPipe
   ],
   imports: [CommonModule]
 })

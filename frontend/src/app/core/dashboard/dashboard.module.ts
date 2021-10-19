@@ -10,6 +10,7 @@ import { EventsDashboardWidgetComponent } from '~/app/core/dashboard/widgets/eve
 import { HealthDashboardWidgetComponent } from '~/app/core/dashboard/widgets/health-dashboard-widget/health-dashboard-widget.component';
 import { PerformanceBytesDashboardWidgetComponent } from '~/app/core/dashboard/widgets/performance-bytes-dashboard-widget/performance-bytes-dashboard-widget.component';
 import { PerformanceOperationsDashboardWidgetComponent } from '~/app/core/dashboard/widgets/performance-operations-dashboard-widget/performance-operations-dashboard-widget.component';
+import { ServicesHealthDashboardWidgetComponent } from '~/app/core/dashboard/widgets/services-health-dashboard-widget/services-health-dashboard-widget.component';
 import { ServicesUtilizationDashboardWidgetComponent } from '~/app/core/dashboard/widgets/services-utilization-dashboard-widget/services-utilization-dashboard-widget.component';
 import { StorageUtilizationDashboardWidgetComponent } from '~/app/core/dashboard/widgets/storage-utilization-dashboard-widget/storage-utilization-dashboard-widget.component';
 import { SharedModule } from '~/app/shared/shared.module';
@@ -21,7 +22,8 @@ import { SharedModule } from '~/app/shared/shared.module';
     ServicesUtilizationDashboardWidgetComponent,
     PerformanceBytesDashboardWidgetComponent,
     PerformanceOperationsDashboardWidgetComponent,
-    StorageUtilizationDashboardWidgetComponent
+    StorageUtilizationDashboardWidgetComponent,
+    ServicesHealthDashboardWidgetComponent
   ],
   exports: [
     EventsDashboardWidgetComponent,
@@ -29,7 +31,8 @@ import { SharedModule } from '~/app/shared/shared.module';
     ServicesUtilizationDashboardWidgetComponent,
     PerformanceBytesDashboardWidgetComponent,
     PerformanceOperationsDashboardWidgetComponent,
-    StorageUtilizationDashboardWidgetComponent
+    StorageUtilizationDashboardWidgetComponent,
+    ServicesHealthDashboardWidgetComponent
   ],
   imports: [
     CommonModule,

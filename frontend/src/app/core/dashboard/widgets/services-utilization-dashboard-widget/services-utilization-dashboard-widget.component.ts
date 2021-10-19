@@ -48,13 +48,13 @@ export class ServicesUtilizationDashboardWidgetComponent {
       }
     ]
   };
-  hasData = false;
+  hasServices = false;
 
   constructor(private servicesService: ServicesService) {}
 
   updateData(services: Services) {
-    this.hasData = services.services.length > 0;
-    if (this.hasData) {
+    this.hasServices = services.services.length > 0;
+    if (this.hasServices) {
       _.set(this.options, 'series[0].data', this.buildSeriesData(services));
     }
   }
