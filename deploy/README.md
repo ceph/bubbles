@@ -104,6 +104,19 @@ your ceph folder ahead of time. For example:
     npx ng build
 ```
 
+
+### Build requirements
+
+The following packages are required on openSUSE Tumbleweed for building the
+container:
+
+```
+    sudo zypper install git podman libvirt python38-devel python38-libvirt-python python38-pip buildah npm16
+    [sudo] pip install kcli
+```
+
+(You could also place kcli into a venv if preferred).
+
 ## Deployment
 
 ### How it works
