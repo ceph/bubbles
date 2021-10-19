@@ -14,7 +14,7 @@ type Data = {
 };
 
 @Component({
-  selector: 'cb-services-dashboard-widget',
+  selector: 'cb-services-utilization-dashboard-widget',
   templateUrl: './services-utilization-dashboard-widget.component.html',
   styleUrls: ['./services-utilization-dashboard-widget.component.scss']
 })
