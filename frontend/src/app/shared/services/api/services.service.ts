@@ -63,15 +63,20 @@ export enum ServiceStatusCode {
   NONE = 20
 }
 
+export enum ServiceStatusInfoCode {
+  UNDEFINED = 'undefined',
+  DNE = 'dne'
+}
+
 export type ServiceStatusInfo = {
-  code: number;
+  code: ServiceStatusInfoCode;
   msg: string;
 };
 
 export type ServiceStatus = {
   name: string;
   status: ServiceStatusCode;
-  info: Array<any>;
+  info: Array<ServiceStatusInfo>;
 };
 
 export type Services = {

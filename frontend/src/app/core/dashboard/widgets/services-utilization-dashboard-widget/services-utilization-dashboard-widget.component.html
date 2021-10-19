@@ -1,15 +1,15 @@
 <cb-widget [loadData]="loadData.bind(this)"
            widgetTitle="{{ 'Services Utilization' | translate }}"
            (loadDataEvent)="updateData($event)">
-  <div class="cb-services-dashboard-widget">
-    <div *ngIf="hasData"
+  <div class="cb-services-utilization-dashboard-widget">
+    <div *ngIf="hasServices"
          class="graph m-2"
          echarts
          [initOpts]="initOpts"
          [options]="options">
     </div>
-    <div *ngIf="!hasData"
-         class="d-flex align-items-center justify-content-center text-muted p-2">
+    <div *ngIf="!hasServices"
+         class="d-flex align-items-center justify-content-center text-muted m-2">
       <span translate>No services available</span>
     </div>
   </div>

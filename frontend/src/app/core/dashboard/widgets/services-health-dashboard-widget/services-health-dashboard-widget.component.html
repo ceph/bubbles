@@ -1,0 +1,28 @@
+<cb-widget [loadData]="loadData.bind(this)"
+           widgetTitle="{{ 'Services Health' | translate }}"
+           [setStatus]="setHealthStatusIndicator.bind(this)"
+           (loadDataEvent)="updateData($event)">
+  <div class="cb-services-health-dashboard-widget d-flex align-items-center justify-content-center p-2"
+       [class.cb-color-theme-ok]="hasStatus && !hasWarn && !hasError"
+       [class.cb-color-theme-warn]="hasStatus && hasWarn && !hasError"
+       [class.cb-color-theme-error]="hasStatus && hasError">
+    <i *ngIf="hasStatus && !hasWarn && !hasError"
+       class="mdi mdi-thumb-up">
+    </i>
+    <i *ngIf="hasStatus && hasWarn && !hasError"
+       class="mdi mdi-alert-circle-outline">
+    </i>
+    <i *ngIf="hasStatus && hasError"
+       class="mdi mdi-thumb-down">
+    </i>
+    <span *ngIf="hasStatus"
+          class="ml-2">
+      {{ text | join }}
+    </span>
+    <span *ngIf="!hasStatus"
+          class="text-muted"
+          translate>
+      No services available
+    </span>
+  </div>
+</cb-widget>
