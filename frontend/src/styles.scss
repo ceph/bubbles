@@ -21,10 +21,6 @@
   color: $cb-color-white;
   background-color: $cb-color-danger;
 }
-.cb-color-theme-ok {
-  color: $cb-color-white;
-  background-color: $cb-color-success;
-}
 .cb-color-theme-warn {
   color: $cb-color-black;
   background-color: $cb-color-warning;
@@ -33,6 +29,7 @@
   color: $cb-color-white;
   background-color: $cb-color-info;
 }
+.cb-color-theme-ok,
 .cb-color-theme-success {
   color: $cb-color-white;
   background-color: $cb-color-success;
