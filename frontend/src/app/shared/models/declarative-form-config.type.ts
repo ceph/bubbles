@@ -100,6 +100,7 @@ export interface DeclarativeForm {
 export type DeclarativeFormConfig = {
   id?: string; // A unique form ID.
   hint?: string;
+  title?: string;
   subtitle?: string;
   fields: FormFieldConfig[];
   buttons?: Array<FormButtonConfig>;

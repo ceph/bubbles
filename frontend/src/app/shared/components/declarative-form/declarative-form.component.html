@@ -1,10 +1,16 @@
-<div fxLayout="column"
+<div class="cb-declarative-form"
+     fxLayout="column"
      fxLayoutAlign="start stretch">
   <cb-alert-panel *ngIf="config?.hint"
                   type="hint">
     <div [innerHTML]="config?.hint! | translate | sanitize:'html'"></div>
   </cb-alert-panel>
+  <div *ngIf="config?.title"
+       class="title"
+       [innerHTML]="config?.title! | translate | sanitize: 'html'">
+  </div>
   <p *ngIf="config?.subtitle"
+     class="subtitle"
      [innerHTML]="config?.subtitle! | translate | sanitize:'html'">
   </p>
   <form *ngIf="formGroup && config"
@@ -372,7 +378,7 @@
 
     <div class="form-actions"
          fxLayout="row"
-         fxLayoutAlign="{{ config.buttonAlign ?? 'start' }} center">
+         fxLayoutAlign="{{ config.buttonAlign ?? 'end' }} center">
       <ng-container *ngFor="let button of config.buttons">
         <ng-container [ngSwitch]="button.type">
           <ng-template [ngSwitchCase]="'default'">
