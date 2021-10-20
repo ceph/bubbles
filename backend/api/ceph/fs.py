@@ -11,16 +11,13 @@ from typing import Callable, List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel
 
-from bubbles.bubbles import Bubbles
 from bubbles.backend.api import jwt_auth_scheme
-from bubbles.backend.controllers.ceph.fs import (
-    Error,
-    NotAuthorized,
-)
+from bubbles.backend.controllers.ceph.fs import Error, NotAuthorized
 from bubbles.backend.models.ceph.fs import (
     CephFSAuthorizationModel,
     CephFSListEntryModel,
 )
+from bubbles.bubbles import Bubbles
 
 router = APIRouter(prefix="/ceph/fs", tags=["ceph"])
 

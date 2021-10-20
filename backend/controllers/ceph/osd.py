@@ -7,14 +7,11 @@
 #
 import json
 import logging
-from mgr_module import MgrModule, MonCommandFailed
 from typing import Any, Dict, List, Union
 
-from bubbles.backend.models.ceph.osd import (
-    OSDMapModel,
-    PoolModel,
-    PoolRequest,
-)
+from mgr_module import MgrModule, MonCommandFailed
+
+from bubbles.backend.models.ceph.osd import OSDMapModel, PoolModel, PoolRequest
 
 logger = logging.getLogger(__name__)
 

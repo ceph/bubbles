@@ -7,15 +7,17 @@
 # version 2.1 of the License, or (at your option) any later version.
 #
 
-from bubbles.backend.controllers.storage import StorageController
-from mgr_module import MgrModule
 from typing import Optional
-from bubbles.backend.controllers.cluster import ClusterController
-from bubbles.backend.controllers.rest_api_proxy import RestApiProxyController
-from bubbles.backend.controllers.services import ServicesController
+
+from mgr_module import MgrModule
+
 from bubbles.backend.controllers.ceph.fs import CephFSController
 from bubbles.backend.controllers.ceph.nfs import NFSController
 from bubbles.backend.controllers.ceph.osd import OSD
+from bubbles.backend.controllers.cluster import ClusterController
+from bubbles.backend.controllers.rest_api_proxy import RestApiProxyController
+from bubbles.backend.controllers.services import ServicesController
+from bubbles.backend.controllers.storage import StorageController
 
 
 class Controllers:

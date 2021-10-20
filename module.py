@@ -16,27 +16,16 @@
 import asyncio
 import os
 import sys
-import uvicorn
+from typing import Any, List, Optional
 
-from typing import Any, Optional, List
+import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-
 from mgr_module import MgrModule
+
+from bubbles.backend.api import auth, cluster, host, services, storage, users
+from bubbles.backend.api.ceph import fs, nfs, osd
 from bubbles.bubbles import Bubbles
-from bubbles.backend.api import (
-    auth,
-    cluster,
-    host,
-    services,
-    storage,
-    users,
-)
-from bubbles.backend.api.ceph import (
-    fs,
-    nfs,
-    osd,
-)
 
 
 class BubblesModule(MgrModule):

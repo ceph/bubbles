@@ -11,8 +11,8 @@ from typing import Optional
 from fastapi import HTTPException, Request
 from fastapi.security import OAuth2PasswordBearer
 
-from bubbles.bubbles import Bubbles
 from bubbles.backend.auth import JWT, JWTDenyList, JWTMgr
+from bubbles.bubbles import Bubbles
 
 
 class JWTAuthSchema(OAuth2PasswordBearer):

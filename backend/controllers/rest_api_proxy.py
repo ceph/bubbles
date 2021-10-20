@@ -6,13 +6,12 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
-import httpx
-
-from fastapi import HTTPException
-from pydantic import BaseModel, Field
 from typing import Any, Dict, List, Optional
 
+import httpx
+from fastapi import HTTPException
 from mgr_module import MgrModule
+from pydantic import BaseModel, Field
 
 
 class RestApiProxyLoginModel(BaseModel):

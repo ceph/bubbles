@@ -9,9 +9,9 @@ from typing import Callable, List
 
 from fastapi import APIRouter, Depends, Request
 
-from bubbles.bubbles import Bubbles
 from bubbles.backend.api import jwt_auth_scheme
 from bubbles.backend.models.host import HostModel
+from bubbles.bubbles import Bubbles
 
 router = APIRouter(prefix="/host", tags=["host"])
 

@@ -7,10 +7,10 @@
 #
 from typing import Any, Dict
 
+from mgr_module import MgrModule
+
 from bubbles.backend.models.cluster import ClusterStatusModel
 from bubbles.backend.models.df import ClusterUsageStatsModel
-
-from mgr_module import MgrModule
 
 
 class ClusterController:
