@@ -1,5 +1,11 @@
 @import 'styles.scss';
 
+.cb-declarative-form {
+  .title {
+    @extend .h3;
+  }
+}
+
 .form-container {
   align-items: baseline;
 
