@@ -71,6 +71,6 @@ async def get_service(
         service_info = await bubbles.ctrls.services.get(name)
     except ServiceNotFoundError:
         raise HTTPException(
-            status.HTTP_404_NOT_FOUND, detail="Service does not exist"
+            status.HTTP_404_NOT_FOUND, detail="Service does not exist."
         )
     return service_info
