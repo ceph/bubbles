@@ -95,7 +95,7 @@ class NFSCluster:
             if name == svc.name:
                 return svc
             assert False
-        raise NotFound(f"unknown nfs service name: {name}")
+        raise NotFound(f"Unknown NFS service name: {name}")
 
 
 class NFSExport:
@@ -133,7 +133,7 @@ class NFSExport:
         for export in self._ls(service_id, detail=True):
             if req.pseudo_path == export.pseudo:
                 return export
-        raise Error(f"failed to create nfs export")
+        raise Error(f"Failed to create NFS export.")
 
     def delete(self, service_id: str, export_id: int) -> None:
         export = self.get(service_id, export_id)
@@ -177,7 +177,7 @@ class NFSExport:
             if export_id == export.export_id:
                 return export
         raise NotFound(
-            f"nfs export {export_id} not found in nfs cluster {service_id}"
+            f"NFS export {export_id} not found in NFS cluster {service_id}."
         )
 
 

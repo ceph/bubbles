@@ -77,10 +77,10 @@ class ServicesController:
                 self._create_nfs(info)
             else:
                 raise NotImplementedError(
-                    f"unknown service backend: {info.backend}"
+                    f"Unknown service backend: {info.backend}"
                 )
         else:
-            raise NotImplementedError(f"unknwon service type: {info.type}")
+            raise NotImplementedError(f"Unknwon service type: {info.type}")
 
         self._services[info.name] = ServiceModel(info=info, pools=[])
         self._save()
@@ -92,7 +92,7 @@ class ServicesController:
         try:
             fs = cephfs.create(info.name)
         except ceph.fs.Error as e:
-            raise ServiceError("unable to create cephfs service") from e
+            raise ServiceError("Unable to create CephFS service.") from e
 
         # adjust the OSD pool size
         osd = ceph.osd.OSD(self._mgr)
@@ -131,7 +131,7 @@ class ServicesController:
             try:
                 nfs.cluster.create(nfs_svc_id, placement=nfs_svc_placement)
             except ceph.nfs.Error as e:
-                raise ServiceError(f"unable to create nfs service: {e}")
+                raise ServiceError(f"Unable to create nfs service: {e}")
 
         # export the root of the created cephfs service
         req = CephFSExportRequest(
@@ -145,7 +145,7 @@ class ServicesController:
                 req,
             )
         except ceph.nfs.Error as e:
-            raise ServiceError("unable to create nfs export")
+            raise ServiceError("Unable to create NFS export.")
 
         return True
 

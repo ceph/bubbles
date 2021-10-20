@@ -41,7 +41,7 @@ class OSD:
         for pool in self.get_pools():
             if pool.pool_name == name:
                 return pool
-        raise NotFound(f"unknown pool: {name}")
+        raise NotFound(f"Unknown pool: {name}")
 
     def _pool_set(
         self,
@@ -63,7 +63,7 @@ class OSD:
         try:
             self._mgr.check_mon_command(cmd)
         except MonCommandFailed as e:
-            msg = f"unable to set {var} = {val} on pool {pool}: {e}"
+            msg = f"Unable to set {var} = {val} on pool {pool}: {e}"
             raise Error(msg)
 
     def set_pool(

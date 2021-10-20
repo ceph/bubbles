@@ -58,7 +58,7 @@ class CephFSController:
         for fs in self.ls():
             if name == fs.name:
                 return fs
-        raise NotFound(f"unknown fs: {fs.name}")
+        raise NotFound(f"Unknown file system: {fs.name}")
 
     def ls(self) -> List[CephFSListEntryModel]:
         try:

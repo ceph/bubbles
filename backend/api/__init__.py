@@ -30,7 +30,7 @@ class JWTAuthSchema(OAuth2PasswordBearer):
             token = await super().__call__(request)
         if not token:
             raise HTTPException(
-                status_code=400, detail="Token missing from request"
+                status_code=400, detail="Token missing from request."
             )
 
         # Decode token and do the following checks:
@@ -44,7 +44,7 @@ class JWTAuthSchema(OAuth2PasswordBearer):
         deny_list.load()
         if deny_list.includes(raw_token):
             raise HTTPException(
-                status_code=401, detail="Token has been revoked"
+                status_code=401, detail="Token has been revoked."
             )
         return raw_token
 
