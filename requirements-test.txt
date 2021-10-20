@@ -1,9 +1,7 @@
 asgi-lifespan
-httpx
+black
+mypy
 pytest
 pytest-asyncio
 pytest-mock
 requests
-black
-mypy
-
