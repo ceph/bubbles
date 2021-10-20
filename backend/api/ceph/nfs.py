@@ -25,7 +25,7 @@ router = APIRouter(prefix="/ceph/nfs", tags=["ceph"])
 
 @router.put(
     "/service/{name}",
-    name="create an nfs service",
+    name="Create an NFS service",
     response_model=NFSServiceModel,
 )
 async def service_create(
@@ -47,7 +47,7 @@ async def service_create(
 
 @router.delete(
     "/service/{name}",
-    name="delete an nfs service",
+    name="Delete an NFS service",
 )
 async def service_delete(
     request: Request,
@@ -65,7 +65,7 @@ async def service_delete(
 
 @router.get(
     "/service",
-    name="list nfs service names",
+    name="List NFS services by name",
     response_model=List[str],
 )
 async def service_ls(
@@ -82,7 +82,7 @@ async def service_ls(
 
 @router.get(
     "/service/{name}",
-    name="nfs service detail",
+    name="NFS service detail",
     response_model=NFSServiceModel,
 )
 async def service_get(
@@ -103,7 +103,7 @@ async def service_get(
 
 @router.post(
     "/export/{service_id}",
-    name="create an nfs export",
+    name="Create an NFS export",
     response_model=NFSExportModel,
 )
 async def export_create(
@@ -126,7 +126,7 @@ async def export_create(
 
 @router.delete(
     "/export/{service_id}/{export_id}",
-    name="delete an nfs export",
+    name="Delete an NFS export",
 )
 async def export_delete(
     request: Request,
@@ -144,7 +144,9 @@ async def export_delete(
 
 
 @router.get(
-    "/export/{service_id}", name="list nfs export ids", response_model=List[int]
+    "/export/{service_id}",
+    name="List NFS exports by ID",
+    response_model=List[int],
 )
 async def export_ls(
     request: Request,
@@ -162,7 +164,7 @@ async def export_ls(
 
 @router.get(
     "/export/{service_id}/{export_id}",
-    name="nfs export detail",
+    name="NFS export detail",
     response_model=NFSExportModel,
 )
 async def export_get(

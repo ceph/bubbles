@@ -39,7 +39,7 @@ async def dump(
 
 @router.get(
     "/pool",
-    name="Get a list of all OSD names",
+    name="List pools by name",
     response_model=List[str],
 )
 async def pool_ls(
@@ -57,7 +57,7 @@ async def pool_ls(
 
 @router.get(
     "/pool/{name}",
-    name="Get an OSD pool",
+    name="Get pool detail",
     response_model=PoolModel,
 )
 async def get_pool(
@@ -78,7 +78,7 @@ async def get_pool(
 
 @router.put(
     "/pool/{name}",
-    name="Create an OSD pool",
+    name="Create a pool",
     response_model=PoolModel,
 )
 async def set_pool(
