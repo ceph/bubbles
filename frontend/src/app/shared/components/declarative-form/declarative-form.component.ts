@@ -111,6 +111,7 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
     _.forEach(fields, (field: FormFieldConfig) => {
       _.defaultsDeep(field, {
         hasCopyToClipboardButton: false,
+        hasDivider: false,
         placeholder: '',
         options: {}
       });
@@ -128,7 +129,7 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
     _.forEach(
       _.filter(fields, (field) => _.isFunction(field.onValueChanges)),
       (field: FormFieldConfig) => {
-        const control: AbstractControl | null = this.getControl(field.name);
+        const control: AbstractControl | null = this.getControl(field.name!);
         if (control) {
           this.subscriptions.add(
             control.valueChanges.subscribe((value: any) => {
@@ -171,7 +172,7 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
   createForm(): FormGroup {
     const controlsConfig: Record<string, FormControl> = {};
     _.forEach(this.getFields(), (field: FormFieldConfig) => {
-      controlsConfig[field.name] = DeclarativeFormComponent.createFormControl(field);
+      controlsConfig[field.name!] = DeclarativeFormComponent.createFormControl(field);
     });
     return this.formBuilder.group(controlsConfig);
   }
@@ -181,7 +182,7 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
   }
 
   onCopyToClipboard(field: FormFieldConfig): void {
-    const text = this.formGroup?.get(field.name)?.value;
+    const text = this.formGroup?.get(field.name!)?.value;
     const messages = {
       success: TEXT('Copied text to the clipboard successfully.'),
       error: TEXT('Failed to copy text to the clipboard.')
@@ -207,9 +208,9 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
   get values(): DeclarativeFormValues {
     const values = this.formGroup?.getRawValue() ?? {};
     _.forEach(this.getFields(), (field: FormFieldConfig) => {
-      const value = values[field.name];
+      const value = values[field.name!];
       if (value) {
-        values[field.name] = this.convertToRaw(value, field);
+        values[field.name!] = this.convertToRaw(value, field);
       }
     });
     return values;
@@ -246,13 +247,19 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
 
   private getFields(): Array<FormFieldConfig> {
     const flatten = (fields: Array<FormFieldConfig>): Array<FormFieldConfig> =>
-      _.flatMap(fields, (field: FormFieldConfig) => {
-        if (_.isArray(field.fields)) {
-          return flatten(field.fields);
-        } else {
-          return field;
+      _.flatMap(
+        _.filter(
+          fields,
+          (field: FormFieldConfig) => !_.isUndefined(field.name) || _.isArray(field.fields)
+        ),
+        (field: FormFieldConfig) => {
+          if (_.isArray(field.fields)) {
+            return flatten(field.fields);
+          } else {
+            return field;
+          }
         }
-      });
+      );
     return flatten(this.config?.fields || []);
   }
 
@@ -268,7 +275,7 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
   private applyModifier(field: FormFieldConfig, modifier: FormFieldModifier) {
     const successful = ConstraintService.test(modifier.constraint, this.values);
     const opposite = _.defaultTo(modifier?.opposite, true);
-    const control: AbstractControl | null = this.getControl(field.name);
+    const control: AbstractControl | null = this.getControl(field.name!);
     switch (modifier.type) {
       case 'readonly':
         if (successful) {
