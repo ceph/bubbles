@@ -55,8 +55,3 @@ class CephFSExportRequest(NFSExportRequest):
     backing: NFSBackingStoreEnum = NFSBackingStoreEnum.CEPHFS
     fs_name: str
     fs_path: str
-
-
-class RGWExportRequest(NFSExportRequest):
-    backing: NFSBackingStoreEnum = NFSBackingStoreEnum.RGW
-    bucket: str
