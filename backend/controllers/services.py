@@ -121,7 +121,10 @@ class ServicesController:
 
     def _create_nfs(self, info: ServiceInfoModel) -> bool:
         # create a cephfs
-        self._create_cephfs(info)
+        try:
+            self._create_cephfs(info)
+        except Exception as e:
+            raise ServiceError(f"Unable to create NFS filesystem: {e}")
 
         # create an generic NFS service
         nfs_svc_id = "bubbles"
@@ -131,7 +134,7 @@ class ServicesController:
             try:
                 nfs.cluster.create(nfs_svc_id, placement=nfs_svc_placement)
             except ceph.nfs.Error as e:
-                raise ServiceError(f"Unable to create nfs service: {e}")
+                raise ServiceError(f"Unable to create NFS service: {e}")
 
         # export the root of the created cephfs service
         req = CephFSExportRequest(
