@@ -1,11 +1,7 @@
 <block-ui>
   <div class="cb-main-layout"
-       fxLayout="row"
-       fxLayoutAlign="start stretch">
-    <div class="navigation"
-         [ngClass]="{'visible': navigationVisible}"
-         fxLayout="column"
-         fxLayoutAlign="start none">
+       [ngClass]="{'navigation-collapsed': navigationCollapsed}">
+    <aside class="navigation">
       <nav>
         <header fxLayout="row"
                 fxLayoutAlign="start center">
@@ -14,13 +10,10 @@
         </header>
         <cb-navigation-bar></cb-navigation-bar>
       </nav>
-    </div>
-    <div class="main"
-         fxFlex
-         fxLayout="column"
-         fxLayoutAlign="start none">
+    </aside>
+    <div class="main">
       <header>
-        <cb-top-bar (toggleNavigation)="navigationVisible = !navigationVisible"></cb-top-bar>
+        <cb-top-bar (toggleNavigation)="navigationCollapsed = !navigationCollapsed"></cb-top-bar>
       </header>
       <div class="content">
         <router-outlet></router-outlet>
