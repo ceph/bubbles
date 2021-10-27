@@ -88,7 +88,7 @@ class ServicesController:
 
     def _create_cephfs(self, info: ServiceInfoModel) -> bool:
         # create the ceph filesystem
-        cephfs = ceph.fs.CephFSController(self._mgr)
+        cephfs = ceph.fs.CephFS(self._mgr)
         try:
             fs = cephfs.create(info.name)
         except ceph.fs.Error as e:
@@ -126,7 +126,7 @@ class ServicesController:
         # create an generic NFS service
         nfs_svc_id = "bubbles"
         nfs_svc_placement = "*"
-        nfs = ceph.nfs.NFSController(self._mgr)
+        nfs = ceph.nfs.NFS(self._mgr)
         if nfs_svc_id not in nfs.cluster.ls():
             try:
                 nfs.cluster.create(nfs_svc_id, placement=nfs_svc_placement)

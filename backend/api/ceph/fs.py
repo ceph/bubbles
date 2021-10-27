@@ -35,7 +35,7 @@ async def create(
 ) -> CephFSListEntryModel:
     bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.cephfs.create(name=name, placement=req.placement)
+        return bubbles.ctrls.ceph.fs.create(name=name, placement=req.placement)
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -52,7 +52,7 @@ async def ls(
 ) -> List[CephFSListEntryModel]:
     bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.cephfs.ls()
+        return bubbles.ctrls.ceph.fs.ls()
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -71,7 +71,7 @@ async def get(
 ) -> CephFSListEntryModel:
     bubbles = request.app.state.bubbles
     try:
-        for fs in bubbles.ctrls.cephfs.ls():
+        for fs in bubbles.ctrls.ceph.fs.ls():
             if fs.name == name:
                 return fs
         raise HTTPException(status.HTTP_404_NOT_FOUND)
@@ -94,7 +94,7 @@ async def auth_put(
 ) -> CephFSAuthorizationModel:
     bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.cephfs.set_auth(name, client_id)
+        return bubbles.ctrls.ceph.fs.set_auth(name, client_id)
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -114,7 +114,7 @@ async def auth_get(
 ) -> List[CephFSAuthorizationModel]:
     bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.cephfs.get_auth(name, client_id)
+        return bubbles.ctrls.ceph.fs.get_auth(name, client_id)
     except NotAuthorized as e:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail=str(e))
     except Error as e:

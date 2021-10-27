@@ -181,7 +181,7 @@ class NFSExport:
         )
 
 
-class NFSController:
+class NFS:
     cluster: NFSCluster
     export: NFSExport
 
