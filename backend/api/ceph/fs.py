@@ -103,7 +103,7 @@ async def auth_put(
 
 @router.get(
     "/{name}/auth",
-    name="Get a list of auth entities to access a Ceph filesystem",
+    name="Get detail about an auth entity to access a Ceph filesystem",
     response_model=CephFSAuthorizationModel,
 )
 async def auth_get(
@@ -111,7 +111,7 @@ async def auth_get(
     name: str,
     client_id: Optional[str] = None,
     _: Callable = Depends(jwt_auth_scheme),
-) -> List[CephFSAuthorizationModel]:
+) -> CephFSAuthorizationModel:
     bubbles: Bubbles = request.app.state.bubbles
     try:
         return bubbles.ctrls.ceph.fs.get_auth(name, client_id)
