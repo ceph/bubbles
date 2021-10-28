@@ -7,8 +7,6 @@
 # version 2.1 of the License, or (at your option) any later version.
 #
 
-from typing import Optional
-
 from mgr_module import MgrModule
 
 from bubbles.backend.controllers.ceph import CephController
@@ -19,11 +17,11 @@ from bubbles.backend.controllers.storage import StorageController
 
 
 class Controllers:
-    services: Optional[ServicesController] = None
-    cluster: Optional[ClusterController] = None
-    storage: Optional[StorageController] = None
-    rest_api_proxy: Optional[RestApiProxyController] = None
-    ceph: Optional[CephController] = None
+    services: ServicesController
+    cluster: ClusterController
+    storage: StorageController
+    rest_api_proxy: RestApiProxyController
+    ceph: CephController
 
     _mgr: MgrModule
 
