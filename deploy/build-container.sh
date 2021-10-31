@@ -118,7 +118,7 @@ ctr=$(sudo buildah from \
 [[ -z "${ctr}" ]] && err "error obtaining base container" && exit 1
 
 buildah run ${ctr} zypper install -y python38-pip || exit 1
-buildah run ${ctr} pip install fastapi uvicorn aiofiles || exit 1
+buildah run ${ctr} pip install $(cat ../requirements.txt) || exit 1
 
 mnt=$(sudo buildah mount ${ctr})
 [[ -z "${mnt}" ]] && err "error mounting container" && exit 1
