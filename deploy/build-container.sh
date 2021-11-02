@@ -27,8 +27,6 @@ options:
   --image-name NAME      Final image name (default: ${image_name})
   --registry URL         Push to registry
   --no-registry-tls      Disable registry TLS verification.
-  --no-sudo              Don't require root super powers. Useful when podman
-                         is able to run unprivileged.
   --help|-h              This message
 
 EOF
@@ -38,8 +36,8 @@ mkdist() {
   mkdir dist
 
   pushd ../frontend
-  npm install || exit 1
-  ng build \
+  npm ci || exit 1
+  npx ng build \
     --output-hashing all \
     --configuration production \
     --output-path ../deploy/dist/frontend/dist || exit 1
@@ -61,7 +59,6 @@ skip_dist=false
 registry=
 has_registry=false
 registry_args=
-no_sudo=false
 use_force=false
 
 while [[ $# -gt 0 ]]; do
@@ -73,7 +70,6 @@ while [[ $# -gt 0 ]]; do
     --image-name) image_name=$2 ; shift 1 ;;
     --registry) registry=$2 ; has_registry=true ; shift 1 ;;
     --no-registry-tls) registry_args="--tls-verify=false" ;;
-    --no-sudo) no_sudo=true ;;
     *)
       err "unknown option: '$1'"
       usage
@@ -117,20 +113,20 @@ ctr=$(sudo buildah from \
 
 [[ -z "${ctr}" ]] && err "error obtaining base container" && exit 1
 
-buildah run ${ctr} zypper install -y python38-pip || exit 1
-buildah run ${ctr} pip install $(cat ../requirements.txt) || exit 1
+sudo buildah run ${ctr} zypper install -y python38-pip || exit 1
+sudo buildah run ${ctr} pip install $(cat ../requirements.txt) || exit 1
 
 mnt=$(sudo buildah mount ${ctr})
 [[ -z "${mnt}" ]] && err "error mounting container" && exit 1
 
-cp -R dist/ ${mnt}/usr/share/ceph/mgr/bubbles || exit 1
+sudo cp -R dist/ ${mnt}/usr/share/ceph/mgr/bubbles || exit 1
 
-buildah unmount ${ctr} || exit 1
-buildah commit ${ctr} ${image_name} || exit 1
-buildah rm ${ctr} || exit 1
+sudo buildah unmount ${ctr} || exit 1
+sudo buildah commit ${ctr} ${image_name} || exit 1
+sudo buildah rm ${ctr} || exit 1
 
 if $has_registry ; then
-  podman push ${registry_args} \
+  sudo podman push ${registry_args} \
     localhost/${image_name} ${registry}/${image_name}
 fi
 
