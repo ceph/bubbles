@@ -34,7 +34,7 @@ class NotFound(Error):
     pass
 
 
-class CephFSController:
+class CephFS:
     _mgr: MgrModule
 
     def __init__(self, mgr: MgrModule) -> None:

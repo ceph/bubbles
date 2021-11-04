@@ -28,9 +28,9 @@ async def dump(
     request: Request,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> OSDMapModel:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.osd.dump()
+        return bubbles.ctrls.ceph.osd.dump()
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -46,9 +46,9 @@ async def pool_ls(
     request: Request,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> List[str]:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return [p.pool_name for p in bubbles.ctrls.osd.get_pools()]
+        return [p.pool_name for p in bubbles.ctrls.ceph.osd.get_pools()]
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -65,9 +65,9 @@ async def get_pool(
     name: str,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> PoolModel:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.osd.get_pool(name)
+        return bubbles.ctrls.ceph.osd.get_pool(name)
     except NotFound as e:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=str(e))
     except Error as e:
@@ -88,9 +88,9 @@ async def set_pool(
     yes_i_really_mean_it: bool = False,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> PoolModel:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.osd.set_pool(
+        return bubbles.ctrls.ceph.osd.set_pool(
             name, req, really=yes_i_really_mean_it
         )
     except Error as e:

@@ -1,1 +1,1 @@
-from . import fs, osd
+from .ceph import CephController

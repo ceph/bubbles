@@ -34,9 +34,11 @@ async def service_create(
     req: NFSServiceRequest,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> NFSServiceModel:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.nfs.cluster.create(name, placement=req.placement)
+        return bubbles.ctrls.ceph.nfs.cluster.create(
+            name, placement=req.placement
+        )
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -52,9 +54,9 @@ async def service_delete(
     name: str,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> None:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.nfs.cluster.delete(name)
+        return bubbles.ctrls.ceph.nfs.cluster.delete(name)
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -69,9 +71,9 @@ async def service_delete(
 async def service_ls(
     request: Request, _: Callable = Depends(jwt_auth_scheme)
 ) -> List[str]:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.nfs.cluster.ls()
+        return bubbles.ctrls.ceph.nfs.cluster.ls()
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -88,9 +90,9 @@ async def service_get(
     name: str,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> NFSServiceModel:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.nfs.cluster.get(name)
+        return bubbles.ctrls.ceph.nfs.cluster.get(name)
     except NotFound as e:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=str(e))
     except Error as e:
@@ -110,9 +112,9 @@ async def export_create(
     req: CephFSExportRequest,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> NFSExportModel:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.nfs.export.create(
+        return bubbles.ctrls.ceph.nfs.export.create(
             service_id=service_id,
             req=req,
         )
@@ -132,9 +134,9 @@ async def export_delete(
     export_id: int,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> None:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.nfs.export.delete(service_id, export_id)
+        return bubbles.ctrls.ceph.nfs.export.delete(service_id, export_id)
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -149,9 +151,9 @@ async def export_ls(
     service_id: str,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> List[int]:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.nfs.export.ls(service_id)
+        return bubbles.ctrls.ceph.nfs.export.ls(service_id)
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -169,9 +171,9 @@ async def export_get(
     export_id: int,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> NFSExportModel:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.nfs.export.get(service_id, export_id)
+        return bubbles.ctrls.ceph.nfs.export.get(service_id, export_id)
     except NotFound as e:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=str(e))
     except Error as e:

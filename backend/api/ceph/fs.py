@@ -33,9 +33,9 @@ async def create(
     req: ServiceRequest,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> CephFSListEntryModel:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.cephfs.create(name=name, placement=req.placement)
+        return bubbles.ctrls.ceph.fs.create(name=name, placement=req.placement)
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -50,9 +50,9 @@ async def create(
 async def ls(
     request: Request, _: Callable = Depends(jwt_auth_scheme)
 ) -> List[CephFSListEntryModel]:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.cephfs.ls()
+        return bubbles.ctrls.ceph.fs.ls()
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -69,9 +69,9 @@ async def get(
     name: str,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> CephFSListEntryModel:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        for fs in bubbles.ctrls.cephfs.ls():
+        for fs in bubbles.ctrls.ceph.fs.ls():
             if fs.name == name:
                 return fs
         raise HTTPException(status.HTTP_404_NOT_FOUND)
@@ -92,9 +92,9 @@ async def auth_put(
     client_id: Optional[str] = None,
     _: Callable = Depends(jwt_auth_scheme),
 ) -> CephFSAuthorizationModel:
-    bubbles = request.app.state.bubbles
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.cephfs.set_auth(name, client_id)
+        return bubbles.ctrls.ceph.fs.set_auth(name, client_id)
     except Error as e:
         raise HTTPException(
             status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
@@ -103,7 +103,7 @@ async def auth_put(
 
 @router.get(
     "/{name}/auth",
-    name="Get a list of auth entities to access a Ceph filesystem",
+    name="Get detail about an auth entity to access a Ceph filesystem",
     response_model=CephFSAuthorizationModel,
 )
 async def auth_get(
@@ -111,10 +111,10 @@ async def auth_get(
     name: str,
     client_id: Optional[str] = None,
     _: Callable = Depends(jwt_auth_scheme),
-) -> List[CephFSAuthorizationModel]:
-    bubbles = request.app.state.bubbles
+) -> CephFSAuthorizationModel:
+    bubbles: Bubbles = request.app.state.bubbles
     try:
-        return bubbles.ctrls.cephfs.get_auth(name, client_id)
+        return bubbles.ctrls.ceph.fs.get_auth(name, client_id)
     except NotAuthorized as e:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail=str(e))
     except Error as e:
