@@ -26,7 +26,7 @@ class ServiceRequest(BaseModel):
     placement: Optional[str] = "*"
 
 
-@router.put("/{name}", name="Create a Ceph filesystem")
+@router.put("/{name}", name="Create a filesystem")
 async def create(
     request: Request,
     name: str,
@@ -44,7 +44,7 @@ async def create(
 
 @router.get(
     "/",
-    name="Get a list of Ceph filesystems",
+    name="List filesystems by name",
     response_model=List[CephFSListEntryModel],
 )
 async def ls(
@@ -61,7 +61,7 @@ async def ls(
 
 @router.get(
     "/{name}",
-    name="Get detail about a Ceph filesystem",
+    name="Get filesystem detail",
     response_model=CephFSListEntryModel,
 )
 async def get(
@@ -83,7 +83,7 @@ async def get(
 
 @router.put(
     "/{name}/auth",
-    name="Create an auth entity to access a Ceph filesystem",
+    name="Create an auth entity to access a filesystem",
     response_model=CephFSAuthorizationModel,
 )
 async def auth_put(

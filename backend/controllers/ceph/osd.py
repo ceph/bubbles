@@ -87,10 +87,10 @@ class OSD:
         try:
             self._pool_set(pool, "size", size, really=really)
         except Error as e:
-            logger.error(f"mon > unable to set pool size: {e}")
+            logger.error(f"Unable to set pool size: {e}")
 
         minsize = 2 if size > 2 else 1
         try:
             self._pool_set(pool, "min_size", minsize)
         except Error as e:
-            logger.error(f"mon > unable to set pool min_size: {e}")
+            logger.error(f"Unable to set pool min_size: {e}")

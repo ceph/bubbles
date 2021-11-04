@@ -53,12 +53,12 @@ class CephFS:
         try:
             _, out, _ = self._mgr.check_mon_command(cmd)
         except MonCommandFailed as e:
-            raise Error(e)
+            raise Error(f"Cannot create filesystem '{name}': {e}")
 
         for fs in self.ls():
             if name == fs.name:
                 return fs
-        raise NotFound(f"Unknown file system: {fs.name}")
+        raise Error(f"Cannot find newly created filesystem '{name}'")
 
     def ls(self) -> List[CephFSListEntryModel]:
         try:
