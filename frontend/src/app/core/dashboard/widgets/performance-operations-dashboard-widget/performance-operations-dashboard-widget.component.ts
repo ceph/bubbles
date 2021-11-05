@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
 import { EChartsOption } from 'echarts';
-import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 
 import { ClusterStatus } from '~/app/shared/services/api/cluster.service';
@@ -45,6 +44,7 @@ export class PerformanceOperationsDashboardWidgetComponent {
       }
     ]
   };
+  updateOptions: EChartsOption = {};
 
   constructor(public clusterStatusService: ClusterStatusService) {}
 
@@ -53,25 +53,31 @@ export class PerformanceOperationsDashboardWidgetComponent {
   }
 
   updateData(status: ClusterStatus) {
-    const iopsTotal = status.pgmap.read_op_per_sec + status.pgmap.write_op_per_sec;
-    _.set(this.options, 'title.text', iopsTotal);
-    _.set(this.options, 'series[0].data', [
-      {
-        name: `${TEXT('Read')}: ${status.pgmap.read_op_per_sec}/s`,
-        value: status.pgmap.read_op_per_sec,
-        itemStyle: {
-          color: '#009ccc'
-        }
+    const iopsTotal: number = status.pgmap.read_op_per_sec + status.pgmap.write_op_per_sec;
+    this.updateOptions = {
+      title: {
+        text: `${iopsTotal}`
       },
-      {
-        name: `${TEXT('Write')}: ${status.pgmap.write_op_per_sec}/s`,
-        value: status.pgmap.write_op_per_sec,
-        itemStyle: {
-          color: '#f58b1f'
+      series: [
+        {
+          data: [
+            {
+              name: `${TEXT('Read')}: ${status.pgmap.read_op_per_sec}/s`,
+              value: status.pgmap.read_op_per_sec,
+              itemStyle: {
+                color: '#009ccc'
+              }
+            },
+            {
+              name: `${TEXT('Write')}: ${status.pgmap.write_op_per_sec}/s`,
+              value: status.pgmap.write_op_per_sec,
+              itemStyle: {
+                color: '#f58b1f'
+              }
+            }
+          ]
         }
-      }
-    ]);
-    // Force change-detection to redraw the chart.
-    this.options = _.cloneDeep(this.options);
+      ]
+    };
   }
 }

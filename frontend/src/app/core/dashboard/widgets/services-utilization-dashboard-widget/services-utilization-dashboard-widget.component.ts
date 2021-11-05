@@ -48,6 +48,7 @@ export class ServicesUtilizationDashboardWidgetComponent {
       }
     ]
   };
+  updateOptions: EChartsOption = {};
   hasServices = false;
 
   constructor(private servicesService: ServicesService) {}
@@ -55,7 +56,7 @@ export class ServicesUtilizationDashboardWidgetComponent {
   updateData(services: Services) {
     this.hasServices = services.services.length > 0;
     if (this.hasServices) {
-      _.set(this.options, 'series[0].data', this.buildSeriesData(services));
+      this.updateOptions = { series: [{ data: this.buildSeriesData(services) }] };
     }
   }
 

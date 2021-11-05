@@ -46,6 +46,7 @@ export class PerformanceBytesDashboardWidgetComponent {
       }
     ]
   };
+  updateOptions: EChartsOption = {};
 
   constructor(public clusterStatusService: ClusterStatusService) {}
 
@@ -54,29 +55,35 @@ export class PerformanceBytesDashboardWidgetComponent {
   }
 
   updateData(status: ClusterStatus) {
-    const rwTotal = _.split(
+    const rwTotal: string[] = _.split(
       bytesToSize(status.pgmap.read_bytes_sec + status.pgmap.write_bytes_sec),
       ' '
     );
-    _.set(this.options, 'title.text', rwTotal[0]);
-    _.set(this.options, 'title.subtext', rwTotal[1]);
-    _.set(this.options, 'series[0].data', [
-      {
-        name: `${TEXT('Read')}: ${bytesToSize(status.pgmap.read_bytes_sec)}/s`,
-        value: status.pgmap.read_bytes_sec,
-        itemStyle: {
-          color: '#009ccc'
-        }
+    this.updateOptions = {
+      title: {
+        text: rwTotal[0],
+        subtext: rwTotal[1]
       },
-      {
-        name: `${TEXT('Write')}: ${bytesToSize(status.pgmap.write_bytes_sec)}/s`,
-        value: status.pgmap.write_bytes_sec,
-        itemStyle: {
-          color: '#f58b1f'
+      series: [
+        {
+          data: [
+            {
+              name: `${TEXT('Read')}: ${bytesToSize(status.pgmap.read_bytes_sec)}/s`,
+              value: status.pgmap.read_bytes_sec,
+              itemStyle: {
+                color: '#009ccc'
+              }
+            },
+            {
+              name: `${TEXT('Write')}: ${bytesToSize(status.pgmap.write_bytes_sec)}/s`,
+              value: status.pgmap.write_bytes_sec,
+              itemStyle: {
+                color: '#f58b1f'
+              }
+            }
+          ]
         }
-      }
-    ]);
-    // Force change-detection to redraw the chart.
-    this.options = _.cloneDeep(this.options);
+      ]
+    };
   }
 }
