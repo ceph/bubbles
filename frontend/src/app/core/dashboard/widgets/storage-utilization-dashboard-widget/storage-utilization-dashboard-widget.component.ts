@@ -46,6 +46,7 @@ export class StorageUtilizationDashboardWidgetComponent {
       }
     ]
   };
+  updateOptions: EChartsOption = {};
 
   constructor(private storageService: StorageService) {}
 
@@ -54,27 +55,33 @@ export class StorageUtilizationDashboardWidgetComponent {
   }
 
   updateData(stats: StorageStats) {
-    const total = _.split(bytesToSize(stats.total), ' ');
-    _.set(this.options, 'title.text', total[0]);
-    _.set(this.options, 'title.subtext', total[1]);
-    _.set(this.options, 'series[0].data', [
-      {
-        name: `${TEXT('Unallocated')}: ${bytesToSize(stats.unallocated)}`,
-        value: stats.unallocated,
-        itemStyle: {
-          color: '#009ccc'
-        }
+    const total: string[] = _.split(bytesToSize(stats.total), ' ');
+    this.updateOptions = {
+      title: {
+        text: total[0],
+        subtext: total[1]
       },
-      {
-        name: `${TEXT('Allocated')}: ${bytesToSize(stats.allocated)}`,
-        value: stats.allocated,
-        itemStyle: {
-          color: '#f58b1f'
+      series: [
+        {
+          data: [
+            {
+              name: `${TEXT('Unallocated')}: ${bytesToSize(stats.unallocated)}`,
+              value: stats.unallocated,
+              itemStyle: {
+                color: '#009ccc'
+              }
+            },
+            {
+              name: `${TEXT('Allocated')}: ${bytesToSize(stats.allocated)}`,
+              value: stats.allocated,
+              itemStyle: {
+                color: '#f58b1f'
+              }
+            }
+          ]
         }
-      }
-    ]);
-    // Force change-detection to redraw the chart.
-    this.options = _.cloneDeep(this.options);
+      ]
+    };
   }
 
   setHealthStatusIndicator(stats: StorageStats): WidgetHealthStatus {
