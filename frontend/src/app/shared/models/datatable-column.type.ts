@@ -48,6 +48,6 @@ export type DatatableColumn = {
   cellTemplateConfig?: any;
   cellTemplate?: TemplateRef<any>;
   pipe?: PipeTransform;
-  unsortable?: boolean;
+  sortable?: boolean; // Defaults to 'true'.
   align?: 'start' | 'center' | 'end';
 };
