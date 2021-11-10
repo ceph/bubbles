@@ -128,6 +128,7 @@
       <ng-container *ngFor="let item of items">
         <button *ngIf="item.type !== 'divider'"
                 ngbDropdownItem
+                [disabled]="item.disabled"
                 (click)="item.callback(row)">
           <span>{{ item.title | translate }}</span>
         </button>
