@@ -119,7 +119,8 @@
              let-items="items"
              let-row="row">
   <div ngbDropdown>
-    <button class="btn"
+    <button *ngIf="items.length"
+            class="btn"
             title="{{ 'Actions' | translate }}"
             ngbDropdownToggle>
       <i class="mdi mdi-dots-vertical"></i>
