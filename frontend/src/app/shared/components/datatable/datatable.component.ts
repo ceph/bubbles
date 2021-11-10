@@ -104,7 +104,7 @@ export class DatatableComponent implements OnInit, OnDestroy {
             case 'actionMenu':
               column.name = '';
               column.prop = '_action'; // Add a none existing name here.
-              column.sortable = true;
+              column.sortable = false;
               column.cols = 1;
               break;
           }
