@@ -102,6 +102,7 @@ export class DatatableComponent implements OnInit, OnDestroy {
               column.name = '';
               column.prop = '_action'; // Add a none existing name here.
               column.unsortable = true;
+              column.cols = 1;
               break;
           }
         }
@@ -229,7 +230,7 @@ export class DatatableComponent implements OnInit, OnDestroy {
   private colSanityCheck(availableCols: number, columnsToChange: number) {
     if (availableCols < 0 || (availableCols === 0 && columnsToChange >= 1)) {
       throw new Error(
-        'Only 12 cols can be used in one row by bootstrap, please redefine the "DatatableColumn.cols" values'
+        'Only 12 cols can be used in one row by Bootstrap, please redefine the "DatatableColumn.cols" values'
       );
     }
   }
