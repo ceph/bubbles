@@ -53,7 +53,7 @@ export class UsersPageComponent {
       {
         name: '',
         prop: '',
-        unsortable: true,
+        sortable: false,
         cellTemplateName: DatatableCellTemplateName.actionMenu,
         cellTemplateConfig: this.onActionMenu.bind(this)
       }
