@@ -14,18 +14,32 @@
 # pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false
 
 import asyncio
+import importlib
 import os
+import pathlib
+import pkgutil
 import sys
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from mgr_module import MgrModule
 
+import bubbles.extras
 from bubbles.backend.api import auth, cluster, host, services, storage, users
 from bubbles.backend.api.ceph import fs, nfs, osd
 from bubbles.bubbles import Bubbles
+
+
+def discover_extras() -> Dict:
+    extras_path = pathlib.Path(__file__).parent / "extras"
+    modules = pkgutil.iter_modules(
+        [str(extras_path.resolve())], bubbles.extras.__name__ + "."
+    )
+    return {
+        name: importlib.import_module(name) for finder, name, ispkg in modules
+    }
 
 
 class BubblesModule(MgrModule):
@@ -37,6 +51,8 @@ class BubblesModule(MgrModule):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
+        self.extras = discover_extras()
+        self.log.info("Extras discovered: %s", ", ".join(self.extras.keys()))
 
     async def _startup(self) -> None:
         self.log.info("Startup Bubbles")
@@ -59,6 +75,10 @@ class BubblesModule(MgrModule):
         )
         self.app.add_event_handler("startup", self._startup)
         self.app.add_event_handler("shutdown", self._shutdown)
+
+        for name, extra in self.extras.items():
+            self.log.info("Initialzing %s", name)
+            extra.init(self.app, self.api)
 
         # bubbles related endpoints
         self.api.include_router(services.router)
