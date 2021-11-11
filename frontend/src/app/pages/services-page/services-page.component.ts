@@ -10,6 +10,7 @@ import { finalize, map, switchMapTo } from 'rxjs/operators';
 import { DeclarativeFormModalComponent } from '~/app/core/modals/declarative-form/declarative-form-modal.component';
 import { bytesToSize, toBytes } from '~/app/functions.helper';
 import { translate } from '~/app/i18n.helper';
+import { PageStatus } from '~/app/shared/components/content-page/content-page.component';
 import { DialogComponent } from '~/app/shared/components/dialog/dialog.component';
 import { DatatableActionItem } from '~/app/shared/models/datatable-action-item.type';
 import {
@@ -43,10 +44,11 @@ export class ServicesPageComponent {
   @BlockUI()
   blockUI!: NgBlockUI;
 
-  loading = false;
-  firstLoadComplete = false;
+  pageStatus: PageStatus = PageStatus.none;
   data: ServiceInfo[] = [];
   columns: DatatableColumn[];
+
+  private firstLoadComplete = false;
 
   constructor(
     private servicesService: ServicesService,
@@ -248,11 +250,23 @@ export class ServicesPageComponent {
   }
 
   loadData(): void {
-    this.loading = true;
-    this.servicesService.list().subscribe((data: Services) => {
-      this.data = data.services;
-      this.loading = this.firstLoadComplete = true;
-    });
+    if (!this.firstLoadComplete) {
+      this.pageStatus = PageStatus.loading;
+    }
+    this.servicesService
+      .list()
+      .pipe(
+        finalize(() => {
+          this.firstLoadComplete = true;
+        })
+      )
+      .subscribe(
+        (data: Services) => {
+          this.data = data.services;
+          this.pageStatus = PageStatus.ready;
+        },
+        () => (this.pageStatus = PageStatus.loadingError)
+      );
   }
 
   onActionMenu(serviceInfo: ServiceInfo): DatatableActionItem[] {

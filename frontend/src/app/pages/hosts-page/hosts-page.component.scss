@@ -1,13 +1,9 @@
 @import 'styles.scss';
 
-.cb-hosts-page {
-  margin: $cb-margin;
+.page-actions {
+  margin-bottom: 8px;
 
-  .page-actions {
-    margin-bottom: 8px;
-
-    button {
-      @extend .btn-outline-default;
-    }
+  button {
+    @extend .btn-outline-default;
   }
 }
