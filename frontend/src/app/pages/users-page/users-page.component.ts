@@ -4,6 +4,7 @@ import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { finalize } from 'rxjs/operators';
 
+import { PageStatus } from '~/app/shared/components/content-page/content-page.component';
 import { DatatableActionItem } from '~/app/shared/models/datatable-action-item.type';
 import {
   DatatableCellTemplateName,
@@ -21,10 +22,11 @@ export class UsersPageComponent {
   @BlockUI()
   blockUI!: NgBlockUI;
 
-  loading = false;
-  firstLoadComplete = false;
+  pageStatus: PageStatus = PageStatus.none;
   data: User[] = [];
   columns: DatatableColumn[];
+
+  private firstLoadComplete = false;
 
   constructor(private usersService: UsersService, private router: Router) {
     this.columns = [
@@ -60,17 +62,23 @@ export class UsersPageComponent {
   }
 
   loadData(): void {
-    this.loading = true;
+    if (!this.firstLoadComplete) {
+      this.pageStatus = PageStatus.loading;
+    }
     this.usersService
       .list()
       .pipe(
         finalize(() => {
-          this.loading = this.firstLoadComplete = true;
+          this.firstLoadComplete = true;
         })
       )
-      .subscribe((data: User[]) => {
-        this.data = data;
-      });
+      .subscribe(
+        (data: User[]) => {
+          this.data = data;
+          this.pageStatus = PageStatus.ready;
+        },
+        () => (this.pageStatus = PageStatus.loadingError)
+      );
   }
 
   onAdd(): void {

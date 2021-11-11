@@ -1,17 +1,11 @@
-<div class="cb-hosts-page"
-     fxLayout="column">
-  <div class="cb-hosts-page-content">
-    <div *ngIf="!firstLoadComplete && loading"
-         class="progress">
-      <div class="progress-bar indeterminate"></div>
-    </div>
-    <cb-datatable [data]="data"
-                  [columns]="columns"
-                  [autoReload]="30000"
-                  (loadData)="loadData()">
-    </cb-datatable>
-  </div>
-</div>
+<cb-content-page [pageStatus]="pageStatus"
+                 fxLayout="column">
+  <cb-datatable [data]="data"
+                [columns]="columns"
+                [autoReload]="30000"
+                (loadData)="loadData()">
+  </cb-datatable>
+</cb-content-page>
 
 <ng-template #servicesTpl
              let-value="value">

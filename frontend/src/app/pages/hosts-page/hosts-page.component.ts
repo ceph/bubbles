@@ -2,6 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
 import { finalize } from 'rxjs/operators';
 
+import { PageStatus } from '~/app/shared/components/content-page/content-page.component';
 import {
   DatatableCellTemplateName,
   DatatableColumn
@@ -18,10 +19,11 @@ export class HostsPageComponent implements OnInit {
   @ViewChild('servicesTpl', { static: true })
   public servicesTpl?: TemplateRef<any>;
 
-  loading = false;
-  firstLoadComplete = false;
+  pageStatus: PageStatus = PageStatus.none;
   data: Host[] = [];
   columns: DatatableColumn[] = [];
+
+  private firstLoadComplete = false;
 
   constructor(
     private cephShortVersionPipe: CephShortVersionPipe,
@@ -57,16 +59,22 @@ export class HostsPageComponent implements OnInit {
   }
 
   loadData(): void {
-    this.loading = true;
+    if (!this.firstLoadComplete) {
+      this.pageStatus = PageStatus.loading;
+    }
     this.hostService
       .list()
       .pipe(
         finalize(() => {
-          this.loading = this.firstLoadComplete = true;
+          this.firstLoadComplete = true;
         })
       )
-      .subscribe((data) => {
-        this.data = data;
-      });
+      .subscribe(
+        (data) => {
+          this.data = data;
+          this.pageStatus = PageStatus.ready;
+        },
+        () => (this.pageStatus = PageStatus.loadingError)
+      );
   }
 }

@@ -1,5 +1,5 @@
-<div class="cb-users-page"
-     fxLayout="column">
+<cb-content-page [pageStatus]="pageStatus"
+                 fxLayout="column">
   <div class="page-actions"
        fxLayout="row"
        fxLayoutAlign="end center">
@@ -10,14 +10,10 @@
     </button>
   </div>
   <div class="cb-users-page-content">
-    <div *ngIf="!firstLoadComplete && loading"
-         class="progress">
-      <div class="progress-bar indeterminate"></div>
-    </div>
     <cb-datatable [data]="data"
                   [columns]="columns"
                   [autoReload]="15000"
                   (loadData)="loadData()">
     </cb-datatable>
   </div>
-</div>
+</cb-content-page>
