@@ -142,7 +142,7 @@ podman is setup, this command needs to run with root super powers because it
 will execute `buildah` and `podman` commands.
 
 ```
-    # sudo ./build-container.sh
+    # ./build-container.sh
 ```
 
 Running `podman images` should now show a `localhost/opensuse/bubbles` image
@@ -180,7 +180,7 @@ Deploying a three node Ceph cluster, bootstrapped by `cephadm`, becomes a
 trivial task:
 
 ```
-    kcli kcli create plan -f plan/cluster.yml -P ceph_dev_folder=/code/ceph -P registry=192.168.122.1:5000
+    kcli create plan -f plan/cluster.yml -P ceph_dev_folder=/code/ceph -P registry=192.168.122.1:5000
 ```
 
 Once `kcli` finishes deploying, one should be able to access the first node with
