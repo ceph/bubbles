@@ -91,7 +91,9 @@ the Ceph tree, such as
     mount --bind /home/foo/code/bubbles.git /home/foo/code/ceph/src/pybind/mgr/bubbles
 ```
 
-But this is a matter of taste, and it really doesn't matter in the end.
+But this is a matter of taste, and it really doesn't matter in the end. (Although
+warning: this can not be done by means of a symlink due to the way the
+shared filesystem mount works with libvirt).
 
 ## Deployment
 
