@@ -4,6 +4,7 @@ export PATH=/root/bin:$PATH
 mkdir /root/bin
 {% if ceph_dev_folder is defined %}
   cp /mnt/{{ ceph_dev_folder }}/src/cephadm/cephadm /root/bin/cephadm
+  sed -i 's/python3.6/python3.8/g' /root/bin/cephadm
 {% else %}
   pushd /root/bin
   curl --silent --remote-name \
