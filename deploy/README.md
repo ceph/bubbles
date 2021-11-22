@@ -161,9 +161,9 @@ Bubbles. This image will be based off the Ceph upstream's master container
 image, with additional dependencies we require (`fastapi`, `uvicorn`, etc)
 installed through `pip`.
 
-To do so, running the following should suffice. Note that, unless unprivileged
-podman is setup, this command needs to run with root super powers because it
-will execute `buildah` and `podman` commands.
+To do so, running the following should suffice. Note that you may be prompted
+for your password as various `buildah` and `podman` commands require sudo
+(unless unprivileged podman is setup).
 
 ```
     # ./build-container.sh

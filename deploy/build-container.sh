@@ -80,10 +80,6 @@ while [[ $# -gt 0 ]]; do
 
 done
 
-[[ $(id -u) -ne 0 ]] && ! $no_sudo && \
-  err "Must be run as root. Pass '--no-sudo' to run unprivileged." && \
-  exit 1
-
 [[ -z "${image_name}" ]] && \
   err "image name not specified" && \
   exit 1
