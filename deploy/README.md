@@ -95,6 +95,15 @@ But this is a matter of taste, and it really doesn't matter in the end. (Althoug
 warning: this can not be done by means of a symlink due to the way the
 shared filesystem mount works with libvirt).
 
+Since we are using the ceph dashboard module, this must also be pre-built in
+your ceph folder ahead of time. For example:
+
+```
+    cd /home/foo/code/ceph/src/pybind/mgr/dashboard/frontend
+    npm ci
+    npx ng build
+```
+
 ## Deployment
 
 ### How it works
