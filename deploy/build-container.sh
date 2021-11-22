@@ -33,14 +33,14 @@ EOF
 }
 
 mkdist() {
-  mkdir dist
+  mkdir -p dist/frontend
 
   pushd ../frontend
   npm ci || exit 1
   npx ng build \
     --output-hashing all \
-    --configuration production \
-    --output-path ../deploy/dist/frontend/dist || exit 1
+    --configuration production || exit 1
+  cp -R dist ../deploy/dist/frontend/
   popd
 
   pushd ..
