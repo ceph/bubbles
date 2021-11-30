@@ -28,6 +28,14 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Developer setup for non openSUSE based systems
+# Vagrant has to be used in order to build a bubbles image due to a
+# zypper openSUSE container bug, that won't be fixed.
+# https://bugzilla.opensuse.org/show_bug.cgi?id=1190670
+deploy/.vagrant/
+deploy/bubbles-image.tar
+deploy/load-image.sh
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.

@@ -1,0 +1,12 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "opensuse/Leap-15.2.x86_64"
+  config.vm.synced_folder "..", "/bubbles", type: "nfs"
+  config.vm.synced_folder "../../../../../", "/ceph", type: "nfs"
+  config.vm.provision "shell", inline: <<-SHELL
+#    cd /ceph/src/pybind/mgr/bubbles/deploy
+#    ./run-in-vagrant.sh
+  SHELL
+end

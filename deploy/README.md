@@ -95,6 +95,24 @@ But this is a matter of taste, and it really doesn't matter in the end.
 
 ## Deployment
 
+
+### Get started
+
+To run a cluster with a newly build image, run the following command and follow the instructions in the script:
+
+```
+    # ./dev-env.sh rebuild
+```
+
+To recreate your cluster run the following command and follow the instructions in the script:
+
+```
+    # ./dev-env.sh recreate
+```
+
+Continue reading to learn whats happening behind the scenes.
+
+
 ### How it works
 
 In order to run a development version of Bubbles, we will rely on a slight hack
@@ -145,9 +163,25 @@ will execute `buildah` and `podman` commands.
     # ./build-container.sh
 ```
 
-Running `podman images` should now show a `localhost/opensuse/bubbles` image
+Running `sudo podman images` should now show a `localhost/opensuse/bubbles` image
 tagged with `master`. The name is relevant because that's the image name and
 tag we'll be pulling to deploy with `cephadm`.
+
+If you use a distribution thats not openSUSE based, you will hit
+[the bug where zypper fails](https://bugzilla.opensuse.org/show_bug.cgi?id=1190670).
+To overcome this bug, you have to use vagrant. You have to do the following steps
+in order to get the image.
+
+```
+    vagrant up
+    vagrant ssh
+```
+
+Inside the machine do the following:
+```
+    cd /ceph/src/pybind/mgr/bubbles/deploy
+    ./run-in-vagrant.sh
+```
 
 
 ### Step 3: Push image to local registry
@@ -174,7 +208,9 @@ First, we need to check a few bits of information:
 
  2. IP address for the host's `libvirt` network, because we will need to point
  the guest VMs to the local registry we deployed before. Typically this will be
- a `virbr` interface. We will be assuming it's `192.168.122.1`.
+ a `virbr` interface. You can easily find the ip by running
+ `ip addr | grep virbr0 | grep -o "[0-9\.]\{13\}" | head -1`.
+ We will be assuming it's `192.168.122.1`.
 
 Deploying a three node Ceph cluster, bootstrapped by `cephadm`, becomes a
 trivial task:

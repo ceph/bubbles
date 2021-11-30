@@ -36,11 +36,11 @@ mkdist() {
   mkdir dist
 
   pushd ../frontend
-  npm ci || exit 1
+  npm ci
   npx ng build \
     --output-hashing all \
     --configuration production \
-    --output-path ../deploy/dist/frontend/dist || exit 1
+    --output-path ../deploy/dist/frontend/dist
   popd
 
   pushd ..
