@@ -71,8 +71,8 @@ Therefore, the `id_rsa.pub` key used by `kcli` will need to be added to
 ### podman
 
 To build the container image and run the registry, we are going to need podman,
-which should be installed through whatever package repository and tool one's
-distro uses.
+which should be installed in version 3.4.x or higher through whatever package
+repository and tool one's distro uses.
 
 
 ### Ceph
@@ -94,6 +94,24 @@ the Ceph tree, such as
 But this is a matter of taste, and it really doesn't matter in the end.
 
 ## Deployment
+
+
+### Get started
+
+To run a cluster with a newly build image, run the following command and follow the instructions in the script:
+
+```
+    # ./dev-env.sh --rebuild
+```
+
+To recreate your cluster run the following command and follow the instructions in the script:
+
+```
+    # ./dev-env.sh --recreate
+```
+
+Continue reading to learn whats happening behind the scenes.
+
 
 ### How it works
 
@@ -149,7 +167,6 @@ Running `podman images` should now show a `localhost/opensuse/bubbles` image
 tagged with `master`. The name is relevant because that's the image name and
 tag we'll be pulling to deploy with `cephadm`.
 
-
 ### Step 3: Push image to local registry
 
 Because we are running an insecure registry, we will need to account for that
@@ -174,7 +191,9 @@ First, we need to check a few bits of information:
 
  2. IP address for the host's `libvirt` network, because we will need to point
  the guest VMs to the local registry we deployed before. Typically this will be
- a `virbr` interface. We will be assuming it's `192.168.122.1`.
+ a `virbr` interface. You can easily find the ip by running
+ `ip addr | grep virbr0 | grep -o "[0-9\.]\{13\}" | head -1`.
+ We will be assuming it's `192.168.122.1`.
 
 Deploying a three node Ceph cluster, bootstrapped by `cephadm`, becomes a
 trivial task:
