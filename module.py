@@ -25,6 +25,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from mgr_module import MgrModule
+from mgr_util import build_url
 
 import bubbles.extras
 from bubbles.backend.api import auth, cluster, host, services, storage, users
@@ -108,6 +109,8 @@ class BubblesModule(MgrModule):
         host: str = "0.0.0.0",
         port: int = 1337,
     ) -> None:
+        self._announce_service(host, port)
+
         config = uvicorn.Config(app=self.app, host=host, port=port)
         config.setup_event_loop()
         server = uvicorn.Server(config=config)
@@ -120,6 +123,13 @@ class BubblesModule(MgrModule):
             loop.run_until_complete(server.serve())
         finally:
             loop.close()
+
+    def _announce_service(
+        self, host: str, port: int, scheme: str = "http"
+    ) -> None:
+        if host in ["::", "0.0.0.0"]:
+            host = self.get_mgr_ip()
+        self.set_uri(build_url(host, scheme=scheme, port=port, path="/"))
 
     def shutdown(self) -> None:
         self.log.info("Shutting down Bubbles server")

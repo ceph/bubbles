@@ -1,0 +1,3 @@
+from typing import Optional
+
+def build_url(host: str, scheme: Optional[str] = ..., port: Optional[int] = ..., path: str = ...) -> str: ...
