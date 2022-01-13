@@ -20,12 +20,14 @@ import { ClusterStatus } from '~/app/shared/services/api/cluster.service';
 import { AuthGuardService } from '~/app/shared/services/auth-guard.service';
 import { ClusterStatusService } from '~/app/shared/services/cluster-status.service';
 import { DialogService } from '~/app/shared/services/dialog.service';
+import { NotificationService } from '~/app/shared/services/notification.service';
 
 @Injectable()
 export class CephDashboardRedirectResolver implements Resolve<any> {
   constructor(
+    private clusterStatusService: ClusterStatusService,
     private dialogService: DialogService,
-    private clusterStatusService: ClusterStatusService
+    private notificationService: NotificationService
   ) {}
 
   resolve(route: ActivatedRouteSnapshot): any {
@@ -34,21 +36,24 @@ export class CephDashboardRedirectResolver implements Resolve<any> {
       this.clusterStatusService.status$.pipe(first()).subscribe((clusterStatus: ClusterStatus) => {
         const dashboardUrl: string | null = _.get(clusterStatus, 'mgrmap.services.dashboard', null);
         if (!_.isString(dashboardUrl)) {
-          return;
-        }
-        this.dialogService.open(
-          DialogComponent,
-          (res: boolean) => {
-            if (res) {
-              window.open(`${_.trimEnd(dashboardUrl, '/')}/#${url}`, '_blank');
+          this.notificationService.show(TEXT('Ceph Dashboard is not accessible.'), {
+            type: 'error'
+          });
+        } else {
+          this.dialogService.open(
+            DialogComponent,
+            (res: boolean) => {
+              if (res) {
+                window.open(`${_.trimEnd(dashboardUrl, '/')}/#${url}`, '_blank');
+              }
+            },
+            {
+              type: 'okCancel',
+              icon: 'info',
+              message: TEXT('This will redirect you to the Ceph Dashboard.')
             }
-          },
-          {
-            type: 'okCancel',
-            icon: 'info',
-            message: TEXT('This will redirect you to the Ceph Dashboard.')
-          }
-        );
+          );
+        }
       });
     }
     return EMPTY;
