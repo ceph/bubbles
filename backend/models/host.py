@@ -5,7 +5,7 @@
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
 #
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -15,11 +15,17 @@ class ServiceModel(BaseModel):
     id: str = Field(title="Service identifier")
 
 
+class HostSourcesModel(BaseModel):
+    ceph: bool
+    orchestrator: bool
+
+
 class HostModel(BaseModel):
     hostname: str = Field(title="Hostname")
     services: List[ServiceModel] = Field(title="Services related to the host")
     ceph_version: str = Field(title="Ceph version")
     addr: str = Field(title="Host address")
     labels: List[str] = Field(title="Labels related to the host")
-    service_type: str = Field(title="")
+    service_type: Optional[str] = Field(title="")
     status: str = Field(title="The status of the host")
+    sources: HostSourcesModel = Field(title="Host Sources")
