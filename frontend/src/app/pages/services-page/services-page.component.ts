@@ -187,7 +187,8 @@ export class ServicesPageComponent {
                         type: 'binary',
                         name: 'size',
                         label: TEXT('Estimated Required Capacity'),
-                        placeholder: TEXT('Enter the capacity of this service'),
+                        placeholder: TEXT('E.g. 10 GiB'),
+                        hint: TEXT('Enter the capacity of this service.'),
                         validators: {
                           required: true
                         },
