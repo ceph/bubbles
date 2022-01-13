@@ -44,7 +44,7 @@ export class HostsPageComponent implements OnInit {
       {
         name: TEXT('Labels'),
         prop: 'labels',
-        cellTemplateName: DatatableCellTemplateName.join
+        cellTemplateName: DatatableCellTemplateName.badge
       },
       {
         name: TEXT('Status'),

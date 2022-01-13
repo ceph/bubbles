@@ -8,14 +8,20 @@ export type Service = {
   id: string;
 };
 
+export type HostSources = {
+  ceph: boolean;
+  orchestrator: boolean;
+};
+
 export type Host = {
   hostname: string;
   services: Array<Service>;
   ceph_version: string;
   addr: string;
   labels: Array<string>;
-  service_type: string;
+  service_type?: string;
   status: string;
+  sources: HostSources;
 };
 
 @Injectable({
