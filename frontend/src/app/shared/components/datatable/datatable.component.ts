@@ -123,6 +123,7 @@ export class DatatableComponent implements OnInit, OnDestroy {
         _.defaultsDeep(column, {
           sortable: true
         });
+        column.css = [column.css, 'cb-text-no-overflow'].join(' ');
         if (_.isString(column.cellTemplateName)) {
           column.cellTemplate = this.cellTemplates[column.cellTemplateName];
           switch (column.cellTemplateName) {
@@ -131,6 +132,7 @@ export class DatatableComponent implements OnInit, OnDestroy {
               column.prop = '_action'; // Add a none existing name here.
               column.sortable = false;
               column.cols = 1;
+              column.css = '';
               break;
           }
         }
