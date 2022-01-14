@@ -14,46 +14,53 @@
 # pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false
 
 import asyncio
-import importlib
 import os
-import pathlib
-import pkgutil
 import sys
-from typing import Any, Dict, List, Optional
+from abc import ABC
+from typing import Any, List, Optional
 
 import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from mgr_module import MgrModule
+from mgr_module import HandleCommandResult, MgrModule, Option
 from mgr_util import build_url
 
-import bubbles.extras
+import bubbles.extras_loader as extras_loader
 from bubbles.backend.api import auth, cluster, host, services, storage, users
 from bubbles.backend.api.ceph import fs, nfs, osd
 from bubbles.bubbles import Bubbles
 
 
-def discover_extras() -> Dict:
-    extras_path = pathlib.Path(__file__).parent / "extras"
-    modules = pkgutil.iter_modules(
-        [str(extras_path.resolve())], bubbles.extras.__name__ + "."
-    )
-    return {
-        name: importlib.import_module(name) for finder, name, ispkg in modules
-    }
-
-
 class BubblesModule(MgrModule):
-    MODULE_OPTIONS: List[Any] = []
+    MODULE_OPTIONS: List[Any] = [
+        Option(
+            "extras_autoreload_enabled",
+            type="bool",
+            default=False,
+            desc="Automatically reload extras on file change",
+        )
+    ]
     NATIVE_OPTIONS: List[Any] = []
+    # NOTE(marcel) Declare a catch all command handled by any Bubbles
+    # extra, as we can't declare commands dynamically
+    COMMANDS = [
+        {
+            "cmd": "bubbles-extra",
+            "desc": "Do something awesome",
+            "perm": "r",
+        }
+    ]
 
     app: Optional[FastAPI] = None
     api: Optional[FastAPI] = None
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self.extras = discover_extras()
-        self.log.info("Extras discovered: %s", ", ".join(self.extras.keys()))
+        self.extras = extras_loader.discover_extras()
+        self.log.info(
+            "Extras discovered: %s",
+            ", ".join(str(extra) for extra in self.extras),
+        )
 
     async def _startup(self) -> None:
         self.log.info("Startup Bubbles")
@@ -61,8 +68,19 @@ class BubblesModule(MgrModule):
         bubbles = Bubbles(self)
         self.api.state.bubbles = bubbles
         await bubbles.start()
+        for extra in self.extras:
+            self.log.info("Initialzing %s", extra)
+            extra.obj.start(self)
+        if self.get_module_option("extras_autoreload_enabled"):
+            extras_loader.enable_extras_autoreload(
+                self.extras, lambda: [self], self.log
+            )
 
     async def _shutdown(self) -> None:
+        self.log.info("Shutting down Bubbles extras")
+        for extra in self.extras:
+            self.log.info("Initialzing %s", extra)
+            extra.obj.shutdown()
         self.log.info("Shutdown Bubbles")
         assert self.api
         bubbles: Bubbles = self.api.state.bubbles
@@ -77,11 +95,6 @@ class BubblesModule(MgrModule):
         self.app.add_event_handler("startup", self._startup)
         self.app.add_event_handler("shutdown", self._shutdown)
 
-        for name, extra in self.extras.items():
-            self.log.info("Initialzing %s", name)
-            extra.init(self.app, self.api)
-
-        # bubbles related endpoints
         self.api.include_router(services.router)
         self.api.include_router(cluster.router)
         self.api.include_router(storage.router)
@@ -139,3 +152,29 @@ class BubblesModule(MgrModule):
     def notify(self, notify_type: str, notify_id: str) -> None:
         # self.log.debug(f"recv notify {notify_type}")
         pass
+
+    def handle_command(
+        self, inbuf: Optional[str], cmd: dict
+    ) -> HandleCommandResult:
+        self.log.info("Command incoming: %r", cmd)
+        if cmd["prefix"].startswith("bubbles-extra"):
+            for extra in self.extras:
+                self.log.info("Checking extra handler %s", extra)
+                try:
+                    extra.obj.handle_command(inbuf, cmd)
+                except NotImplementedError:
+                    pass
+        raise NotImplementedError()
+
+
+class BubblesExtra(ABC):
+    def start(self, mgr: BubblesModule) -> None:
+        raise NotImplementedError()
+
+    def shutdown(self) -> None:
+        raise NotImplementedError()
+
+    def handle_command(
+        self, inbuf: Optional[str], cmd: dict
+    ) -> HandleCommandResult:
+        raise NotImplementedError()
