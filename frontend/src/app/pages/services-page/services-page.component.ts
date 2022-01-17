@@ -25,7 +25,7 @@ import {
 import { BytesToSizePipe } from '~/app/shared/pipes/bytes-to-size.pipe';
 import { RedundancyLevelPipe } from '~/app/shared/pipes/redundancy-level.pipe';
 import { CephFSAuthorization, CephfsService } from '~/app/shared/services/api/cephfs.service';
-import { Inventory, LocalNodeService } from '~/app/shared/services/api/local.service';
+import { Host, HostService } from '~/app/shared/services/api/host.service';
 import {
   ServiceInfo,
   Services,
@@ -56,7 +56,7 @@ export class ServicesPageComponent {
     private redundancyLevelPipe: RedundancyLevelPipe,
     private cephfsService: CephfsService,
     private dialogService: DialogService,
-    private localNodeService: LocalNodeService,
+    private hostService: HostService,
     private storageService: StorageService
   ) {
     this.columns = [
@@ -282,32 +282,32 @@ export class ServicesPageComponent {
           {
             title: TEXT('Show credentials'),
             callback: (data: DatatableData) => {
-              this.cephfsService.authorization(data.name).subscribe((auth: CephFSAuthorization) => {
-                // this.dialogService.open(DeclarativeFormModalComponent, undefined, {
-                //   width: '40%',
-                //   data: {
-                //     title: 'Credentials',
-                //     fields: [
-                //       {
-                //         type: 'text',
-                //         name: 'entity',
-                //         label: TEXT('Entity'),
-                //         value: auth.entity,
-                //         readonly: true
-                //       },
-                //       {
-                //         type: 'password',
-                //         name: 'key',
-                //         label: TEXT('Key'),
-                //         value: auth.key,
-                //         readonly: true,
-                //         hasCopyToClipboardButton: true
-                //       }
-                //     ],
-                //     submitButtonVisible: false,
-                //     cancelButtonText: TEXT('Close')
-                //   }
-                // });
+              this.cephfsService.authorization(data.name).subscribe((res: CephFSAuthorization) => {
+                this.dialogService.open(DeclarativeFormModalComponent, undefined, {
+                  title: TEXT('Credentials'),
+                  formConfig: {
+                    fields: [
+                      {
+                        type: 'text',
+                        name: 'entity',
+                        label: TEXT('Entity'),
+                        value: res.entity,
+                        readonly: true,
+                        hasCopyToClipboardButton: true
+                      },
+                      {
+                        type: 'password',
+                        name: 'key',
+                        label: TEXT('Key'),
+                        value: res.key,
+                        readonly: true,
+                        hasCopyToClipboardButton: true
+                      }
+                    ]
+                  },
+                  submitButtonVisible: false,
+                  cancelButtonText: TEXT('Close')
+                });
               });
             }
           },
@@ -316,11 +316,11 @@ export class ServicesPageComponent {
             callback: (data: DatatableData) => {
               forkJoin({
                 auth: this.cephfsService.authorization(data.name),
-                inventory: this.localNodeService.inventory()
+                hosts: this.hostService.list()
               }).subscribe((res) => {
-                const ipAddr = this.getIpAddrFromInventory(res.inventory);
-                const secret = res.auth.key;
-                const name = res.auth.entity.replace('client.', '');
+                const ipAddr: string = this.getIpAddrFromHosts(res.hosts);
+                const secret: string = res.auth.key;
+                const name: string = res.auth.entity.replace('client.', '');
                 const cmdArgs: Array<string> = [
                   'mount',
                   '-t',
@@ -352,8 +352,8 @@ export class ServicesPageComponent {
           {
             title: TEXT('Show mount command'),
             callback: (data: DatatableData) => {
-              this.localNodeService.inventory().subscribe((res) => {
-                const ipAddr = this.getIpAddrFromInventory(res);
+              this.hostService.list().subscribe((res) => {
+                const ipAddr = this.getIpAddrFromHosts(res);
                 const cmdArgs: Array<string> = [
                   'mount',
                   '-t',
@@ -406,19 +406,17 @@ export class ServicesPageComponent {
   }
 
   /**
-   * Helper method to get the IP address from the inventory. If not
-   * found, `<IPADDR>` will be returned instead.
+   * Helper method to get the first found IP address in the list of hosts.
+   * If not found, `<IPADDR>` will be returned instead.
    *
-   * @param inventory The node's inventory.
+   * @param hosts The clusters's list of hosts.
    * @private
    */
-  private getIpAddrFromInventory(inventory: Inventory): string {
-    const physicalIfs = _.values(_.filter(inventory.nics, ['iftype', 'physical']));
-    let ipAddr = _.get(_.first(physicalIfs), 'ipv4_address', '<IPADDR>') as string;
-    if (ipAddr.indexOf('/')) {
-      ipAddr = ipAddr.slice(0, ipAddr.indexOf('/'));
+  private getIpAddrFromHosts(hosts: Array<Host>): string {
+    if (!hosts.length) {
+      return '<IPADDR>';
     }
-    return ipAddr;
+    return hosts[0].addr;
   }
 
   private showMountCmdDialog(cmdArgs: Array<string>): void {
