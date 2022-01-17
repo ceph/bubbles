@@ -1,0 +1,19 @@
+<cb-content-page [pageStatus]="pageStatus"
+                 fxLayout="column">
+  <div class="page-actions"
+       fxLayout="row"
+       fxLayoutAlign="end center">
+    <button type="button"
+            class="btn btn-primary"
+            [routerLink]="'/services/object/users/create'">
+      <span translate>Add</span>
+    </button>
+  </div>
+  <div class="cb-rgw-users-page-content">
+    <cb-datatable [data]="data"
+                  [columns]="columns"
+                  [autoReload]="15000"
+                  (loadData)="loadData()">
+    </cb-datatable>
+  </div>
+</cb-content-page>

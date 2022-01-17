@@ -24,7 +24,7 @@ export class UsersPageComponent {
 
   pageStatus: PageStatus = PageStatus.none;
   data: User[] = [];
-  columns: DatatableColumn[];
+  columns: DatatableColumn[] = [];
 
   private firstLoadComplete = false;
 
@@ -85,7 +85,7 @@ export class UsersPageComponent {
     this.navigateTo('/user-management/users/create');
   }
 
-  onActionMenu(user: User): DatatableActionItem[] {
+  private onActionMenu(user: User): DatatableActionItem[] {
     const result: DatatableActionItem[] = [
       {
         title: TEXT('Edit'),

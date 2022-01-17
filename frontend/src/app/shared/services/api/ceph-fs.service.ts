@@ -17,7 +17,7 @@ export type CephFSAuthorization = {
 @Injectable({
   providedIn: 'root'
 })
-export class CephfsService {
+export class CephFsService {
   private url = 'api/ceph/fs';
 
   constructor(private http: HttpClient) {}

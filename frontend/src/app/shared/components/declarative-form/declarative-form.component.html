@@ -155,6 +155,11 @@
                     class="invalid-feedback">
                 {{ formGroup.getError('custom', field.name) | translate }}
               </span>
+              <span *ngIf="showError(field.name, frm, 'email')"
+                    class="invalid-feedback"
+                    translate>
+                This field must be a valid email address.
+              </span>
             </div>
           </ng-template>
 
@@ -209,6 +214,11 @@
               <span *ngIf="showError(field.name, frm, 'custom')"
                     class="invalid-feedback">
                 {{ formGroup.getError('custom', field.name) | translate }}
+              </span>
+              <span *ngIf="showError(field.name, frm, 'pattern')"
+                    class="invalid-feedback"
+                    translate>
+                The value is invalid.
               </span>
             </div>
           </ng-template>
@@ -281,7 +291,7 @@
                       [ngClass]="{'is-invalid': showError(field.name, frm)}"
                       [formControlName]="field.name"
                       [required]="field.validators?.required!">
-                <option *ngFor="let option of field.options | keyvalue"
+                <option *ngFor="let option of field.options | keyvalue:noOrder"
                         [value]="option.key"
                         [selected]="option.key === field.value">
                   {{ option.value | toString | translate }}
