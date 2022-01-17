@@ -20,7 +20,7 @@ import bubbles.extras
 import logging
 from typing import Iterable, Callable, Any, List, Optional, Protocol, cast, Type
 from types import ModuleType
-from bubbles.module import BubblesExtra
+from bubbles.extras_interface import BubblesExtra
 
 
 class BubblesExtraProto(Protocol):

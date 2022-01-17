@@ -18,7 +18,7 @@ from mgr_module import MgrModule, HandleCommandResult
 import json
 from fastapi import APIRouter
 
-from bubbles.module import BubblesExtra
+from bubbles.extras_interface import BubblesExtra
 
 
 class HelloWorldExtra(BubblesExtra):

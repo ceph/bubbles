@@ -16,7 +16,6 @@
 import asyncio
 import os
 import sys
-from abc import ABC
 from typing import Any, List, Optional
 
 import uvicorn
@@ -164,17 +163,4 @@ class BubblesModule(MgrModule):
                     extra.obj.handle_command(inbuf, cmd)
                 except NotImplementedError:
                     pass
-        raise NotImplementedError()
-
-
-class BubblesExtra(ABC):
-    def start(self, mgr: BubblesModule) -> None:
-        raise NotImplementedError()
-
-    def shutdown(self) -> None:
-        raise NotImplementedError()
-
-    def handle_command(
-        self, inbuf: Optional[str], cmd: dict
-    ) -> HandleCommandResult:
         raise NotImplementedError()
