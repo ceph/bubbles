@@ -123,7 +123,7 @@ export class DatatableComponent implements OnInit, OnDestroy {
         _.defaultsDeep(column, {
           sortable: true
         });
-        column.css = [column.css, 'cb-text-no-overflow'].join(' ');
+        column.css = ['cb-text-no-overflow', column.css].join(' ').trim();
         if (_.isString(column.cellTemplateName)) {
           column.cellTemplate = this.cellTemplates[column.cellTemplateName];
           switch (column.cellTemplateName) {
