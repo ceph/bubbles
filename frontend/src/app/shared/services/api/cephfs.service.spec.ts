@@ -22,7 +22,7 @@ describe('CephfsService', () => {
 
   it('should call authorization', () => {
     service.authorization('foo').subscribe();
-    const req = httpTesting.expectOne('api/services/cephfs/auth/foo');
+    const req = httpTesting.expectOne('api/ceph/fs/foo/auth');
     expect(req.request.method).toBe('GET');
   });
 });

@@ -18,11 +18,11 @@ export type CephFSAuthorization = {
   providedIn: 'root'
 })
 export class CephfsService {
-  private url = 'api/services/cephfs';
+  private url = 'api/ceph/fs';
 
   constructor(private http: HttpClient) {}
 
   public authorization(name: string): Observable<CephFSAuthorization> {
-    return this.http.get<CephFSAuthorization>(`${this.url}/auth/${name}`);
+    return this.http.get<CephFSAuthorization>(`${this.url}/${name}/auth`);
   }
 }
