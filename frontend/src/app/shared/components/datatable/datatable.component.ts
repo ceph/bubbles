@@ -49,14 +49,6 @@ export class DatatableComponent implements OnInit, OnDestroy {
   badgeTpl?: TemplateRef<any>;
 
   @Input()
-  get data(): DatatableData[] {
-    return this._data;
-  }
-  set data(data: DatatableData[]) {
-    this._data = data;
-  }
-
-  @Input()
   columns: DatatableColumn[] = [];
 
   // Set to 0 to disable pagination.
@@ -114,6 +106,26 @@ export class DatatableComponent implements OnInit, OnDestroy {
   private tableData: DatatableData[] = [];
 
   constructor(private ngZone: NgZone) {}
+
+  @Input()
+  get data(): DatatableData[] {
+    return this._data;
+  }
+  set data(data: DatatableData[]) {
+    this._data = data;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  get filteredData(): DatatableData[] {
+    const filtered = _.orderBy(this.data, [this.sortHeader], [this.sortDirection]).slice(
+      (this.page - 1) * this.pageSize,
+      (this.page - 1) * this.pageSize + this.pageSize
+    );
+    if (!_.isEqual(filtered, this.tableData)) {
+      this.tableData = filtered;
+    }
+    return this.tableData;
+  }
 
   ngOnInit(): void {
     this.initTemplates();
@@ -253,17 +265,6 @@ export class DatatableComponent implements OnInit, OnDestroy {
   reloadData(): void {
     this.loadData.emit();
     this.updateSelection();
-  }
-
-  get filteredData(): DatatableData[] {
-    const filtered = _.orderBy(this.data, [this.sortHeader], [this.sortDirection]).slice(
-      (this.page - 1) * this.pageSize,
-      (this.page - 1) * this.pageSize + this.pageSize
-    );
-    if (!_.isEqual(filtered, this.tableData)) {
-      this.tableData = filtered;
-    }
-    return this.tableData;
   }
 
   onPageSizeChange(pageSize: number): void {
