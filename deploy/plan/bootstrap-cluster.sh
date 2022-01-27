@@ -14,10 +14,9 @@ mkdir /root/bin
 chmod +x /root/bin/cephadm
 mkdir -p /etc/ceph
 mon_ip=$(ifconfig eth0  | grep 'inet ' | awk '{ print $2}')
+podman pull --tls-verify=false \
+  docker://{{ registry }}/opensuse/bubbles:master
 {% if ceph_dev_folder is defined %}
-  podman pull --tls-verify=false \
-    docker://{{ registry }}/opensuse/bubbles:master
-
   cephadm --image {{ registry }}/opensuse/bubbles:master \
     bootstrap \
     --skip-pull \
@@ -27,9 +26,6 @@ mon_ip=$(ifconfig eth0  | grep 'inet ' | awk '{ print $2}')
     --dashboard-password-noupdate \
     --shared_ceph_folder /mnt/{{ ceph_dev_folder }}
 {% else %}
-  podman pull --tls-verify=false \
-    docker://{{ registry }}/opensuse/bubbles:master
-
   cephadm --image {{registry}}/opensuse/bubbles:master \
     bootstrap \
     --skip-pull \

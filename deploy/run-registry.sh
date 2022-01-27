@@ -15,6 +15,10 @@ EOF
 port=5000
 storage=/var/lib/registry
 
+[[ $(id -u) -ne 0 ]] && \
+  echo "error: Must be run as root." && \
+  exit 1
+
 while [[ $# -gt 0 ]]; do
   case $1 in
     -p|--port)
@@ -51,8 +55,7 @@ done
   echo "error: storage path at '${storage}' does not exist" >/dev/stderr && \
   exit 1
 
-sudo podman run --privileged -d --name registry -p 5000:${port} \
+podman run --privileged -d --name registry -p 5000:${port} \
   -v ${storage}:/var/lib/registry \
   --restart=always \
   registry:2
-

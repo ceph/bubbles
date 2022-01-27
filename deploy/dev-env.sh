@@ -34,12 +34,12 @@ step1_run_local_registry(){
   registry_is_running=$(sudo podman ps | grep "registry:2" || :)
   if [ -z "$registry_is_running" ]; then
     sudo mkdir -p /var/lib/registry
-    ./run-registry.sh
+    sudo ./run-registry.sh
   fi
 }
 
 step2_build_container_image(){
-  ./build-container.sh --force --no-registry-tls --registry docker://127.0.0.1:5000
+  buildah unshare ./build-container.sh --force --no-registry-tls --registry docker://127.0.0.1:5000
 }
 
 prepare_kcli(){
@@ -111,4 +111,5 @@ case "$1" in
   *)
     usage
     exit 0
+    ;;
 esac

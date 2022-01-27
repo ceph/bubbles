@@ -80,10 +80,6 @@ while [[ $# -gt 0 ]]; do
 
 done
 
-[[ $(id -u) -ne 0 ]] && ! $no_sudo && \
-  err "Must be run as root. Pass '--no-sudo' to run unprivileged." && \
-  exit 1
-
 [[ -z "${image_name}" ]] && \
   err "image name not specified" && \
   exit 1
@@ -108,25 +104,25 @@ elif [[ ! -d "dist" ]]; then
   exit 1
 fi
 
-ctr=$(sudo buildah from \
+ctr=$(buildah from \
   registry.opensuse.org/filesystems/ceph/master/upstream/images/opensuse/ceph/ceph:latest)
 
 [[ -z "${ctr}" ]] && err "error obtaining base container" && exit 1
 
-sudo buildah run ${ctr} zypper install -y python38-pip || exit 1
-sudo buildah run ${ctr} pip install $(cat ../requirements.txt) || exit 1
+buildah run ${ctr} zypper install -y python38-pip || exit 1
+buildah run ${ctr} pip install $(cat ../requirements.txt) || exit 1
 
-mnt=$(sudo buildah mount ${ctr})
+mnt=$(buildah mount ${ctr})
 [[ -z "${mnt}" ]] && err "error mounting container" && exit 1
 
-sudo cp -R dist/ ${mnt}/usr/share/ceph/mgr/bubbles || exit 1
+cp -R dist/ ${mnt}/usr/share/ceph/mgr/bubbles || exit 1
 
-sudo buildah unmount ${ctr} || exit 1
-sudo buildah commit ${ctr} ${image_name} || exit 1
-sudo buildah rm ${ctr} || exit 1
+buildah unmount ${ctr} || exit 1
+buildah commit ${ctr} ${image_name} || exit 1
+buildah rm ${ctr} || exit 1
 
 if $has_registry ; then
-  sudo podman push ${registry_args} \
+  podman push ${registry_args} \
     localhost/${image_name} ${registry}/${image_name}
 fi
 
