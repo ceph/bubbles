@@ -4,6 +4,7 @@ export PATH=/root/bin:$PATH
 mkdir /root/bin
 {% if ceph_dev_folder is defined %}
   cp /mnt/{{ ceph_dev_folder }}/src/cephadm/cephadm /root/bin/cephadm
+  sed -i 's/python3.6/python3.8/g' /root/bin/cephadm
 {% else %}
   pushd /root/bin
   curl --silent --remote-name \
@@ -13,7 +14,7 @@ mkdir /root/bin
 {% endif %}
 chmod +x /root/bin/cephadm
 mkdir -p /etc/ceph
-mon_ip=$(ifconfig eth0  | grep 'inet ' | awk '{ print $2}')
+mon_ip=$(ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
 {% if ceph_dev_folder is defined %}
   podman pull --tls-verify=false \
     docker://{{ registry }}/opensuse/bubbles:master

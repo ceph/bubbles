@@ -91,7 +91,31 @@ the Ceph tree, such as
     mount --bind /home/foo/code/bubbles.git /home/foo/code/ceph/src/pybind/mgr/bubbles
 ```
 
-But this is a matter of taste, and it really doesn't matter in the end.
+But this is a matter of taste, and it really doesn't matter in the end. (Although
+warning: this can not be done by means of a symlink due to the way the
+shared filesystem mount works with libvirt).
+
+Since we are using the ceph dashboard module, this must also be pre-built in
+your ceph folder ahead of time. For example:
+
+```
+    cd /home/foo/code/ceph/src/pybind/mgr/dashboard/frontend
+    npm ci
+    npx ng build
+```
+
+
+### Build requirements
+
+The following packages are required on openSUSE Tumbleweed for building the
+container:
+
+```
+    sudo zypper install git podman libvirt python38-devel python38-libvirt-python python38-pip buildah npm16
+    [sudo] pip install kcli
+```
+
+(You could also place kcli into a venv if preferred).
 
 ## Deployment
 
@@ -155,9 +179,9 @@ Bubbles. This image will be based off the Ceph upstream's master container
 image, with additional dependencies we require (`fastapi`, `uvicorn`, etc)
 installed through `pip`.
 
-To do so, running the following should suffice. Note that, unless unprivileged
-podman is setup, this command needs to run with root super powers because it
-will execute `buildah` and `podman` commands.
+To do so, running the following should suffice. Note that you may be prompted
+for your password as various `buildah` and `podman` commands require sudo
+(unless unprivileged podman is setup).
 
 ```
     # ./build-container.sh
@@ -194,6 +218,12 @@ First, we need to check a few bits of information:
  a `virbr` interface. You can easily find the ip by running
  `ip addr | grep virbr0 | grep -o "[0-9\.]\{13\}" | head -1`.
  We will be assuming it's `192.168.122.1`.
+
+ 3. An SSH keypair in $HOME/.ssh/[id_rsa|id_rsa.pub|id_dsa|id_dsa.pub] or kcli
+ configured to set up keys elsewhere.
+
+ 4. Have your user in the appropriate `libvirtd` group, or run the following
+ with `sudo`.
 
 Deploying a three node Ceph cluster, bootstrapped by `cephadm`, becomes a
 trivial task:
@@ -233,7 +263,7 @@ default, the plan deploys VMs with a single NIC, so it should be easy to spot.
 Alternatively, one can run
 
 ```
-    # ifconfig eth0 | grep 'inet ' | awk '{print $2}'
+    # ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1
 ```
 
 Which will provide the configured IP address for the single NIC available in the

@@ -33,14 +33,14 @@ EOF
 }
 
 mkdist() {
-  mkdir dist
+  mkdir -p dist/frontend
 
   pushd ../frontend
   npm ci || exit 1
   npx ng build \
     --output-hashing all \
-    --configuration production \
-    --output-path ../deploy/dist/frontend/dist || exit 1
+    --configuration production || exit 1
+  cp -R dist ../deploy/dist/frontend/
   popd
 
   pushd ..
@@ -79,10 +79,6 @@ while [[ $# -gt 0 ]]; do
   shift 1
 
 done
-
-[[ $(id -u) -ne 0 ]] && ! $no_sudo && \
-  err "Must be run as root. Pass '--no-sudo' to run unprivileged." && \
-  exit 1
 
 [[ -z "${image_name}" ]] && \
   err "image name not specified" && \
