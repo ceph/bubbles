@@ -13,6 +13,8 @@ import { EmptyPageComponent } from '~/app/pages/empty-page/empty-page.component'
 import { HostsPageComponent } from '~/app/pages/hosts-page/hosts-page.component';
 import { LoginPageComponent } from '~/app/pages/login-page/login-page.component';
 import { NotFoundPageComponent } from '~/app/pages/not-found-page/not-found-page.component';
+import { RgwUserPageComponent } from '~/app/pages/services-page/rgw/rgw-user-page/rgw-user-page.component';
+import { RgwUsersPageComponent } from '~/app/pages/services-page/rgw/rgw-users-page/rgw-users-page.component';
 import { ServicesPageComponent } from '~/app/pages/services-page/services-page.component';
 import { UsersPageComponent } from '~/app/pages/users-page/users-page.component';
 import { DialogComponent } from '~/app/shared/components/dialog/dialog.component';
@@ -92,7 +94,40 @@ const routes: Routes = [
         data: { breadcrumb: TEXT('Services') },
         canActivate: [AuthGuardService],
         canActivateChild: [AuthGuardService],
-        component: ServicesPageComponent
+        children: [
+          { path: '', component: ServicesPageComponent },
+          {
+            path: 'object',
+            data: { breadcrumb: TEXT('Object') },
+            children: [
+              {
+                path: '',
+                pathMatch: 'full',
+                redirectTo: '/services'
+              },
+              {
+                path: 'users',
+                data: { breadcrumb: TEXT('Users') },
+                children: [
+                  {
+                    path: '',
+                    component: RgwUsersPageComponent
+                  },
+                  {
+                    path: 'create',
+                    data: { breadcrumb: TEXT('Create') },
+                    component: RgwUserPageComponent
+                  },
+                  {
+                    path: 'edit/:name',
+                    data: { breadcrumb: TEXT('Edit') },
+                    component: RgwUserPageComponent
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
   },

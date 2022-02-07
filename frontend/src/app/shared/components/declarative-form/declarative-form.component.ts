@@ -1,5 +1,5 @@
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   AsyncValidatorFn,
@@ -34,7 +34,7 @@ let nextUniqueId = 0;
   templateUrl: './declarative-form.component.html',
   styleUrls: ['./declarative-form.component.scss']
 })
-export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDestroy {
+export class DeclarativeFormComponent implements AfterViewInit, DeclarativeForm, OnInit, OnDestroy {
   @Input()
   config?: DeclarativeFormConfig;
 
@@ -93,6 +93,15 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
         switch (field.validators.patternType) {
           case 'hostAddress':
             validators.push(CbValidators.hostAddress());
+            break;
+          case 'email':
+            validators.push(Validators.email);
+            break;
+          case 'numeric':
+            validators.push(Validators.pattern(/^[-]?[0-9]+$/i));
+            break;
+          case 'decimal':
+            validators.push(Validators.pattern(/^[-]?[0-9]+(.[0-9]+)?$/i));
             break;
         }
       }
@@ -154,6 +163,10 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
         }
       }
     );
+  }
+
+  ngAfterViewInit(): void {
+    const fields: Array<FormFieldConfig> = this.getFields();
     // Initialize field 'modifiers' that are applied when the specified
     // constraint succeeds.
     _.forEach(
@@ -172,14 +185,14 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
               })
             );
           });
-          // Finally apply the modifier to the form field.
+          // Finally, apply the modifier to the form field.
           this.applyModifier(field, modifier);
         });
       }
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
@@ -244,6 +257,10 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
       : false;
   }
 
+  noOrder(): number {
+    return 0;
+  }
+
   private getFields(): Array<FormFieldConfig> {
     const flatten = (fields: Array<FormFieldConfig>): Array<FormFieldConfig> =>
       _.flatMap(
@@ -275,6 +292,8 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
     const successful = ConstraintService.test(modifier.constraint, this.values);
     const opposite = _.defaultTo(modifier?.opposite, true);
     const control: AbstractControl | null = this.getControl(field.name!);
+    // @ts-ignore
+    const element: HTMLElement | undefined = control?.nativeElement;
     switch (modifier.type) {
       case 'readonly':
         if (successful) {
@@ -287,6 +306,16 @@ export class DeclarativeFormComponent implements DeclarativeForm, OnInit, OnDest
       case 'value':
         if (successful) {
           control?.setValue(modifier.data);
+        }
+        break;
+      case 'hidden':
+        if (!_.isUndefined(element)) {
+          if (successful) {
+            element.parentElement!.style.display = 'none';
+          }
+          if (!successful && opposite) {
+            element.parentElement!.style.display = 'flex';
+          }
         }
         break;
     }

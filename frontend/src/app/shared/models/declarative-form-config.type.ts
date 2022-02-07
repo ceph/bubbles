@@ -3,7 +3,7 @@ import { AbstractControl, AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { Constraint } from '~/app/shared/models/constraint.type';
 
 export type FormFieldModifier = {
-  type: 'readonly' | 'value';
+  type: 'readonly' | 'value' | 'hidden';
   constraint: Constraint;
   // Apply the opposite type, e.g. `editable` for `readonly`,
   // if the constraint is falsy. Defaults to `true`.
@@ -45,7 +45,7 @@ export type FormFieldConfig = {
     required?: boolean;
     requiredIf?: Constraint;
     pattern?: string | RegExp;
-    patternType?: 'hostAddress';
+    patternType?: 'hostAddress' | 'email' | 'numeric' | 'decimal';
     constraint?: {
       constraint: Constraint;
       errorMessage: string;
@@ -68,7 +68,7 @@ export type FormFieldConfig = {
   // --- text | password ---
   hasCopyToClipboardButton?: boolean;
 
-  // --- dropdown ---
+  // --- select ---
   options?: Record<any, string>;
 
   // --- container ---

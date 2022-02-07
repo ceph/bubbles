@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
 import { ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Router } from '@angular/router';
 import { marker as TEXT } from '@biesbjerg/ngx-translate-extract-marker';
 import * as _ from 'lodash';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
@@ -24,7 +25,7 @@ import {
 } from '~/app/shared/models/declarative-form-config.type';
 import { BytesToSizePipe } from '~/app/shared/pipes/bytes-to-size.pipe';
 import { RedundancyLevelPipe } from '~/app/shared/pipes/redundancy-level.pipe';
-import { CephFSAuthorization, CephfsService } from '~/app/shared/services/api/cephfs.service';
+import { CephFSAuthorization, CephFsService } from '~/app/shared/services/api/ceph-fs.service';
 import { Host, HostService } from '~/app/shared/services/api/host.service';
 import {
   ServiceInfo,
@@ -54,9 +55,10 @@ export class ServicesPageComponent {
     private servicesService: ServicesService,
     private bytesToSizePipe: BytesToSizePipe,
     private redundancyLevelPipe: RedundancyLevelPipe,
-    private cephfsService: CephfsService,
+    private cephfsService: CephFsService,
     private dialogService: DialogService,
     private hostService: HostService,
+    private router: Router,
     private storageService: StorageService
   ) {
     this.columns = [
@@ -106,148 +108,24 @@ export class ServicesPageComponent {
   }
 
   onAdd(type: ServiceType): void {
-    switch (type) {
-      case 'block':
-        break;
-      case 'file':
-        this.storageService.stats().subscribe((stats: StorageStats) => {
-          this.dialogService.open(
-            DeclarativeFormModalComponent,
-            (result: DeclarativeFormValues | boolean) => {
-              if (_.isPlainObject(result)) {
-                this.createService(result as ServiceInfo);
-              }
-            },
-            {
-              title: TEXT('File Service'),
-              submitButtonText: TEXT('Create'),
-              formConfig: {
-                fields: [
-                  {
-                    type: 'hidden',
-                    name: 'type',
-                    value: 'file'
-                  },
-                  {
-                    type: 'text',
-                    name: 'name',
-                    label: TEXT('Name'),
-                    placeholder: TEXT('Enter the name of this service'),
-                    validators: {
-                      required: true,
-                      asyncCustom: this.nameValidator()
-                    }
-                  },
-                  {
-                    type: 'select',
-                    name: 'backend',
-                    label: TEXT('Type'),
-                    value: 'nfs',
-                    options: {
-                      nfs: 'NFS',
-                      cephfs: 'CephFS'
-                    },
-                    validators: {
-                      required: true
-                    }
-                  },
-                  {
-                    type: 'container',
-                    fields: [
-                      {
-                        type: 'binary',
-                        name: 'available',
-                        label: TEXT('Available Capacity'),
-                        value: stats.available,
-                        hint: TEXT('The overall available capacity.'),
-                        readonly: true
-                      },
-                      {
-                        type: 'binary',
-                        name: 'allocated',
-                        label: TEXT('Allocated Capacity'),
-                        value: stats.allocated,
-                        hint: TEXT('The currently allocated capacity.'),
-                        readonly: true
-                      },
-                      {
-                        type: 'binary',
-                        name: 'free',
-                        label: TEXT('Unallocated Capacity'),
-                        value: stats.unallocated,
-                        hint: TEXT('The currently unallocated capacity.'),
-                        readonly: true
-                      }
-                    ]
-                  },
-                  {
-                    type: 'container',
-                    fields: [
-                      {
-                        type: 'binary',
-                        name: 'size',
-                        label: TEXT('Estimated Required Capacity'),
-                        placeholder: TEXT('E.g. 10 GiB'),
-                        hint: TEXT('Enter the capacity of this service.'),
-                        validators: {
-                          required: true
-                        },
-                        defaultUnit: 'g',
-                        onValueChanges: (
-                          value: any,
-                          control: AbstractControl,
-                          form: DeclarativeForm
-                        ) => {
-                          const rawSize = (value as number) * (form.values.replicas as number);
-                          form.patchValues({ rawSize: bytesToSize(rawSize) });
-                        }
-                      },
-                      {
-                        type: 'select',
-                        name: 'replicas',
-                        label: TEXT('Number Of Replicas'),
-                        value: 1,
-                        options: {
-                          1: this.redundancyLevelPipe.transform(1, 'flavor'),
-                          2: this.redundancyLevelPipe.transform(2, 'flavor'),
-                          3: this.redundancyLevelPipe.transform(3, 'flavor')
-                        },
-                        validators: {
-                          required: true
-                        },
-                        onValueChanges: (
-                          value: any,
-                          control: AbstractControl,
-                          form: DeclarativeForm
-                        ) => {
-                          const rawSize = form.values.size * (value as number);
-                          form.patchValues({ rawSize: bytesToSize(rawSize) });
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    type: 'text',
-                    name: 'rawSize',
-                    readonly: true,
-                    label: TEXT('Raw Required Capacity'),
-                    hint: TEXT('The estimated raw capacity of this service.'),
-                    validators: {
-                      custom: this.budgetValidator(stats)
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              size: 'lg'
+    this.blockUI.start(translate(TEXT('Please wait, retrieving storage statistics ...')));
+    this.storageService
+      .stats()
+      .pipe(finalize(() => this.blockUI.stop()))
+      .subscribe((stats: StorageStats) => {
+        this.dialogService.open(
+          DeclarativeFormModalComponent,
+          (result: DeclarativeFormValues | boolean) => {
+            if (_.isPlainObject(result)) {
+              this.createService(result as ServiceInfo);
             }
-          );
-        });
-        break;
-      case 'object':
-        break;
-    }
+          },
+          this.buildDialogData(type, stats),
+          {
+            size: 'lg'
+          }
+        );
+      });
   }
 
   loadData(): void {
@@ -373,8 +251,164 @@ export class ServicesPageComponent {
             callback: (data: DatatableData) => this.deleteService(data.name)
           }
         );
+        break;
+      case 'rgw':
+        result.push({
+          title: TEXT('User management'),
+          callback: () => this.router.navigate(['/services/object/users'])
+        });
+        break;
     }
     return result;
+  }
+
+  private buildDialogData(type: ServiceType, stats: StorageStats): Record<string, any> {
+    const title: Record<ServiceType, string> = {
+      file: TEXT('File Service'),
+      object: TEXT('Object Service'),
+      block: TEXT('Block Service')
+    };
+    let backend = {};
+    switch (type) {
+      case 'block':
+        backend = {
+          type: 'select',
+          name: 'backend',
+          label: TEXT('Type'),
+          value: 'nfs',
+          options: {
+            rbd: 'RBD',
+            iscsi: 'iSCSI'
+          },
+          validators: {
+            required: true
+          }
+        };
+        break;
+      case 'file':
+        backend = {
+          type: 'select',
+          name: 'backend',
+          label: TEXT('Type'),
+          value: 'nfs',
+          options: {
+            nfs: 'NFS',
+            cephfs: 'CephFS'
+          },
+          validators: {
+            required: true
+          }
+        };
+        break;
+      case 'object':
+        backend = {
+          type: 'hidden',
+          name: 'backend',
+          value: 'rgw'
+        };
+        break;
+    }
+    return {
+      title: title[type],
+      submitButtonText: TEXT('Create'),
+      formConfig: {
+        fields: [
+          {
+            type: 'hidden',
+            name: 'type',
+            value: type
+          },
+          {
+            type: 'text',
+            name: 'name',
+            label: TEXT('Name'),
+            placeholder: TEXT('Enter the name of this service'),
+            validators: {
+              required: true,
+              asyncCustom: this.nameValidator()
+            }
+          },
+          backend,
+          {
+            type: 'container',
+            fields: [
+              {
+                type: 'binary',
+                name: 'available',
+                label: TEXT('Available Capacity'),
+                value: stats.available,
+                hint: TEXT('The overall available capacity.'),
+                readonly: true
+              },
+              {
+                type: 'binary',
+                name: 'allocated',
+                label: TEXT('Allocated Capacity'),
+                value: stats.allocated,
+                hint: TEXT('The currently allocated capacity.'),
+                readonly: true
+              },
+              {
+                type: 'binary',
+                name: 'free',
+                label: TEXT('Unallocated Capacity'),
+                value: stats.unallocated,
+                hint: TEXT('The currently unallocated capacity.'),
+                readonly: true
+              }
+            ]
+          },
+          {
+            type: 'container',
+            fields: [
+              {
+                type: 'binary',
+                name: 'size',
+                label: TEXT('Estimated Required Capacity'),
+                placeholder: TEXT('E.g. 10 GiB'),
+                hint: TEXT('Enter the capacity of this service.'),
+                validators: {
+                  required: true
+                },
+                defaultUnit: 'g',
+                onValueChanges: (value: any, control: AbstractControl, form: DeclarativeForm) => {
+                  const rawSize = (value as number) * (form.values.replicas as number);
+                  form.patchValues({ rawSize: bytesToSize(rawSize) });
+                }
+              },
+              {
+                type: 'select',
+                name: 'replicas',
+                label: TEXT('Number Of Replicas'),
+                value: 1,
+                options: {
+                  1: this.redundancyLevelPipe.transform(1, 'flavor'),
+                  2: this.redundancyLevelPipe.transform(2, 'flavor'),
+                  3: this.redundancyLevelPipe.transform(3, 'flavor')
+                },
+                validators: {
+                  required: true
+                },
+                onValueChanges: (value: any, control: AbstractControl, form: DeclarativeForm) => {
+                  const rawSize = form.values.size * (value as number);
+                  form.patchValues({ rawSize: bytesToSize(rawSize) });
+                }
+              }
+            ]
+          },
+          {
+            type: 'text',
+            name: 'rawSize',
+            readonly: true,
+            label: TEXT('Raw Required Capacity'),
+            hint: TEXT('The estimated raw capacity of this service.'),
+            validators: {
+              custom: this.budgetValidator(stats)
+            }
+          }
+        ]
+      }
+    };
   }
 
   private createService(serviceInfo: ServiceInfo): void {
