@@ -1,18 +1,18 @@
 import { HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { CephfsService } from '~/app/shared/services/api/cephfs.service';
+import { CephFsService } from '~/app/shared/services/api/ceph-fs.service';
 import { TestingModule } from '~/app/testing.module';
 
-describe('CephfsService', () => {
-  let service: CephfsService;
+describe('CephFsService', () => {
+  let service: CephFsService;
   let httpTesting: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TestingModule]
     });
-    service = TestBed.inject(CephfsService);
+    service = TestBed.inject(CephFsService);
     httpTesting = TestBed.inject(HttpTestingController);
   });
 
